@@ -1,0 +1,584 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    font-family: 'VT323', monospace;
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
+}
+
+.vhs-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('backgrounds/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-image 0.1s ease-in-out;
+}
+
+/* VHS background filter */
+.vhs-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 0, 0.08) 2px,
+            rgba(0, 255, 0, 0.08) 4px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 1px,
+            rgba(255, 0, 255, 0.03) 1px,
+            rgba(255, 0, 255, 0.03) 2px
+        );
+    filter:
+        contrast(1.4)
+        brightness(0.4)
+        saturate(0.1)
+        sepia(0.6)
+        hue-rotate(25deg)
+        blur(0.3px);
+    pointer-events: none;
+    z-index: -1;
+    animation: backgroundScan 3s linear infinite;
+    mix-blend-mode: multiply;
+}
+
+/* Additional dramatic VHS distortion */
+.vhs-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(
+            45deg,
+            rgba(255, 0, 0, 0.1) 0%,
+            transparent 20%,
+            rgba(0, 255, 0, 0.05) 40%,
+            transparent 60%,
+            rgba(0, 0, 255, 0.08) 80%,
+            transparent 100%
+        );
+    filter:
+        contrast(2.0)
+        brightness(0.3)
+        saturate(0.05);
+    pointer-events: none;
+    z-index: -1;
+    animation: backgroundDistortion 2s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+}
+
+/* VHS scramble background */
+.vhs-scramble {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="scramble"><feTurbulence baseFrequency="0.3" numOctaves="1" seed="2"/><feColorMatrix type="matrix" values="0.3 0.3 0.3 0 0 0.3 0.3 0.3 0 0 0.3 0.3 0.3 0 0 0 0 0 1 0"/></filter></defs><rect width="100%" height="100%" filter="url(%23scramble)"/></svg>');
+    opacity: 0.1;
+    animation: scrambleMove 20s infinite linear;
+    z-index: 2;
+}
+
+/* VHS static overlay */
+.static-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>');
+    opacity: 0.1;
+    animation: staticFlicker 10s infinite;
+    pointer-events: none;
+    z-index: -2;
+}
+
+/* Scan lines */
+.scan-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 0, 0.02) 2px,
+        rgba(0, 255, 0, 0.02) 4px
+    );
+    pointer-events: none;
+    animation: scanlineMove 8s linear infinite;
+    z-index: -2;
+}
+
+/* Tracking lines */
+.tracking-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 100px,
+        rgba(255, 255, 255, 0.02) 100px,
+        rgba(255, 255, 255, 0.02) 101px
+    );
+    animation: trackingMove 15s linear infinite;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* VHS timestamp */
+.vhs-timestamp {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #ff0000;
+    font-size: 18px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    z-index: 100;
+    animation: timestampFlicker 5s infinite;
+}
+
+/* Main text styling */
+.vhs-text {
+    position: relative;
+    font-size: 32px;
+    color: #00ff00;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow:
+        0 0 10px #00ff00,
+        0 0 20px #00ff00,
+        0 0 30px #00ff00,
+        2px 2px 0px #003300;
+    z-index: 10;
+    filter: brightness(1.2) contrast(1.1);
+    animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+/* Ensure links and interactive elements are above effects */
+.vhs-text a,
+.vhs-text .cat-link {
+    position: relative;
+    z-index: 1000;
+    pointer-events: all !important;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.01);
+    padding: 2px;
+}
+
+/* Regular link styling to match VHS theme */
+.vhs-text a {
+    color: #00ffff;
+    text-decoration: underline;
+    text-decoration-color: #00ffff;
+    text-shadow: 0 0 5px #00ffff;
+    transition: all 0.2s;
+}
+
+.vhs-text a:hover {
+    color: #ffff00;
+    text-decoration-color: #ffff00;
+    text-shadow: 0 0 10px #ffff00;
+    transform: scale(1.05);
+}
+
+.vhs-text .line {
+    display: block;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 50;
+}
+
+/* Chromatic aberration effect using CSS drop-shadow filters */
+.chromatic .line {
+    position: relative;
+    filter:
+        drop-shadow(0.3px 0 0 #ff0000)
+        drop-shadow(-0.3px 0 0 #0000ff);
+    /* animation: chromaticShift 8s infinite; */
+    z-index: 50;
+}
+
+/* Animations */
+@keyframes staticFlicker {
+    0%, 90%, 100% { opacity: 0.1; }
+    95% { opacity: 0.15; }
+}
+
+@keyframes scanlineMove {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+}
+
+@keyframes trackingMove {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100vw); }
+}
+
+@keyframes textGlow {
+    0% { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00, 2px 2px 0px #003300; }
+    100% { text-shadow: 0 0 15px #00ff00, 0 0 25px #00ff00, 0 0 35px #00ff00, 2px 2px 0px #003300; }
+}
+
+@keyframes timestampFlicker {
+    0%, 95%, 100% { opacity: 1; }
+    97% { opacity: 0.9; }
+}
+
+@keyframes chromaShiftRed {
+    0%, 100% { transform: translateX(0); }
+    33% { transform: translateX(2px); }
+    66% { transform: translateX(-1px); }
+}
+
+@keyframes chromaShiftBlue {
+    0%, 100% { transform: translateX(0); }
+    33% { transform: translateX(-2px); }
+    66% { transform: translateX(1px); }
+}
+
+@keyframes chromaticShift {
+    0%, 100% {
+        filter:
+            drop-shadow(0 0 0 #ff0000)
+            drop-shadow(0 0 0 #0000ff);
+    }
+    50% {
+        filter:
+            drop-shadow(0.5px 0 0 #ff0000)
+            drop-shadow(-0.5px 0 0 #0000ff);
+    }
+}
+
+@keyframes scrambleMove {
+    0% { 
+        transform: translate(0, 0);
+        filter: hue-rotate(0deg);
+    }
+    25% { 
+        transform: translate(2px, -1px);
+        filter: hue-rotate(90deg);
+    }
+    50% { 
+        transform: translate(-1px, 2px);
+        filter: hue-rotate(180deg);
+    }
+    75% { 
+        transform: translate(-2px, -2px);
+        filter: hue-rotate(270deg);
+    }
+    100% { 
+        transform: translate(0, 0);
+        filter: hue-rotate(360deg);
+    }
+}
+
+@keyframes backgroundScan {
+    0% { 
+        filter: 
+            contrast(1.4) 
+            brightness(0.4) 
+            saturate(0.1) 
+            sepia(0.6)
+            hue-rotate(25deg)
+            blur(0.3px);
+        transform: translateX(0px);
+    }
+    15% { 
+        filter: 
+            contrast(2.2) 
+            brightness(0.2) 
+            saturate(0.05) 
+            sepia(0.9)
+            hue-rotate(180deg)
+            blur(0.8px);
+        transform: translateX(-3px);
+    }
+    30% { 
+        filter: 
+            contrast(0.8) 
+            brightness(0.6) 
+            saturate(0.3) 
+            sepia(0.3)
+            hue-rotate(-45deg)
+            blur(0.1px);
+        transform: translateX(2px);
+    }
+    45% { 
+        filter: 
+            contrast(3.0) 
+            brightness(0.1) 
+            saturate(0.02) 
+            sepia(1.0)
+            hue-rotate(270deg)
+            blur(1.2px);
+        transform: translateX(-1px);
+    }
+    60% { 
+        filter: 
+            contrast(1.8) 
+            brightness(0.3) 
+            saturate(0.08) 
+            sepia(0.7)
+            hue-rotate(90deg)
+            blur(0.5px);
+        transform: translateX(1px);
+    }
+    80% { 
+        filter: 
+            contrast(2.5) 
+            brightness(0.15) 
+            saturate(0.03) 
+            sepia(0.95)
+            hue-rotate(315deg)
+            blur(0.9px);
+        transform: translateX(-2px);
+    }
+    100% { 
+        filter: 
+            contrast(1.4) 
+            brightness(0.4) 
+            saturate(0.1) 
+            sepia(0.6)
+            hue-rotate(25deg)
+            blur(0.3px);
+        transform: translateX(0px);
+    }
+}
+
+@keyframes backgroundDistortion {
+    0% {
+        transform: translateY(0px) skewX(0deg);
+        filter: 
+            contrast(2.0) 
+            brightness(0.3) 
+            saturate(0.05);
+    }
+    25% {
+        transform: translateY(-2px) skewX(1deg);
+        filter: 
+            contrast(2.8) 
+            brightness(0.1) 
+            saturate(0.02);
+    }
+    50% {
+        transform: translateY(1px) skewX(-0.5deg);
+        filter: 
+            contrast(1.5) 
+            brightness(0.4) 
+            saturate(0.08);
+    }
+    75% {
+        transform: translateY(-1px) skewX(0.8deg);
+        filter: 
+            contrast(3.2) 
+            brightness(0.08) 
+            saturate(0.01);
+    }
+    100% {
+        transform: translateY(0px) skewX(0deg);
+        filter: 
+            contrast(2.0) 
+            brightness(0.3) 
+            saturate(0.05);
+    }
+}
+
+/* Cat Modal Styles */
+.cat-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+.cat-modal-content {
+    position: relative;
+    background: #000;
+    margin: 5% auto;
+    padding: 0;
+    border: 2px solid #00ff00;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow:
+        0 0 20px #00ff00,
+        inset 0 0 20px rgba(0, 255, 0, 0.1);
+    font-family: 'VT323', monospace;
+}
+
+.cat-modal-static {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="modal-noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23modal-noise)" opacity="0.05"/></svg>');
+    opacity: 0.2;
+    animation: modalStaticFlicker 0.15s infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cat-modal-scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 0, 0.02) 2px,
+        rgba(0, 255, 0, 0.02) 4px
+    );
+    pointer-events: none;
+    z-index: 2;
+    animation: modalScanlineMove 2s linear infinite;
+}
+
+.cat-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #ff0000;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    text-shadow: 0 0 10px #ff0000;
+    transition: all 0.2s;
+}
+
+.cat-modal-close:hover {
+    color: #ff6666;
+    text-shadow: 0 0 15px #ff0000;
+    transform: scale(1.2);
+}
+
+.cat-modal-header {
+    background: rgba(0, 255, 0, 0.1);
+    padding: 15px;
+    border-bottom: 1px solid #00ff00;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+}
+
+.cat-modal-header #catName {
+    color: #00ff00;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px #00ff00;
+}
+
+.cat-modal-timestamp {
+    color: #ff0000;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+.cat-modal-body {
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 5;
+    background: #000;
+}
+
+.cat-modal-body img {
+    max-width: 100%;
+    max-height: 60vh;
+    object-fit: contain;
+    border: 1px solid #00ff00;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    filter:
+        contrast(1.1)
+        brightness(0.9)
+        saturate(1.2)
+        sepia(0.1);
+}
+
+/* Cat link styling */
+.cat-link {
+    color: #ff00ff;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: #ff00ff;
+    text-shadow: 0 0 5px #ff00ff;
+    transition: all 0.2s;
+}
+
+.cat-link:hover {
+    color: #ffff00;
+    text-decoration-color: #ffff00;
+    text-shadow: 0 0 10px #ffff00;
+    transform: scale(1.05);
+}
+
+/* Modal animations */
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modalStaticFlicker {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.4; }
+}
+
+@keyframes modalScanlineMove {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}

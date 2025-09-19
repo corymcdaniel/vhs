@@ -1,0 +1,17 @@
+{
+  "name": "september",
+  "version": "1.0.0",
+  "description": "A retro VHS-style web page featuring multilingual chaos text with authentic 90s tape effects.",
+  "main": "script.js",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHS TAPE - MULTILINGUAL CHAOS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="vhs-container">
+        <div class="vhs-scramble"></div>
+        <div class="static-overlay"></div>
+        <div class="scan-lines"></div>
+        <div class="tracking-lines"></div>
+
+        <div class="vhs-timestamp">REC 00:42:17</div>
+
+        <div class="vhs-text chromatic">
+            <span class="line">Hello, I'm Cory.</span>
+            <span class="line">I've been <a target="_blank" href="https://www.linkedin.com/in/corymcdaniel/">developing websites</a> for years.</span>
+            <span class="line">I also do <a target="_blank" href="https://www.instagram.com/corymcdaniel">photography</a>.</span>
+            <span class="line">I have two cats, <span class="cat-link" data-cat="charlie">Charlie</span> and <span class="cat-link" data-cat="papago">Papago</span>.</span>
+            <span class="line">I live in <a target="_blank" href="https://www.google.com/maps?sca_esv=9811266bc1be51f6&output=search&q=phoenix&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZmZAX1lZM8ZLCSv42N_JL5y_dgz0p08u6CB8VLiWU48dsAYemN16z2WeFE_578RkqAWIx-Gl3DxCRXIOdaRRxAUfEyMlkajHqbRSrzmF1pep-9FYT0EKbs-oZug-QDcdztnORGEfplYUCbfv3bw_NpjyMcW0nYni456BlkekuoaEOhEB1PSvoLgStBzfvufYZ6io-gA&entry=mc&ved=1t:200715&ictx=111">Phoenix, Arizona</a> and love the <a href="https://dbg.org">desert</a>.</span>
+            <span class="line">I travel a lot too, and eat many things.</span>
+            <span class="line">...</span>
+        </div>
+
+        <!-- Accessibility controls -->
+        <button id="toggleEffects" style="position: absolute; bottom: 20px; left: 20px; background: rgba(255,255,0,0.2); border: 1px solid #ffff00; color: #ffff00; padding: 10px; font-family: 'VT323', monospace; cursor: pointer; z-index: 1000;">
+            REDUCE EFFECTS
+        </button>
+
+        <!-- Test button for debugging -->
+        <button id="testButton" style="position: absolute; bottom: 20px; right: 20px; background: rgba(0,255,0,0.2); border: 1px solid #00ff00; color: #00ff00; padding: 10px; font-family: 'VT323', monospace; cursor: pointer; z-index: 1000;">
+            TEST GLITCH
+        </button>
+    </div>
+
+    <!-- Cat Photo Modal -->
+    <div id="catModal" class="cat-modal">
+        <div class="cat-modal-content">
+            <div class="cat-modal-static"></div>
+            <div class="cat-modal-scanlines"></div>
+            <span class="cat-modal-close">&times;</span>
+            <div class="cat-modal-header">
+                <span id="catName">CAT NAME</span>
+                <span class="cat-modal-timestamp">VHS 01:23:45</span>
+            </div>
+            <div class="cat-modal-body">
+                <img id="catImage" src="" alt="Cat Photo" />
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
