@@ -187,6 +187,28 @@
   border-radius: 4px;
   font-weight: bold;
   z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid transparent;
+}
+
+.vhs-timestamp:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #ff0000;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+  transform: scale(1.05);
+}
+
+.rec-dot {
+  width: 8px;
+  height: 8px;
+  background: #ff0000;
+  border-radius: 50%;
+  animation: recBlink 1.5s infinite;
+  box-shadow: 0 0 6px #ff0000;
 }
 
 /* Main Text */
@@ -1107,6 +1129,17 @@
   100% {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+@keyframes recBlink {
+  0%, 50% {
+    opacity: 1;
+    box-shadow: 0 0 6px #ff0000;
+  }
+  51%, 100% {
+    opacity: 0.3;
+    box-shadow: 0 0 2px #ff0000;
   }
 }
 

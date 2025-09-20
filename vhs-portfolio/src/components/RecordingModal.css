@@ -1,0 +1,182 @@
+.recording-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+}
+
+.recording-modal-content {
+  background: linear-gradient(135deg, #001122, #002244, #001133);
+  border: 2px solid #ff0000;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  font-family: 'VT323', monospace;
+  box-shadow:
+    0 0 30px rgba(255, 0, 0, 0.3),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.recording-modal-header {
+  background: rgba(255, 0, 0, 0.1);
+  border-bottom: 1px solid #ff0000;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rec-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ff0000;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 0 0 5px #ff0000;
+}
+
+.rec-dot-large {
+  width: 12px;
+  height: 12px;
+  background: #ff0000;
+  border-radius: 50%;
+  animation: recBlink 1.5s infinite;
+  box-shadow: 0 0 8px #ff0000;
+}
+
+.recording-modal-close {
+  background: none;
+  border: 1px solid #ff0000;
+  color: #ff0000;
+  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.recording-modal-close:hover {
+  background: rgba(255, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+.recording-modal-body {
+  padding: 20px;
+}
+
+.recording-info h3 {
+  color: #ff0000;
+  font-size: 24px;
+  margin: 0 0 15px 0;
+  text-align: center;
+  text-shadow: 0 0 5px #ff0000;
+  text-transform: uppercase;
+}
+
+.recording-info p {
+  color: #00ff00;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 10px 0;
+  text-shadow: 0 0 3px #00ff00;
+}
+
+.vhs-details {
+  margin-top: 20px;
+  border: 1px solid #00ff00;
+  border-radius: 4px;
+  padding: 15px;
+  background: rgba(0, 255, 0, 0.05);
+}
+
+.detail-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.detail-line .label {
+  color: #00ffff;
+  text-shadow: 0 0 3px #00ffff;
+}
+
+.detail-line .value {
+  color: #ffff00;
+  text-shadow: 0 0 3px #ffff00;
+  font-weight: bold;
+}
+
+.recording-modal-footer {
+  background: rgba(255, 0, 0, 0.1);
+  border-top: 1px solid #ff0000;
+  padding: 15px 20px;
+  text-align: center;
+}
+
+.recording-modal-ok {
+  background: rgba(0, 255, 0, 0.2);
+  border: 2px solid #00ff00;
+  color: #00ff00;
+  padding: 10px 20px;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+.recording-modal-ok:hover {
+  background: rgba(0, 255, 0, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+  transform: scale(1.05);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .recording-modal-content {
+    width: 95%;
+    margin: 20px;
+  }
+
+  .recording-info h3 {
+    font-size: 20px;
+  }
+
+  .recording-info p {
+    font-size: 14px;
+  }
+
+  .detail-line {
+    font-size: 12px;
+  }
+}

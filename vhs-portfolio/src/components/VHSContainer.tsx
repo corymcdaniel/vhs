@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './VHSContainer.css';
 import { useTypewriter } from '../hooks/useTypewriter';
 import ContactModal from './ContactModal';
+import RecordingModal from './RecordingModal';
 
 interface VHSContainerProps {
   effectsReduced: boolean;
@@ -17,6 +18,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
   const [timestamp, setTimestamp] = useState(257); // Starting at 00:42:17
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showRecordingModal, setShowRecordingModal] = useState(false);
   const [isEjected, setIsEjected] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
@@ -243,7 +245,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     const hours = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `REC ${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const handleLinkClick = (url: string) => {
@@ -260,6 +262,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
   const handleContactClose = () => {
     setShowContactModal(false);
+  };
+
+  const handleRecordingClick = () => {
+    setShowRecordingModal(true);
+  };
+
+  const handleRecordingClose = () => {
+    setShowRecordingModal(false);
   };
 
   const handleEject = () => {
@@ -318,7 +328,10 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {isPaused && <div className="static-text-overlay"></div>}
 
       {/* Timestamp */}
-      <div className="vhs-timestamp">{formatTimestamp(timestamp)}</div>
+      <div className="vhs-timestamp" onClick={handleRecordingClick}>
+        <span className="rec-dot"></span>
+        REC {formatTimestamp(timestamp)}
+      </div>
 
       {/* Main Text */}
       <div className="vhs-text chromatic" ref={textElementRef}>
@@ -446,6 +459,11 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* Contact Modal */}
       {showContactModal && (
         <ContactModal onClose={handleContactClose} />
+      )}
+
+      {/* Recording Modal */}
+      {showRecordingModal && (
+        <RecordingModal onClose={handleRecordingClose} />
       )}
     </div>
   );
