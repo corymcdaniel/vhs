@@ -55,7 +55,7 @@ const CatModal: React.FC<CatModalProps> = ({ catName, onClose }) => {
           <span className="cat-modal-timestamp">VHS 01:23:45</span>
         </div>
         <div className="cat-modal-body">
-          <img src={cat.image} alt={`Photo of ${cat.name}`} />
+          <img src={cat.image} alt={cat.name} />
         </div>
       </div>
     </div>
