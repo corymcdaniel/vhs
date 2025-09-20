@@ -25,6 +25,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [isPaused, setIsPaused] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const textElementRef = useRef<HTMLDivElement>(null);
+  const fastForwardTimers = useRef<Set<NodeJS.Timeout>>(new Set());
 
   const backgroundImages = useRef([
     '/backgrounds/20250906_194829.jpg',
@@ -68,7 +69,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       "It is a bit dry, but so am I?",
       "Damn. That was lame. But I am too.",
       "................",
-      "Eject to see the pictures without my rambles."
+      "Eject to see the pictures without my rambling."
   ]).current;
 
   const { displayTexts, isComplete, currentLineIndex } = useTypewriter({
@@ -88,11 +89,20 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
   // Preload background images
   useEffect(() => {
+    let isMounted = true;
+    const imageObjects: HTMLImageElement[] = [];
+
     const preloadImage = (src: string) => {
       return new Promise<void>((resolve, reject) => {
         const img = new Image();
-        img.onload = () => resolve();
-        img.onerror = () => reject(new Error(`Failed to load ${src}`));
+        imageObjects.push(img); // Track for cleanup
+
+        img.onload = () => {
+          if (isMounted) resolve();
+        };
+        img.onerror = () => {
+          if (isMounted) reject(new Error(`Failed to load ${src}`));
+        };
         img.src = src;
       });
     };
@@ -100,14 +110,28 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     const preloadAllImages = async () => {
       try {
         await Promise.all(backgroundImages.map(preloadImage));
-        setImagesLoaded(true);
+        if (isMounted) {
+          setImagesLoaded(true);
+        }
       } catch (error) {
         console.warn('Some images failed to load:', error);
-        setImagesLoaded(true); // Still show the site
+        if (isMounted) {
+          setImagesLoaded(true); // Still show the site
+        }
       }
     };
 
     preloadAllImages();
+
+    return () => {
+      isMounted = false;
+      // Clean up image objects
+      imageObjects.forEach(img => {
+        img.onload = null;
+        img.onerror = null;
+        img.src = '';
+      });
+    };
   }, [backgroundImages]);
 
   // Update timestamp
@@ -126,19 +150,21 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
       const interval = setInterval(() => {
         // Show flash
+        console.log('Auto background change - Setting showFlash to true'); // Debug log
         setShowFlash(true);
 
         // Change background after brief flash
         const bgTimer = setTimeout(() => {
           setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
           activeTimers.delete(bgTimer);
-        }, 50);
+        }, 100);
 
         // Hide flash after longer duration
         const flashTimer = setTimeout(() => {
+          console.log('Auto background change - Setting showFlash to false'); // Debug log
           setShowFlash(false);
           activeTimers.delete(flashTimer);
-        }, 200);
+        }, 600);
 
         activeTimers.add(bgTimer);
         activeTimers.add(flashTimer);
@@ -153,18 +179,28 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   }, [effectsReduced, isPaused, backgroundImages.length]);
 
   const handleFastForward = useCallback(() => {
+    // Clear any existing fast forward timers
+    fastForwardTimers.current.forEach(timer => clearTimeout(timer));
+    fastForwardTimers.current.clear();
+
     // Show flash
+    console.log('Setting showFlash to true'); // Debug log
     setShowFlash(true);
 
-    // Change background after brief flash
-    setTimeout(() => {
+    // Track timers for cleanup
+    const bgTimer = setTimeout(() => {
       setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
-    }, 50);
+      fastForwardTimers.current.delete(bgTimer);
+    }, 100); // Slightly longer delay
 
-    // Hide flash after longer duration
-    setTimeout(() => {
+    const flashTimer = setTimeout(() => {
+      console.log('Setting showFlash to false'); // Debug log
       setShowFlash(false);
-    }, 200);
+      fastForwardTimers.current.delete(flashTimer);
+    }, 600); // Longer flash duration
+
+    fastForwardTimers.current.add(bgTimer);
+    fastForwardTimers.current.add(flashTimer);
   }, [backgroundImages.length]);
 
   // Keyboard commands
@@ -301,22 +337,41 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     setIsEjected(true);
   };
 
+  const reopenTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   const handleReopen = useCallback(() => {
+    // Clear any existing reopen timer
+    if (reopenTimerRef.current) {
+      clearTimeout(reopenTimerRef.current);
+    }
+
     setIsReopening(true);
     setIsEjected(false);
 
     // Reset reopening state after animation completes
-    const timer = setTimeout(() => {
+    reopenTimerRef.current = setTimeout(() => {
       setIsReopening(false);
+      reopenTimerRef.current = null;
     }, 1200);
-
-    // Store timer for potential cleanup (though this is less critical since it's user-triggered)
-    return () => clearTimeout(timer);
   }, []);
 
   const handlePause = () => {
     setIsPaused(!isPaused);
   };
+
+  // Comprehensive cleanup on unmount
+  useEffect(() => {
+    return () => {
+      // Clear fast forward timers
+      fastForwardTimers.current.forEach(timer => clearTimeout(timer));
+      fastForwardTimers.current.clear();
+
+      // Clear reopen timer
+      if (reopenTimerRef.current) {
+        clearTimeout(reopenTimerRef.current);
+      }
+    };
+  }, []);
 
   // Show loading screen while images are preloading
   if (!imagesLoaded) {
