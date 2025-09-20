@@ -23,7 +23,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [isPaused, setIsPaused] = useState(false);
   const textElementRef = useRef<HTMLDivElement>(null);
 
-  const backgroundImages = [
+  const backgroundImages = useRef([
     '/backgrounds/20250906_194829.jpg',
     '/backgrounds/20250312_095352.jpg',
     '/backgrounds/20250315_152239.jpg',
@@ -33,16 +33,16 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     '/backgrounds/20250814_204013-EDIT (2).jpg',
     '/backgrounds/20250906_201009.jpg',
     '/backgrounds/bg.jpg'
-  ];
+  ]).current;
 
-  const textLines = [
+  const textLines = useRef([
     "Hello, I'm Cory.",
     "I've been developing websites for years.",
     "I also do photography.",
     "I have two cats, Charlie and Papago.",
     "I live in Phoenix, Arizona and love the desert.",
     "..............."
-  ];
+  ]).current;
 
   const { displayTexts, isComplete, currentLineIndex } = useTypewriter({
     texts: textLines,
@@ -71,27 +71,55 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   // Background cycling with flash effect
   useEffect(() => {
     if (!effectsReduced && !isPaused) {
+      const activeTimers = new Set<NodeJS.Timeout>();
+
       const interval = setInterval(() => {
         // Show flash
         setShowFlash(true);
 
         // Change background after brief flash
-        setTimeout(() => {
+        const bgTimer = setTimeout(() => {
           setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
+          activeTimers.delete(bgTimer);
         }, 50);
 
         // Hide flash after longer duration
-        setTimeout(() => {
+        const flashTimer = setTimeout(() => {
           setShowFlash(false);
+          activeTimers.delete(flashTimer);
         }, 200);
+
+        activeTimers.add(bgTimer);
+        activeTimers.add(flashTimer);
       }, 15000);
 
-      return () => clearInterval(interval);
+      return () => {
+        clearInterval(interval);
+        activeTimers.forEach(timer => clearTimeout(timer));
+        activeTimers.clear();
+      };
     }
   }, [effectsReduced, isPaused, backgroundImages.length]);
 
+  const handleFastForward = useCallback(() => {
+    // Show flash
+    setShowFlash(true);
+
+    // Change background after brief flash
+    setTimeout(() => {
+      setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
+    }, 50);
+
+    // Hide flash after longer duration
+    setTimeout(() => {
+      setShowFlash(false);
+    }, 200);
+  }, [backgroundImages.length]);
+
   // Keyboard commands
   useEffect(() => {
+    const keyboardTimers = new Set<NodeJS.Timeout>();
+
     const handleKeyDown = (e: KeyboardEvent) => {
       // Prevent default for our custom keys
       if (['g', 'b', 'r', 'n', ' '].includes(e.key.toLowerCase())) {
@@ -101,7 +129,11 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       switch (e.key.toLowerCase()) {
         case ' ': // Spacebar for static burst
           setShowFlash(true);
-          setTimeout(() => setShowFlash(false), 300);
+          const flashTimer = setTimeout(() => {
+            setShowFlash(false);
+            keyboardTimers.delete(flashTimer);
+          }, 300);
+          keyboardTimers.add(flashTimer);
           break;
 
         case 'g': // 'g' for text glitch
@@ -115,12 +147,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
             element.style.transform = `translate(${glitchX}px, ${glitchY}px)`;
             element.style.filter = `hue-rotate(${hueShift}deg) contrast(${contrastBoost}) brightness(1.5)`;
 
-            setTimeout(() => {
+            const glitchTimer = setTimeout(() => {
               if (textElementRef.current) {
                 textElementRef.current.style.transform = '';
                 textElementRef.current.style.filter = '';
               }
+              keyboardTimers.delete(glitchTimer);
             }, 400);
+            keyboardTimers.add(glitchTimer);
           }
           break;
 
@@ -138,12 +172,18 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      keyboardTimers.forEach(timer => clearTimeout(timer));
+      keyboardTimers.clear();
+    };
   }, [handleFastForward]);
 
   // Random glitch effects with useRef
   useEffect(() => {
     if (!effectsReduced) {
+      const activeTimers = new Set<NodeJS.Timeout>();
+
       const glitchInterval = setInterval(() => {
         if (Math.random() < 0.1 && textElementRef.current) {
           const textElement = textElementRef.current;
@@ -160,14 +200,18 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
               textElementRef.current.style.transform = 'translate(0, 0)';
               textElementRef.current.style.filter = '';
             }
+            activeTimers.delete(resetTimer);
           }, 50 + Math.random() * 100);
 
-          // Return cleanup for the reset timer
-          return () => clearTimeout(resetTimer);
+          activeTimers.add(resetTimer);
         }
       }, 200);
 
-      return () => clearInterval(glitchInterval);
+      return () => {
+        clearInterval(glitchInterval);
+        activeTimers.forEach(timer => clearTimeout(timer));
+        activeTimers.clear();
+      };
     }
   }, [effectsReduced]);
 
@@ -198,30 +242,18 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     setIsEjected(true);
   };
 
-  const handleReopen = () => {
+  const handleReopen = useCallback(() => {
     setIsReopening(true);
     setIsEjected(false);
 
     // Reset reopening state after animation completes
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setIsReopening(false);
     }, 1200);
-  };
 
-  const handleFastForward = useCallback(() => {
-    // Show flash
-    setShowFlash(true);
-
-    // Change background after brief flash
-    setTimeout(() => {
-      setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
-    }, 50);
-
-    // Hide flash after longer duration
-    setTimeout(() => {
-      setShowFlash(false);
-    }, 200);
-  }, [backgroundImages.length]);
+    // Store timer for potential cleanup (though this is less critical since it's user-triggered)
+    return () => clearTimeout(timer);
+  }, []);
 
   const handlePause = () => {
     setIsPaused(!isPaused);
