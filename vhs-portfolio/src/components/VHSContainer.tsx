@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './VHSContainer.css';
 import { useTypewriter } from '../hooks/useTypewriter';
 import ContactModal from './ContactModal';
@@ -139,7 +139,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [handleFastForward]);
 
   // Random glitch effects with useRef
   useEffect(() => {
@@ -208,7 +208,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     }, 1200);
   };
 
-  const handleFastForward = () => {
+  const handleFastForward = useCallback(() => {
     // Show flash
     setShowFlash(true);
 
@@ -221,7 +221,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     setTimeout(() => {
       setShowFlash(false);
     }, 200);
-  };
+  }, [backgroundImages.length]);
 
   const handlePause = () => {
     setIsPaused(!isPaused);
