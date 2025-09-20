@@ -66,7 +66,9 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     "I live in Phoenix, Arizona and love the desert.",
     "...............",
       "It is a bit dry, but so am I?",
-      "Damn. That was lame. But so am I, you?"
+      "Damn. That was lame. But so am I, you?",
+      "................",
+      "Eject to see the pictures without my rambles."
   ]).current;
 
   const { displayTexts, isComplete, currentLineIndex } = useTypewriter({
