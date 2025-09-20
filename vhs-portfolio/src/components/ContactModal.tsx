@@ -13,6 +13,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -31,32 +32,84 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     }
   };
 
+  const validateForm = () => {
+    const errors: {[key: string]: string} = {};
+
+    // Name validation
+    if (!formData.name.trim()) {
+      errors.name = 'Name is required';
+    } else if (formData.name.trim().length < 2) {
+      errors.name = 'Name must be at least 2 characters';
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+
+    // Message validation
+    if (!formData.message.trim()) {
+      errors.message = 'Message is required';
+    } else if (formData.message.trim().length < 10) {
+      errors.message = 'Message must be at least 10 characters';
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+
+    // Clear validation error for this field
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate form before submission
+    if (!validateForm()) {
+      return;
+    }
+
     setIsSubmitting(true);
+    setSubmitStatus('idle');
 
-    // TODO: Replace with actual form submission endpoint
     try {
-      console.log('Form submission:', formData);
+      const form = e.target as HTMLFormElement;
+      const netlifyFormData = new FormData(form);
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyFormData as any).toString(),
+      });
 
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        setValidationErrors({});
 
-      // Auto-close after success
-      setTimeout(() => {
-        onClose();
-      }, 2000);
+        // Auto-close after success
+        setTimeout(() => {
+          onClose();
+        }, 2000);
+      } else {
+        throw new Error(`Form submission failed with status: ${response.status}`);
+      }
 
     } catch (error) {
       console.error('Form submission error:', error);
@@ -88,7 +141,24 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
               <div className="success-subtitle">Thanks for reaching out!</div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="contact-form">
+            <form
+              onSubmit={handleSubmit}
+              className="contact-form"
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+            >
+              {/* Netlify form detection */}
+              <input type="hidden" name="form-name" value="contact" />
+
+              {/* Honeypot field for spam protection */}
+              <div style={{ display: 'none' }}>
+                <label>
+                  Don't fill this out if you're human: <input name="bot-field" />
+                </label>
+              </div>
+
               <div className="form-group">
                 <label htmlFor="name">NAME:</label>
                 <input
@@ -99,7 +169,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                   onChange={handleInputChange}
                   required
                   disabled={isSubmitting}
+                  className={validationErrors.name ? 'error' : ''}
                 />
+                {validationErrors.name && <span className="validation-error">{validationErrors.name}</span>}
               </div>
 
               <div className="form-group">
@@ -112,7 +184,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                   onChange={handleInputChange}
                   required
                   disabled={isSubmitting}
+                  className={validationErrors.email ? 'error' : ''}
                 />
+                {validationErrors.email && <span className="validation-error">{validationErrors.email}</span>}
               </div>
 
               <div className="form-group">
@@ -125,7 +199,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                   rows={4}
                   required
                   disabled={isSubmitting}
+                  className={validationErrors.message ? 'error' : ''}
                 />
+                {validationErrors.message && <span className="validation-error">{validationErrors.message}</span>}
               </div>
 
               <button

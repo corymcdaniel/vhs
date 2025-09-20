@@ -160,6 +160,22 @@
   cursor: not-allowed;
 }
 
+.form-group input.error,
+.form-group textarea.error {
+  border-color: #ff0000;
+  background: rgba(255, 0, 0, 0.05);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+.validation-error {
+  color: #ff0000;
+  font-size: 14px;
+  margin-top: 5px;
+  text-shadow: 0 0 5px #ff0000;
+  text-transform: uppercase;
+  font-family: 'VT323', monospace;
+}
+
 .form-group textarea {
   resize: vertical;
   min-height: 80px;
