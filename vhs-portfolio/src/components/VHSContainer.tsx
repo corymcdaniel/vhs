@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './VHSContainer.css';
 import { useTypewriter } from '../hooks/useTypewriter';
 import ContactModal from './ContactModal';
@@ -17,6 +17,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
   const [timestamp, setTimestamp] = useState(257); // Starting at 00:42:17
   const [showContactModal, setShowContactModal] = useState(false);
+  const textElementRef = useRef<HTMLDivElement>(null);
 
   const backgroundImages = [
     '/backgrounds/20250906_194829.jpg',
@@ -47,8 +48,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const showLocationNav = currentLineIndex >= 4; // After "location" line
   const showContactButton = isComplete; // After all text is complete
 
-  console.log('VHS Container - displayTexts:', displayTexts);
-  console.log('VHS Container - currentLineIndex:', currentLineIndex);
 
   // Update timestamp
   useEffect(() => {
@@ -70,26 +69,29 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     }
   }, [effectsReduced, backgroundImages.length]);
 
-  // Random glitch effects
+  // Random glitch effects with useRef
   useEffect(() => {
     if (!effectsReduced) {
       const glitchInterval = setInterval(() => {
-        if (Math.random() < 0.1) {
-          const textElement = document.querySelector('.vhs-text');
-          if (textElement) {
-            const randomX = Math.random() * 4 - 2;
-            const randomY = Math.random() * 4 - 2;
-            const randomHue = Math.random() * 360;
-            const randomContrast = 1 + Math.random() * 0.5;
+        if (Math.random() < 0.1 && textElementRef.current) {
+          const textElement = textElementRef.current;
+          const randomX = Math.random() * 4 - 2;
+          const randomY = Math.random() * 4 - 2;
+          const randomHue = Math.random() * 360;
+          const randomContrast = 1 + Math.random() * 0.5;
 
-            (textElement as HTMLElement).style.transform = `translate(${randomX}px, ${randomY}px)`;
-            (textElement as HTMLElement).style.filter = `hue-rotate(${randomHue}deg) contrast(${randomContrast})`;
+          textElement.style.transform = `translate(${randomX}px, ${randomY}px)`;
+          textElement.style.filter = `hue-rotate(${randomHue}deg) contrast(${randomContrast})`;
 
-            setTimeout(() => {
-              (textElement as HTMLElement).style.transform = 'translate(0, 0)';
-              (textElement as HTMLElement).style.filter = '';
-            }, 50 + Math.random() * 100);
-          }
+          const resetTimer = setTimeout(() => {
+            if (textElementRef.current) {
+              textElementRef.current.style.transform = 'translate(0, 0)';
+              textElementRef.current.style.filter = '';
+            }
+          }, 50 + Math.random() * 100);
+
+          // Return cleanup for the reset timer
+          return () => clearTimeout(resetTimer);
         }
       }, 200);
 
@@ -105,17 +107,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   };
 
   const handleLinkClick = (url: string) => {
-    console.log(`🔗 External link clicked: ${url}`);
     window.open(url, '_blank');
   };
 
   const handleCatLinkClick = (catName: string) => {
-    console.log(`🐱 Cat link clicked: ${catName}`);
     onCatClick(catName);
   };
 
   const handleContactClick = () => {
-    console.log('📧 Contact button clicked');
     setShowContactModal(true);
   };
 
@@ -140,7 +139,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       <div className="vhs-timestamp">{formatTimestamp(timestamp)}</div>
 
       {/* Main Text */}
-      <div className="vhs-text chromatic">
+      <div className="vhs-text chromatic" ref={textElementRef}>
         {displayTexts.map((text, index) => {
           const isVisible = index <= currentLineIndex;
           const opacity = isVisible ? 1 : 0;
@@ -237,7 +236,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         {effectsReduced ? 'RESTORE EFFECTS' : 'REDUCE EFFECTS'}
       </button>
 
-      <button className="test-btn">TEST GLITCH</button>
 
       {/* Contact Modal */}
       {showContactModal && (

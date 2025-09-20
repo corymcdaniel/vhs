@@ -14,6 +14,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
+  const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -23,8 +24,14 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     };
 
     document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      // Clean up auto-close timer on unmount
+      if (autoCloseTimer) {
+        clearTimeout(autoCloseTimer);
+      }
+    };
+  }, [onClose, autoCloseTimer]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -103,10 +110,11 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
         setFormData({ name: '', email: '', message: '' });
         setValidationErrors({});
 
-        // Auto-close after success
-        setTimeout(() => {
+        // Auto-close after success with proper cleanup
+        const timer = setTimeout(() => {
           onClose();
         }, 2000);
+        setAutoCloseTimer(timer);
       } else {
         throw new Error(`Form submission failed with status: ${response.status}`);
       }
@@ -114,6 +122,13 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     } catch (error) {
       console.error('Form submission error:', error);
       setSubmitStatus('error');
+
+      // More specific error handling could be added here
+      // For example, network errors vs server errors
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        // Network error - could show different message
+        console.error('Network error during form submission');
+      }
     } finally {
       setIsSubmitting(false);
     }

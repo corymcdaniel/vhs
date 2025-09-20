@@ -25,7 +25,6 @@ export const useTypewriter = ({
   const [isComplete, setIsComplete] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
-  console.log('Typewriter state:', { currentLineIndex, currentCharIndex, hasStarted, isComplete });
 
   useEffect(() => {
     // Start delay
@@ -45,8 +44,10 @@ export const useTypewriter = ({
     const currentText = texts[currentLineIndex];
 
     if (currentCharIndex < currentText.length) {
-      // Add random typing variation
+      // Add random typing variation and occasional pause
       const randomDelay = speed + Math.random() * 20 - 10;
+      const pauseDelay = Math.random() < 0.03 ? 100 + Math.random() * 150 : 0;
+      const totalDelay = randomDelay + pauseDelay;
 
       const timer = setTimeout(() => {
         setDisplayTexts(prev => {
@@ -54,16 +55,8 @@ export const useTypewriter = ({
           newTexts[currentLineIndex] = currentText.slice(0, currentCharIndex + 1);
           return newTexts;
         });
-
-        // Occasional pause for effect (reduced frequency and duration)
-        const pauseDelay = Math.random() < 0.03 ? 100 + Math.random() * 150 : 0;
-
-        const charTimer = setTimeout(() => {
-          setCurrentCharIndex(prev => prev + 1);
-        }, pauseDelay);
-
-        return () => clearTimeout(charTimer);
-      }, randomDelay);
+        setCurrentCharIndex(prev => prev + 1);
+      }, totalDelay);
 
       return () => clearTimeout(timer);
     } else {
