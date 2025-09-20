@@ -150,7 +150,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
       const interval = setInterval(() => {
         // Show flash
-        console.log('Auto background change - Setting showFlash to true'); // Debug log
         setShowFlash(true);
 
         // Change background after brief flash
@@ -161,7 +160,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
         // Hide flash after longer duration
         const flashTimer = setTimeout(() => {
-          console.log('Auto background change - Setting showFlash to false'); // Debug log
           setShowFlash(false);
           activeTimers.delete(flashTimer);
         }, 600);
@@ -184,20 +182,18 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     fastForwardTimers.current.clear();
 
     // Show flash
-    console.log('Setting showFlash to true'); // Debug log
     setShowFlash(true);
 
     // Track timers for cleanup
     const bgTimer = setTimeout(() => {
       setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
       fastForwardTimers.current.delete(bgTimer);
-    }, 100); // Slightly longer delay
+    }, 100);
 
     const flashTimer = setTimeout(() => {
-      console.log('Setting showFlash to false'); // Debug log
       setShowFlash(false);
       fastForwardTimers.current.delete(flashTimer);
-    }, 600); // Longer flash duration
+    }, 600);
 
     fastForwardTimers.current.add(bgTimer);
     fastForwardTimers.current.add(flashTimer);
@@ -361,14 +357,17 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
   // Comprehensive cleanup on unmount
   useEffect(() => {
+    const currentFastForwardTimers = fastForwardTimers.current;
+    const currentReopenTimer = reopenTimerRef.current;
+
     return () => {
       // Clear fast forward timers
-      fastForwardTimers.current.forEach(timer => clearTimeout(timer));
-      fastForwardTimers.current.clear();
+      currentFastForwardTimers.forEach(timer => clearTimeout(timer));
+      currentFastForwardTimers.clear();
 
       // Clear reopen timer
-      if (reopenTimerRef.current) {
-        clearTimeout(reopenTimerRef.current);
+      if (currentReopenTimer) {
+        clearTimeout(currentReopenTimer);
       }
     };
   }, []);
