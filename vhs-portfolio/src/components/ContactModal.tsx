@@ -96,13 +96,22 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     setSubmitStatus('idle');
 
     try {
-      const form = e.target as HTMLFormElement;
-      const netlifyFormData = new FormData(form);
+      // Encode form data for Netlify
+      const encode = (data: {[key: string]: string}) => {
+        return Object.keys(data)
+          .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+          .join("&");
+      };
 
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyFormData as any).toString(),
+        body: encode({
+          'form-name': 'contact',
+          'name': formData.name,
+          'email': formData.email,
+          'message': formData.message
+        }),
       });
 
       if (response.ok) {
