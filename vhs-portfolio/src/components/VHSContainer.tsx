@@ -41,10 +41,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const textLines = useRef([
     "Hello, I'm Cory.",
     "I've been developing websites for years.",
+    "...............",
     "I also do photography.",
     "I have two cats, Charlie and Papago.",
     "I live in Phoenix, Arizona and love the desert.",
-    "..............."
+    "...............",
+      "What more, friend?"
   ]).current;
 
   const { displayTexts, isComplete, currentLineIndex } = useTypewriter({
@@ -54,11 +56,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     startDelay: 500
   });
 
-  // Track which navigation sections should be visible
-  const showWorkNav = currentLineIndex >= 1; // After "developing websites" line
-  const showPhotoNav = currentLineIndex >= 2; // After "photography" line
-  const showCatsNav = currentLineIndex >= 3; // After "cats" line
-  const showLocationNav = currentLineIndex >= 4; // After "location" line
+  // Track which navigation sections should be visible based on content
+  const completedText = displayTexts.slice(0, currentLineIndex + 1).join(' ').toLowerCase();
+  const showWorkNav = completedText.includes('developing websites') || completedText.includes('websites');
+  const showPhotoNav = completedText.includes('photography');
+  const showCatsNav = completedText.includes('cats') && (completedText.includes('charlie') || completedText.includes('papago'));
+  const showLocationNav = completedText.includes('phoenix') || completedText.includes('desert');
   const showContactButton = isComplete; // After all text is complete
 
   // Preload background images
