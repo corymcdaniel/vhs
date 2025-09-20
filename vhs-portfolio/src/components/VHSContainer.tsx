@@ -20,13 +20,13 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const textElementRef = useRef<HTMLDivElement>(null);
 
   const backgroundImages = [
+    '/backgrounds/20250906_194829.jpg',
     '/backgrounds/20250312_095352.jpg',
     '/backgrounds/20250315_152239.jpg',
     '/backgrounds/20250329_180257.jpg',
     '/backgrounds/20250502_152600.jpg',
     '/backgrounds/20250502_152748~2.jpg',
     '/backgrounds/20250814_204013-EDIT (2).jpg',
-    '/backgrounds/20250906_194829.jpg',
     '/backgrounds/20250906_201009.jpg',
     '/backgrounds/bg.jpg'
   ];
