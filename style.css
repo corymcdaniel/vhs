@@ -18,7 +18,7 @@ body {
     position: relative;
     width: 100%;
     height: 100vh;
-    background: linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('backgrounds/bg.jpg');
+    background: linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('vhs-portfolio/public/backgrounds/bg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -290,94 +290,94 @@ body {
 }
 
 @keyframes scrambleMove {
-    0% { 
+    0% {
         transform: translate(0, 0);
         filter: hue-rotate(0deg);
     }
-    25% { 
+    25% {
         transform: translate(2px, -1px);
         filter: hue-rotate(90deg);
     }
-    50% { 
+    50% {
         transform: translate(-1px, 2px);
         filter: hue-rotate(180deg);
     }
-    75% { 
+    75% {
         transform: translate(-2px, -2px);
         filter: hue-rotate(270deg);
     }
-    100% { 
+    100% {
         transform: translate(0, 0);
         filter: hue-rotate(360deg);
     }
 }
 
 @keyframes backgroundScan {
-    0% { 
-        filter: 
-            contrast(1.4) 
-            brightness(0.4) 
-            saturate(0.1) 
+    0% {
+        filter:
+            contrast(1.4)
+            brightness(0.4)
+            saturate(0.1)
             sepia(0.6)
             hue-rotate(25deg)
             blur(0.3px);
         transform: translateX(0px);
     }
-    15% { 
-        filter: 
-            contrast(2.2) 
-            brightness(0.2) 
-            saturate(0.05) 
+    15% {
+        filter:
+            contrast(2.2)
+            brightness(0.2)
+            saturate(0.05)
             sepia(0.9)
             hue-rotate(180deg)
             blur(0.8px);
         transform: translateX(-3px);
     }
-    30% { 
-        filter: 
-            contrast(0.8) 
-            brightness(0.6) 
-            saturate(0.3) 
+    30% {
+        filter:
+            contrast(0.8)
+            brightness(0.6)
+            saturate(0.3)
             sepia(0.3)
             hue-rotate(-45deg)
             blur(0.1px);
         transform: translateX(2px);
     }
-    45% { 
-        filter: 
-            contrast(3.0) 
-            brightness(0.1) 
-            saturate(0.02) 
+    45% {
+        filter:
+            contrast(3.0)
+            brightness(0.1)
+            saturate(0.02)
             sepia(1.0)
             hue-rotate(270deg)
             blur(1.2px);
         transform: translateX(-1px);
     }
-    60% { 
-        filter: 
-            contrast(1.8) 
-            brightness(0.3) 
-            saturate(0.08) 
+    60% {
+        filter:
+            contrast(1.8)
+            brightness(0.3)
+            saturate(0.08)
             sepia(0.7)
             hue-rotate(90deg)
             blur(0.5px);
         transform: translateX(1px);
     }
-    80% { 
-        filter: 
-            contrast(2.5) 
-            brightness(0.15) 
-            saturate(0.03) 
+    80% {
+        filter:
+            contrast(2.5)
+            brightness(0.15)
+            saturate(0.03)
             sepia(0.95)
             hue-rotate(315deg)
             blur(0.9px);
         transform: translateX(-2px);
     }
-    100% { 
-        filter: 
-            contrast(1.4) 
-            brightness(0.4) 
-            saturate(0.1) 
+    100% {
+        filter:
+            contrast(1.4)
+            brightness(0.4)
+            saturate(0.1)
             sepia(0.6)
             hue-rotate(25deg)
             blur(0.3px);
@@ -388,37 +388,37 @@ body {
 @keyframes backgroundDistortion {
     0% {
         transform: translateY(0px) skewX(0deg);
-        filter: 
-            contrast(2.0) 
-            brightness(0.3) 
+        filter:
+            contrast(2.0)
+            brightness(0.3)
             saturate(0.05);
     }
     25% {
         transform: translateY(-2px) skewX(1deg);
-        filter: 
-            contrast(2.8) 
-            brightness(0.1) 
+        filter:
+            contrast(2.8)
+            brightness(0.1)
             saturate(0.02);
     }
     50% {
         transform: translateY(1px) skewX(-0.5deg);
-        filter: 
-            contrast(1.5) 
-            brightness(0.4) 
+        filter:
+            contrast(1.5)
+            brightness(0.4)
             saturate(0.08);
     }
     75% {
         transform: translateY(-1px) skewX(0.8deg);
-        filter: 
-            contrast(3.2) 
-            brightness(0.08) 
+        filter:
+            contrast(3.2)
+            brightness(0.08)
             saturate(0.01);
     }
     100% {
         transform: translateY(0px) skewX(0deg);
-        filter: 
-            contrast(2.0) 
-            brightness(0.3) 
+        filter:
+            contrast(2.0)
+            brightness(0.3)
             saturate(0.05);
     }
 }
