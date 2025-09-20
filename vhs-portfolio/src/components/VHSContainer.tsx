@@ -20,6 +20,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [isEjected, setIsEjected] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const textElementRef = useRef<HTMLDivElement>(null);
 
   const backgroundImages = [
@@ -40,7 +41,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     "I also do photography.",
     "I have two cats, Charlie and Papago.",
     "I live in Phoenix, Arizona and love the desert.",
-    "..."
+    "..............."
   ];
 
   const { displayTexts, isComplete, currentLineIndex } = useTypewriter({
@@ -69,7 +70,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
   // Background cycling with flash effect
   useEffect(() => {
-    if (!effectsReduced) {
+    if (!effectsReduced && !isPaused) {
       const interval = setInterval(() => {
         // Show flash
         setShowFlash(true);
@@ -87,7 +88,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
       return () => clearInterval(interval);
     }
-  }, [effectsReduced, backgroundImages.length]);
+  }, [effectsReduced, isPaused, backgroundImages.length]);
 
   // Keyboard commands
   useEffect(() => {
@@ -222,9 +223,13 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     }, 200);
   };
 
+  const handlePause = () => {
+    setIsPaused(!isPaused);
+  };
+
   return (
     <div
-      className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''}`}
+      className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''}`}
       style={{
         backgroundImage: `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${backgroundImages[currentBackgroundIndex]}')`
       }}
@@ -237,6 +242,9 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
       {/* Static Flash for background transitions */}
       {showFlash && <div className="static-flash"></div>}
+
+      {/* Static Text Overlay for paused state */}
+      {isPaused && <div className="static-text-overlay"></div>}
 
       {/* Timestamp */}
       <div className="vhs-timestamp">{formatTimestamp(timestamp)}</div>
@@ -278,7 +286,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       </div>
 
       {/* Navigation Bar - appears as content is typed */}
-      <div className="vhs-nav">
+      <div className={`vhs-nav ${showWorkNav ? 'show' : ''}`}>
         {showWorkNav && (
           <button
             className="vhs-nav-item"
@@ -347,6 +355,10 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* Controls */}
       <button className="toggle-effects-btn" onClick={onToggleEffects}>
         {effectsReduced ? 'RESTORE EFFECTS' : 'REDUCE EFFECTS'}
+      </button>
+
+      <button className="pause-btn" onClick={handlePause}>
+        {isPaused ? '▶ PLAY' : '⏸ PAUSE'}
       </button>
 
       <button className="fast-forward-btn" onClick={handleFastForward}>
