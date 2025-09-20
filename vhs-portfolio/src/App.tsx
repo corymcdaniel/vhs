@@ -8,7 +8,6 @@ function App() {
   const [effectsReduced, setEffectsReduced] = useState(false);
 
   const handleCatClick = (catName: string) => {
-    console.log(`🐱 Cat clicked: ${catName}`);
     setSelectedCat(catName);
   };
 
@@ -18,7 +17,6 @@ function App() {
 
   const toggleEffects = () => {
     setEffectsReduced(!effectsReduced);
-    console.log(`✅ Effects ${!effectsReduced ? 'reduced' : 'restored'}`);
   };
 
   return (
