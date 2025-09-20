@@ -911,6 +911,15 @@
   0% {
     transform: scale(1) translate(0, 0);
     position: relative;
+    opacity: 1;
+  }
+  80% {
+    transform: scale(0.3) translate(-120vw, -80vh);
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1003;
+    opacity: 1;
   }
   100% {
     transform: scale(0.3) translate(-120vw, -80vh);
@@ -918,6 +927,8 @@
     top: 20px;
     left: 20px;
     z-index: 1003;
+    opacity: 0;
+    visibility: hidden;
   }
 }
 
@@ -928,10 +939,23 @@
     top: 20px;
     left: 20px;
     z-index: 1003;
+    opacity: 0;
+    visibility: hidden;
+  }
+  20% {
+    transform: scale(0.3) translate(-120vw, -80vh);
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1003;
+    opacity: 1;
+    visibility: visible;
   }
   100% {
     transform: scale(1) translate(0, 0);
     position: relative;
+    opacity: 1;
+    visibility: visible;
   }
 }
 
