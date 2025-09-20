@@ -88,7 +88,15 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="scramble"><feTurbulence baseFrequency="0.3" numOctaves="1" seed="2"/><feColorMatrix type="matrix" values="0.3 0.3 0.3 0 0 0.3 0.3 0.3 0 0 0.3 0.3 0.3 0 0 0 0 0 1 0"/></filter></defs><rect width="100%" height="100%" filter="url(%23scramble)"/></svg>');
+  background:
+    url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="scramble"><feTurbulence baseFrequency="0.3" numOctaves="1" seed="2"/><feColorMatrix type="matrix" values="0.3 0.3 0.3 0 0 0.3 0.3 0.3 0 0 0.3 0.3 0.3 0 0 0 0 0 1 0"/></filter></defs><rect width="100%" height="100%" filter="url(%23scramble)"/></svg>'),
+    repeating-linear-gradient(
+      90deg,
+      rgba(128, 128, 128, 0.01) 0px,
+      rgba(128, 128, 128, 0.01) 1px,
+      transparent 1px,
+      transparent 2px
+    );
   opacity: 0.1;
   animation: scrambleMove 30s infinite linear;
   z-index: 3;
@@ -101,7 +109,15 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>');
+  background:
+    url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>'),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 1px,
+      rgba(0, 0, 0, 0.02) 1px,
+      rgba(0, 0, 0, 0.02) 2px
+    );
   opacity: 0.25;
   animation: staticFlicker 8s infinite;
   pointer-events: none;
@@ -151,7 +167,7 @@
   width: 100%;
   height: 100%;
   background:
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noise)" opacity="1"/></svg>'),
+    url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noise)" opacity="1"/></svg>'),
     repeating-linear-gradient(
       0deg,
       transparent 0px,
@@ -601,7 +617,7 @@
       rgba(0, 0, 0, 0.02) 3px,
       transparent 4px
     ),
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="pauseNoise"><feTurbulence baseFrequency="0.95" numOctaves="5" stitchTiles="stitch" seed="1"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23pauseNoise)" opacity="0.4"/></svg>');
+    url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="pauseNoise"><feTurbulence baseFrequency="0.95" numOctaves="5" stitchTiles="stitch" seed="1"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23pauseNoise)" opacity="0.4"/></svg>');
   opacity: 0.6;
   z-index: 800;
   pointer-events: none;
