@@ -526,7 +526,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       </button>
 
       <button className="fast-forward-btn" onClick={handleFastForward}>
-        >> FF
+        {'>> FF'}
       </button>
 
       {/* Reopen Icon - shows when ejected */}
