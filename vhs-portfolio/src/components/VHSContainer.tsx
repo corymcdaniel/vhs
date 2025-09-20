@@ -21,6 +21,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [isReopening, setIsReopening] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const textElementRef = useRef<HTMLDivElement>(null);
 
   const backgroundImages = useRef([
@@ -58,6 +59,29 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const showLocationNav = currentLineIndex >= 4; // After "location" line
   const showContactButton = isComplete; // After all text is complete
 
+  // Preload background images
+  useEffect(() => {
+    const preloadImage = (src: string) => {
+      return new Promise<void>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => reject(new Error(`Failed to load ${src}`));
+        img.src = src;
+      });
+    };
+
+    const preloadAllImages = async () => {
+      try {
+        await Promise.all(backgroundImages.map(preloadImage));
+        setImagesLoaded(true);
+      } catch (error) {
+        console.warn('Some images failed to load:', error);
+        setImagesLoaded(true); // Still show the site
+      }
+    };
+
+    preloadAllImages();
+  }, [backgroundImages]);
 
   // Update timestamp
   useEffect(() => {
@@ -258,6 +282,21 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const handlePause = () => {
     setIsPaused(!isPaused);
   };
+
+  // Show loading screen while images are preloading
+  if (!imagesLoaded) {
+    return (
+      <div className="vhs-loading-container">
+        <div className="vhs-loading-text">
+          <div className="loading-line">LOADING VHS PORTFOLIO...</div>
+          <div className="loading-line">PREPARING BACKGROUND IMAGES...</div>
+          <div className="loading-progress">
+            <div className="loading-bar"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
