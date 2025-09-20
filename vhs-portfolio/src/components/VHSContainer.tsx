@@ -79,7 +79,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   // Track which navigation sections should be visible based on content
   const completedText = displayTexts.slice(0, currentLineIndex + 1).join(' ').toLowerCase();
   const showWorkNav = completedText.includes('developing websites') || completedText.includes('websites');
-  const showPhotoNav = completedText.includes('photography');
+  const showPhotoNav = completedText.includes('photography') || completedText.includes('photographer');
   const showCatsNav = completedText.includes('cats') && (completedText.includes('charlie') || completedText.includes('papago'));
   const showLocationNav = completedText.includes('phoenix') || completedText.includes('desert');
   const showContactButton = isComplete; // After all text is complete
