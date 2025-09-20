@@ -35,6 +35,25 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     '/backgrounds/20250502_152748~2.jpg',
     '/backgrounds/20250814_204013-EDIT (2).jpg',
     '/backgrounds/20250906_201009.jpg',
+    '/backgrounds/20250908_200811.jpg',
+    '/backgrounds/20230305_160446.jpg',
+    '/backgrounds/20230305_194111.jpg',
+    '/backgrounds/20230310_113926.jpg',
+    '/backgrounds/20230310_170323.jpg',
+    '/backgrounds/20230311_114327~2.jpg',
+    '/backgrounds/20230415_091146.jpg',
+    '/backgrounds/20230603_095027~2.jpg',
+    '/backgrounds/20231214_174753.jpg',
+    '/backgrounds/20231220_091305.jpg',
+    '/backgrounds/20231222_135934.jpg',
+    '/backgrounds/20231224_132745.jpg',
+    '/backgrounds/20240309_174427.jpg',
+    '/backgrounds/20240601_192412.jpg',
+    '/backgrounds/20240704_201604.jpg',
+    '/backgrounds/20240805_191606.jpg',
+    '/backgrounds/20241227_162337.jpg',
+    '/backgrounds/20250104_150527-EDIT.jpg',
+    '/backgrounds/20250329_172513.jpg',
     '/backgrounds/bg.jpg'
   ]).current;
 
@@ -42,11 +61,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     "Hello, I'm Cory.",
     "I've been developing websites for years.",
     "...............",
-    "I also do photography.",
+    "I am also sort of an amateur photographer.",
     "I have two cats, Charlie and Papago.",
     "I live in Phoenix, Arizona and love the desert.",
     "...............",
-      "What more, friend?"
+      "It is a bit dry, but so am I?",
+      "Oof, that was lame."
   ]).current;
 
   const { displayTexts, isComplete, currentLineIndex } = useTypewriter({
