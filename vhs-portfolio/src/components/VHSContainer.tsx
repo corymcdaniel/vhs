@@ -17,6 +17,9 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
   const [timestamp, setTimestamp] = useState(257); // Starting at 00:42:17
   const [showContactModal, setShowContactModal] = useState(false);
+  const [isEjected, setIsEjected] = useState(false);
+  const [isReopening, setIsReopening] = useState(false);
+  const [showFlash, setShowFlash] = useState(false);
   const textElementRef = useRef<HTMLDivElement>(null);
 
   const backgroundImages = [
@@ -64,16 +67,78 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     return () => clearInterval(interval);
   }, []);
 
-  // Background cycling
+  // Background cycling with flash effect
   useEffect(() => {
     if (!effectsReduced) {
       const interval = setInterval(() => {
-        setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
+        // Show flash
+        setShowFlash(true);
+
+        // Change background after brief flash
+        setTimeout(() => {
+          setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
+        }, 50);
+
+        // Hide flash after longer duration
+        setTimeout(() => {
+          setShowFlash(false);
+        }, 200);
       }, 15000);
 
       return () => clearInterval(interval);
     }
   }, [effectsReduced, backgroundImages.length]);
+
+  // Keyboard commands
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Prevent default for our custom keys
+      if (['g', 'b', 'r', 'n', ' '].includes(e.key.toLowerCase())) {
+        e.preventDefault();
+      }
+
+      switch (e.key.toLowerCase()) {
+        case ' ': // Spacebar for static burst
+          setShowFlash(true);
+          setTimeout(() => setShowFlash(false), 300);
+          break;
+
+        case 'g': // 'g' for text glitch
+          if (textElementRef.current) {
+            const element = textElementRef.current;
+            const glitchX = Math.random() * 20 - 10;
+            const glitchY = Math.random() * 20 - 10;
+            const hueShift = Math.random() * 360;
+            const contrastBoost = 2 + Math.random() * 3;
+
+            element.style.transform = `translate(${glitchX}px, ${glitchY}px)`;
+            element.style.filter = `hue-rotate(${hueShift}deg) contrast(${contrastBoost}) brightness(1.5)`;
+
+            setTimeout(() => {
+              if (textElementRef.current) {
+                textElementRef.current.style.transform = '';
+                textElementRef.current.style.filter = '';
+              }
+            }, 400);
+          }
+          break;
+
+        case 'n': // 'n' for next background (same as FF button)
+          handleFastForward();
+          break;
+
+        case 'r': // 'r' to reset/reload page
+          window.location.reload();
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Random glitch effects with useRef
   useEffect(() => {
@@ -128,9 +193,38 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     setShowContactModal(false);
   };
 
+  const handleEject = () => {
+    setIsEjected(true);
+  };
+
+  const handleReopen = () => {
+    setIsReopening(true);
+    setIsEjected(false);
+
+    // Reset reopening state after animation completes
+    setTimeout(() => {
+      setIsReopening(false);
+    }, 1200);
+  };
+
+  const handleFastForward = () => {
+    // Show flash
+    setShowFlash(true);
+
+    // Change background after brief flash
+    setTimeout(() => {
+      setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
+    }, 50);
+
+    // Hide flash after longer duration
+    setTimeout(() => {
+      setShowFlash(false);
+    }, 200);
+  };
+
   return (
     <div
-      className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''}`}
+      className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''}`}
       style={{
         backgroundImage: `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${backgroundImages[currentBackgroundIndex]}')`
       }}
@@ -140,6 +234,9 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       <div className="static-overlay"></div>
       <div className="scan-lines"></div>
       <div className="tracking-lines"></div>
+
+      {/* Static Flash for background transitions */}
+      {showFlash && <div className="static-flash"></div>}
 
       {/* Timestamp */}
       <div className="vhs-timestamp">{formatTimestamp(timestamp)}</div>
@@ -166,6 +263,16 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
             onClick={handleContactClick}
           >
             CONTACT ME
+          </button>
+        )}
+
+        {showContactButton && !isEjected && (
+          <button
+            className="eject-button"
+            style={{ animationDelay: '6.0s' }}
+            onClick={handleEject}
+          >
+            ⏏ EJECT
           </button>
         )}
       </div>
@@ -242,6 +349,16 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         {effectsReduced ? 'RESTORE EFFECTS' : 'REDUCE EFFECTS'}
       </button>
 
+      <button className="fast-forward-btn" onClick={handleFastForward}>
+        ⏩ FF
+      </button>
+
+      {/* Reopen Icon - shows when ejected */}
+      {isEjected && (
+        <button className="reopen-icon" onClick={handleReopen}>
+          ⏏
+        </button>
+      )}
 
       {/* Contact Modal */}
       {showContactModal && (
