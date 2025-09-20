@@ -49,7 +49,7 @@
     blur(0.3px);
   pointer-events: none;
   z-index: 1;
-  animation: backgroundScan 3s linear infinite;
+  animation: backgroundScan 5s linear infinite;
   mix-blend-mode: multiply;
 }
 
@@ -77,7 +77,7 @@
     saturate(0.05);
   pointer-events: none;
   z-index: 2;
-  animation: backgroundDistortion 2s ease-in-out infinite alternate;
+  animation: backgroundDistortion 4s ease-in-out infinite alternate;
   mix-blend-mode: screen;
 }
 
@@ -90,7 +90,7 @@
   height: 100%;
   background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="scramble"><feTurbulence baseFrequency="0.3" numOctaves="1" seed="2"/><feColorMatrix type="matrix" values="0.3 0.3 0.3 0 0 0.3 0.3 0.3 0 0 0.3 0.3 0.3 0 0 0 0 0 1 0"/></filter></defs><rect width="100%" height="100%" filter="url(%23scramble)"/></svg>');
   opacity: 0.1;
-  animation: scrambleMove 20s infinite linear;
+  animation: scrambleMove 30s infinite linear;
   z-index: 3;
   pointer-events: none;
 }
@@ -103,7 +103,7 @@
   height: 100%;
   background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>');
   opacity: 0.25;
-  animation: staticFlicker 5s infinite;
+  animation: staticFlicker 8s infinite;
   pointer-events: none;
   z-index: 4;
 }
@@ -122,7 +122,7 @@
     rgba(0, 255, 0, 0.03) 4px
   );
   pointer-events: none;
-  animation: scanlineMove 3s linear infinite;
+  animation: scanlineMove 6s linear infinite;
   z-index: 5;
 }
 
@@ -139,7 +139,7 @@
     rgba(255, 255, 255, 0.02) 100px,
     rgba(255, 255, 255, 0.02) 101px
   );
-  animation: trackingMove 15s linear infinite;
+  animation: trackingMove 25s linear infinite;
   pointer-events: none;
   z-index: 6;
 }
@@ -151,33 +151,35 @@
   width: 100%;
   height: 100%;
   background:
-    linear-gradient(45deg,
-      rgba(255, 255, 255, 0.9),
-      rgba(255, 255, 255, 0.7),
-      rgba(255, 255, 255, 0.9)
-    ),
     url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noise)" opacity="1"/></svg>'),
     repeating-linear-gradient(
       0deg,
       transparent 0px,
-      rgba(255, 255, 255, 0.1) 1px,
+      rgba(255, 255, 255, 0.8) 1px,
       transparent 2px,
-      rgba(0, 0, 0, 0.1) 3px,
+      rgba(0, 0, 0, 0.8) 3px,
       transparent 4px
     ),
     repeating-linear-gradient(
       90deg,
       transparent 0px,
-      rgba(255, 255, 255, 0.1) 1px,
+      rgba(255, 255, 255, 0.8) 1px,
       transparent 2px,
-      rgba(0, 0, 0, 0.1) 3px,
+      rgba(0, 0, 0, 0.8) 3px,
       transparent 4px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.3) 0px,
+      transparent 1px,
+      rgba(0, 0, 0, 0.3) 2px,
+      transparent 3px
     );
-  opacity: 1.0;
+  opacity: 0.85;
   z-index: 2000;
   pointer-events: none;
-  animation: staticNoise 600ms linear;
-  mix-blend-mode: screen;
+  animation: staticNoise 400ms linear;
+  mix-blend-mode: overlay;
 }
 
 /* Timestamp */

@@ -16,7 +16,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   onToggleEffects
 }) => {
   const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
-  const [timestamp, setTimestamp] = useState(257); // Starting at 00:42:17
   const [showContactModal, setShowContactModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
   const [isEjected, setIsEjected] = useState(false);
@@ -134,10 +133,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     };
   }, [backgroundImages]);
 
-  // Update timestamp
+  // Current time display (updates every second)
+  const [currentTime, setCurrentTime] = useState(new Date());
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimestamp(prev => prev + 1);
+      setCurrentTime(new Date());
     }, 1000);
 
     return () => clearInterval(interval);
@@ -298,10 +299,10 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     }
   }, [effectsReduced]);
 
-  const formatTimestamp = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
+  const formatCurrentTime = (date: Date) => {
+    const hours = date.getHours();
+    const mins = date.getMinutes();
+    const secs = date.getSeconds();
     return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
@@ -409,7 +410,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* Timestamp */}
       <div className="vhs-timestamp" onClick={handleRecordingClick}>
         <span className="rec-dot"></span>
-        REC {formatTimestamp(timestamp)}
+        REC {formatCurrentTime(currentTime)}
       </div>
 
       {/* Main Text */}
@@ -440,7 +441,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         {showContactButton && !isEjected && (
           <button
             className="eject-button"
-            style={{ animationDelay: '6.0s' }}
+            style={{ animationDelay: '3.0s' }}
             onClick={handleEject}
           >
             ⏏ EJECT
