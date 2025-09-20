@@ -1,0 +1,24 @@
+{
+  "name": "vhs-project",
+  "version": "1.0.0",
+  "description": "A VHS (Video Home System) project for creating terminal recordings",
+  "main": "index.js",
+  "scripts": {
+    "demo": "vhs demo.tape",
+    "clean": "rm -f *.gif *.mp4 *.webm *.mov"
+  },
+  "keywords": [
+    "vhs",
+    "terminal",
+    "recording",
+    "gif",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
