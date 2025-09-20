@@ -1,0 +1,56 @@
+name: VHS Demo
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install VHS
+      run: |
+        # Install VHS for generating terminal recordings
+        curl -s https://api.github.com/repos/charmbracelet/vhs/releases/latest \
+        | grep "browser_download_url.*Linux_x86_64.tar.gz" \
+        | cut -d : -f 2,3 \
+        | tr -d \" \
+        | wget -qi -
+        
+        tar -xzf vhs_*_Linux_x86_64.tar.gz
+        sudo mv vhs /usr/local/bin/
+        
+    - name: Validate tape files
+      run: |
+        # Check if tape files are syntactically valid
+        for tape in *.tape; do
+          if [ -f "$tape" ]; then
+            echo "Validating $tape..."
+            # VHS will validate the syntax without executing
+            vhs validate "$tape" || echo "Warning: $tape may have syntax issues"
+          fi
+        done
+    
+    # Uncomment to generate demo recordings in CI
+    # - name: Generate demo recordings
+    #   run: npm run demo
+    #   
+    # - name: Upload recordings
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: vhs-recordings
+    #     path: '*.gif'

@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "demo": "vhs demo.tape",
+    "advanced": "vhs advanced.tape", 
+    "all": "npm run demo && npm run advanced",
     "clean": "rm -f *.gif *.mp4 *.webm *.mov"
   },
   "keywords": [
