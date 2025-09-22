@@ -64,9 +64,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     "I am also sort of an amateur photographer.",
     "I have two cats, Charlie and Papago.",
     "I live in Phoenix, Arizona and love the desert.",
-    "...............",
-      "It is a bit dry, but so am I?",
-      "Damn. That was lame. But I am too.",
       "................",
       "Eject to see the pictures without my rambling."
   ]).current;
