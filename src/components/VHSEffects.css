@@ -1,0 +1,127 @@
+/* VHS Effect Styles */
+.vhs-scramble {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 98px,
+    rgba(255, 255, 255, 0.03) 100px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.static-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle, transparent 20%, rgba(255, 255, 255, 0.05) 70%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(0, 255, 255, 0.02) 1px,
+      transparent 2px
+    );
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0.6;
+  animation: static-flicker 0.15s infinite linear alternate;
+}
+
+.scan-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 9;
+  animation: scanlines 2s linear infinite;
+}
+
+.tracking-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    rgba(255, 0, 255, 0.02) 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 7;
+  animation: tracking 4s ease-in-out infinite;
+}
+
+.static-text-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(255, 255, 255, 0.1) 0deg,
+      transparent 2deg,
+      rgba(255, 255, 255, 0.1) 4deg
+    );
+  pointer-events: none;
+  z-index: 15;
+  animation: static-noise 0.1s infinite;
+}
+
+/* Animations */
+@keyframes static-flicker {
+  0% { opacity: 0.6; }
+  100% { opacity: 0.8; }
+}
+
+@keyframes scanlines {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes tracking {
+  0%, 100% { transform: translateX(0px); }
+  50% { transform: translateX(2px); }
+}
+
+@keyframes static-noise {
+  0% {
+    filter: hue-rotate(0deg) contrast(1);
+    transform: translateX(0px);
+  }
+  25% {
+    filter: hue-rotate(90deg) contrast(1.2);
+    transform: translateX(1px);
+  }
+  50% {
+    filter: hue-rotate(180deg) contrast(0.8);
+    transform: translateX(-1px);
+  }
+  75% {
+    filter: hue-rotate(270deg) contrast(1.1);
+    transform: translateX(0.5px);
+  }
+  100% {
+    filter: hue-rotate(360deg) contrast(1);
+    transform: translateX(0px);
+  }
+}

@@ -3,7 +3,8 @@ import './VHSContainer.css';
 import { useTypewriter } from '../hooks/useTypewriter';
 import ContactModal from './ContactModal';
 import RecordingModal from './RecordingModal';
-import BackgroundManager from './BackgroundManager';
+import SimpleBackgroundManager from './SimpleBackgroundManager';
+import VHSEffects from './VHSEffects';
 
 interface VHSContainerProps {
   effectsReduced: boolean;
@@ -21,7 +22,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [isEjected, setIsEjected] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(true);
   const [loadingStep, setLoadingStep] = useState(0);
   const textElementRef = useRef<HTMLDivElement>(null);
 
@@ -63,9 +64,9 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     const loadingTimers: NodeJS.Timeout[] = [];
 
     // Show each loading line with 1 second delay
-    const timer1 = setTimeout(() => setLoadingStep(1), 1000);
-    const timer2 = setTimeout(() => setLoadingStep(2), 2000);
-    const timer3 = setTimeout(() => setLoadingStep(3), 3000);
+    const timer1 = setTimeout(() => setLoadingStep(1), 100);
+    const timer2 = setTimeout(() => setLoadingStep(2), 200);
+    const timer3 = setTimeout(() => setLoadingStep(3), 300);
 
     loadingTimers.push(timer1, timer2, timer3);
 
@@ -255,8 +256,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     };
   }, []);
 
+  // Debug logging
+  console.log('VHSContainer render - imagesLoaded:', imagesLoaded, 'loadingStep:', loadingStep);
+
   // Show loading screen while images are preloading
   if (!imagesLoaded) {
+    console.log('Showing loading screen');
     return (
       <div className="vhs-loading-container">
         <div className="vhs-loading-text">
@@ -273,10 +278,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     );
   }
 
+  console.log('Showing main VHS interface');
+
   return (
     <>
-      {/* Background Manager handles all background cycling and effects */}
-      <BackgroundManager
+      {/* Simple Background Manager handles all background cycling and effects */}
+      <SimpleBackgroundManager
         onImagesLoaded={handleImagesLoaded}
         isEjected={isEjected}
         isPaused={isPaused}
@@ -285,15 +292,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       <div
         className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''}`}
       >
-      {/* VHS Effects */}
-      <div className="vhs-scramble"></div>
-      <div className="static-overlay"></div>
-      <div className="scan-lines"></div>
-      <div className="tracking-lines"></div>
-
-
-      {/* Static Text Overlay for paused state */}
-      {isPaused && <div className="static-text-overlay"></div>}
+      {/* VHS Effects Component */}
+      <VHSEffects effectsReduced={effectsReduced} isPaused={isPaused} />
 
       {/* Timestamp */}
       <div className="vhs-timestamp" onClick={handleRecordingClick}>

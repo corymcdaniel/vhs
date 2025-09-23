@@ -1,0 +1,203 @@
+.vhs-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity 0.1s ease;
+}
+
+.vhs-transition.phase-1 {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.1) 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.05) 4px,
+      transparent 6px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 0, 255, 0.1) 0px,
+      transparent 1px,
+      rgba(0, 255, 255, 0.05) 2px,
+      transparent 3px
+    );
+  filter:
+    contrast(5)
+    brightness(0.05)
+    saturate(0.01)
+    sepia(1.0)
+    hue-rotate(180deg)
+    blur(4px);
+  transform: translateX(25px) skewX(5deg);
+  animation: static-heavy 0.1s infinite;
+}
+
+.vhs-transition.phase-2 {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.2) 0px,
+      transparent 1px,
+      rgba(255, 255, 255, 0.1) 2px,
+      transparent 3px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 0, 0, 0.1) 0px,
+      transparent 1px,
+      rgba(0, 255, 0, 0.05) 2px,
+      transparent 3px
+    );
+  filter:
+    contrast(8)
+    brightness(0.02)
+    saturate(0.005)
+    sepia(1.0)
+    hue-rotate(270deg)
+    blur(8px);
+  transform: translateX(-40px) skewX(-7.5deg);
+  animation: static-peak 0.05s infinite;
+}
+
+.vhs-transition.phase-3 {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.02) 4px,
+      transparent 6px
+    );
+  filter:
+    contrast(3)
+    brightness(0.1)
+    saturate(0.02)
+    sepia(0.8)
+    hue-rotate(90deg)
+    blur(2px);
+  transform: translateX(10px) skewX(2.5deg);
+  animation: static-recovery 0.2s infinite;
+}
+
+@keyframes static-heavy {
+  0% {
+    transform: translateX(25px) skewX(5deg);
+    filter:
+      contrast(5)
+      brightness(0.05)
+      saturate(0.01)
+      sepia(1.0)
+      hue-rotate(180deg)
+      blur(4px);
+  }
+  25% {
+    transform: translateX(-25px) skewX(-5deg);
+    filter:
+      contrast(6)
+      brightness(0.03)
+      saturate(0.005)
+      sepia(1.0)
+      hue-rotate(200deg)
+      blur(5px);
+  }
+  50% {
+    transform: translateX(30px) skewX(6deg);
+    filter:
+      contrast(4)
+      brightness(0.07)
+      saturate(0.02)
+      sepia(1.0)
+      hue-rotate(160deg)
+      blur(3px);
+  }
+  75% {
+    transform: translateX(-30px) skewX(-6deg);
+    filter:
+      contrast(7)
+      brightness(0.04)
+      saturate(0.008)
+      sepia(1.0)
+      hue-rotate(220deg)
+      blur(6px);
+  }
+  100% {
+    transform: translateX(25px) skewX(5deg);
+    filter:
+      contrast(5)
+      brightness(0.05)
+      saturate(0.01)
+      sepia(1.0)
+      hue-rotate(180deg)
+      blur(4px);
+  }
+}
+
+@keyframes static-peak {
+  0% {
+    transform: translateX(-40px) skewX(-7.5deg);
+    filter:
+      contrast(8)
+      brightness(0.02)
+      saturate(0.005)
+      sepia(1.0)
+      hue-rotate(270deg)
+      blur(8px);
+  }
+  50% {
+    transform: translateX(40px) skewX(7.5deg);
+    filter:
+      contrast(10)
+      brightness(0.01)
+      saturate(0.001)
+      sepia(1.0)
+      hue-rotate(300deg)
+      blur(10px);
+  }
+  100% {
+    transform: translateX(-40px) skewX(-7.5deg);
+    filter:
+      contrast(8)
+      brightness(0.02)
+      saturate(0.005)
+      sepia(1.0)
+      hue-rotate(270deg)
+      blur(8px);
+  }
+}
+
+@keyframes static-recovery {
+  0% {
+    transform: translateX(10px) skewX(2.5deg);
+    filter:
+      contrast(3)
+      brightness(0.1)
+      saturate(0.02)
+      sepia(0.8)
+      hue-rotate(90deg)
+      blur(2px);
+  }
+  50% {
+    transform: translateX(-10px) skewX(-2.5deg);
+    filter:
+      contrast(2)
+      brightness(0.15)
+      saturate(0.05)
+      sepia(0.6)
+      hue-rotate(120deg)
+      blur(1px);
+  }
+  100% {
+    transform: translateX(10px) skewX(2.5deg);
+    filter:
+      contrast(3)
+      brightness(0.1)
+      saturate(0.02)
+      sepia(0.8)
+      hue-rotate(90deg)
+      blur(2px);
+  }
+}

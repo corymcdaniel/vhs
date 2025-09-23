@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './BackgroundManager.css';
-import VHSTransition from './VHSTransition';
 
-interface BackgroundManagerProps {
+interface SimpleBackgroundManagerProps {
   onImagesLoaded: (loaded: boolean) => void;
   isEjected: boolean;
   isPaused: boolean;
 }
 
-const BackgroundManager: React.FC<BackgroundManagerProps> = ({
+const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
   onImagesLoaded,
   isEjected,
   isPaused
@@ -16,7 +15,6 @@ const BackgroundManager: React.FC<BackgroundManagerProps> = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const triggerTransitionRef = useRef<((callback: () => void) => void) | null>(null);
 
   const backgroundImages = useRef([
     '/bg/20250906_194829.jpg',
@@ -49,47 +47,75 @@ const BackgroundManager: React.FC<BackgroundManagerProps> = ({
     '/bg/bg.jpg'
   ]).current;
 
-  // Skip preloading for now - just proceed to main site immediately
+  // Preload all background images
   useEffect(() => {
-    console.log('🚀 BackgroundManager: Skipping image preload - calling onImagesLoaded(true)');
-    onImagesLoaded(true);
-    console.log('🚀 BackgroundManager: onImagesLoaded(true) called');
+    console.log('🚀 SimpleBackgroundManager: Starting image preload...');
 
-    // Set initial background immediately
-    if (containerRef.current && backgroundImages.length > 0) {
-      const initialBackground = backgroundImages[0];
-      containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${initialBackground}')`;
-      console.log('🖼️ Initial background set:', initialBackground);
-    }
+    let loadedCount = 0;
+    const totalImages = backgroundImages.length;
+
+    const handleImageLoad = () => {
+      loadedCount++;
+      console.log(`📸 Loaded ${loadedCount}/${totalImages} images`);
+
+      if (loadedCount === totalImages) {
+        console.log('✅ All images preloaded');
+        onImagesLoaded(true);
+
+        // Set initial background after all images are loaded
+        if (containerRef.current) {
+          const initialBackground = backgroundImages[0];
+          containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${initialBackground}')`;
+          console.log('🖼️ Initial background set:', initialBackground);
+        }
+      }
+    };
+
+    // Preload each image
+    backgroundImages.forEach((imageSrc) => {
+      const img = new Image();
+      img.onload = handleImageLoad;
+      img.onerror = () => {
+        console.warn('⚠️ Failed to load:', imageSrc);
+        handleImageLoad(); // Count as loaded to prevent hanging
+      };
+      img.src = imageSrc;
+    });
   }, [onImagesLoaded, backgroundImages]);
 
-  // Handle transition trigger from VHSTransition component
-  const handleTransitionTrigger = useCallback((triggerFn: (callback: () => void) => void) => {
-    triggerTransitionRef.current = triggerFn;
-  }, []);
-
-  // Change to next background image
+  // Simple background change with static effect
   const changeBackground = useCallback(() => {
-    if (!containerRef.current || !triggerTransitionRef.current) {
-      console.log('⚠️ Cannot change background - missing refs');
-      return;
-    }
+    if (!containerRef.current) return;
 
     const nextIndex = (currentImageIndex + 1) % backgroundImages.length;
     const newBackground = backgroundImages[nextIndex];
 
-    console.log(`🔄 Triggering background change to: ${newBackground}`);
+    console.log(`🔄 Changing background to: ${newBackground}`);
 
-    triggerTransitionRef.current(() => {
+    // Add static effect
+    const container = containerRef.current;
+    container.style.filter = 'contrast(8) brightness(0.1) blur(3px) hue-rotate(180deg)';
+    container.style.transform = 'translateX(20px) skewX(5deg)';
+
+    // Change background after brief static
+    setTimeout(() => {
       if (containerRef.current) {
         containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
         setCurrentImageIndex(nextIndex);
         console.log(`📺 Background changed to: ${newBackground}`);
+
+        // Remove static effect
+        setTimeout(() => {
+          if (containerRef.current) {
+            containerRef.current.style.filter = '';
+            containerRef.current.style.transform = '';
+          }
+        }, 300);
       }
-    });
+    }, 200);
   }, [currentImageIndex, backgroundImages]);
 
-  // Manual background change (for keyboard shortcut)
+  // Manual background change
   const changeBackgroundManually = useCallback(() => {
     changeBackground();
   }, [changeBackground]);
@@ -119,7 +145,6 @@ const BackgroundManager: React.FC<BackgroundManagerProps> = ({
   // Cleanup on unmount
   useEffect(() => {
     const currentCycleTimer = cycleTimerRef.current;
-
     return () => {
       if (currentCycleTimer) {
         clearInterval(currentCycleTimer);
@@ -127,7 +152,7 @@ const BackgroundManager: React.FC<BackgroundManagerProps> = ({
     };
   }, []);
 
-  // Expose manual change function to parent (for keyboard shortcuts)
+  // Expose manual change function
   useEffect(() => {
     (window as any).changeBackgroundManually = changeBackgroundManually;
     return () => {
@@ -136,14 +161,11 @@ const BackgroundManager: React.FC<BackgroundManagerProps> = ({
   }, [changeBackgroundManually]);
 
   return (
-    <>
-      <div
-        ref={containerRef}
-        className="background-manager"
-      />
-      <VHSTransition onTransitionTrigger={handleTransitionTrigger} />
-    </>
+    <div
+      ref={containerRef}
+      className="background-manager"
+    />
   );
 };
 
-export default BackgroundManager;
+export default SimpleBackgroundManager;
