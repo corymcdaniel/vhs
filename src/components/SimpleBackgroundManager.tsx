@@ -145,10 +145,10 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
       return;
     }
 
-    // Start background cycling every 15 seconds
+    // Start background cycling every 10 seconds
     cycleTimerRef.current = setInterval(() => {
       changeBackground();
-    }, 15000);
+    }, 10000);
 
     return () => {
       if (cycleTimerRef.current) {
