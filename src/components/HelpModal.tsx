@@ -49,7 +49,7 @@ const HelpModal: React.FC<HelpModalProps> = ({ onClose }) => {
                 (window as any).openAboutModal();
               }
             }}>
-              📖 WHY I BUILT THIS WEBSITE
+              WHY I BUILT THIS WEBSITE
             </button>
           </div>
 

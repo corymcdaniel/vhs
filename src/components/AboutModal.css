@@ -102,13 +102,12 @@
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   animation: titleGlow 3s ease-in-out infinite alternate;
 }
 
 .about-subtitle {
   color: #88ff88;
-  font-size: 18px;
+  font-size: 24px;
   margin-top: 8px;
   font-style: italic;
   opacity: 0.9;
@@ -126,7 +125,7 @@
   padding: 30px;
   color: #00ff00;
   line-height: 1.6;
-  font-size: 16px;
+  font-size: 22px;
 }
 
 .blog-content h2 {
@@ -138,7 +137,6 @@
   letter-spacing: 1px;
   border-left: 4px solid #00ff00;
   padding-left: 15px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .blog-content h2:first-child {
@@ -148,7 +146,6 @@
 .blog-content p {
   margin: 0 0 20px 0;
   text-align: justify;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .blog-content p:last-of-type {
@@ -178,13 +175,13 @@
 }
 
 .signature span:first-child {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
   color: #88ff88;
 }
 
 .signature .date {
-  font-size: 14px;
+  font-size: 24px;
   color: #66ff66;
   opacity: 0.8;
 }
@@ -222,10 +219,10 @@
 /* Animations */
 @keyframes titleGlow {
   0% {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 255, 0, 0.3);
+    opacity: 0.8;
   }
   100% {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 0, 0.6);
+    opacity: 1;
   }
 }
 
@@ -257,15 +254,15 @@
   }
 
   .about-subtitle {
-    font-size: 16px;
+    font-size: 24px;
   }
 
   .blog-content {
     padding: 20px;
-    font-size: 14px;
+    font-size: 20px;
   }
 
   .blog-content h2 {
-    font-size: 20px;
+    font-size: 24px;
   }
 }

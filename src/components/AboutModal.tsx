@@ -37,14 +37,13 @@ const AboutModal: React.FC<AboutModalProps> = ({ onClose }) => {
 
         <div className="about-modal-header">
           <h1 className="about-title">WHY I BUILT THIS WEBSITE</h1>
-          <div className="about-subtitle">A Developer's Journey Through Nostalgia</div>
         </div>
 
         <div className="about-modal-body">
           <div className="blog-content">
             <h2>The hell is this?</h2>
             <p>
-              An experiment in UI, UX, and escapism with code.
+              An experiment in UI, UX, and escapism with code and the influence of AI in my field.
             </p>
 
             <h2>AI: The juice</h2>

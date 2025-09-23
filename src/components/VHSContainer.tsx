@@ -4,7 +4,7 @@ import { useTypewriter } from '../hooks/useTypewriter';
 import ContactModal from './ContactModal';
 import RecordingModal from './RecordingModal';
 import HelpModal from './HelpModal';
-import VHSHelpBox from './VHSHelpBox';
+import VHSTopNavBar from './VHSTopNavBar';
 import AboutModal from './AboutModal';
 import SimpleBackgroundManager from './SimpleBackgroundManager';
 import VHSEffects from './VHSEffects';
@@ -296,15 +296,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* VHS Effects Component */}
       <VHSEffects effectsReduced={effectsReduced} isPaused={isPaused} />
 
-      {/* Top Button Container */}
-      <div className="top-button-container">
-        <VHSHelpBox onHelpClick={handleHelpClick} />
-        {isEjected && (
-          <button className="reopen-icon" onClick={handleReopen}>
-            ⏏ REOPEN
-          </button>
-        )}
-      </div>
+      {/* Top Navigation Bar */}
+      <VHSTopNavBar
+        isEjected={isEjected}
+        onHelpClick={handleHelpClick}
+        onReopen={handleReopen}
+      />
 
       {/* Timestamp */}
       <VHSTimestamp onRecordingClick={handleRecordingClick} />

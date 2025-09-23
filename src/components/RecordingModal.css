@@ -43,7 +43,7 @@
   color: #ff0000;
   font-size: 18px;
   font-weight: bold;
-  text-shadow: 0 0 5px #ff0000;
+  
 }
 
 .rec-dot-large {
@@ -85,7 +85,7 @@
   font-size: 24px;
   margin: 0 0 15px 0;
   text-align: center;
-  text-shadow: 0 0 5px #ff0000;
+  
   text-transform: uppercase;
 }
 
@@ -94,7 +94,7 @@
   font-size: 16px;
   line-height: 1.4;
   margin: 10px 0;
-  text-shadow: 0 0 3px #00ff00;
+  
 }
 
 .vhs-details {
@@ -114,12 +114,12 @@
 
 .detail-line .label {
   color: #00ffff;
-  text-shadow: 0 0 3px #00ffff;
+  
 }
 
 .detail-line .value {
   color: #ffff00;
-  text-shadow: 0 0 3px #ffff00;
+  
   font-weight: bold;
 }
 
