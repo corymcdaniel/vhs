@@ -3,6 +3,7 @@ import './VHSContainer.css';
 import { useTypewriter } from '../hooks/useTypewriter';
 import ContactModal from './ContactModal';
 import RecordingModal from './RecordingModal';
+import BackgroundManager from './BackgroundManager';
 
 interface VHSContainerProps {
   effectsReduced: boolean;
@@ -15,47 +16,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   onCatClick,
   onToggleEffects
 }) => {
-  const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
   const [isEjected, setIsEjected] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
-  const [showFlash, setShowFlash] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
   const textElementRef = useRef<HTMLDivElement>(null);
-  const fastForwardTimers = useRef<Set<NodeJS.Timeout>>(new Set());
-
-  const backgroundImages = useRef([
-    '/backgrounds/20250906_194829.jpg',
-    '/backgrounds/20250312_095352.jpg',
-    '/backgrounds/20250315_152239.jpg',
-    '/backgrounds/20250329_180257.jpg',
-    '/backgrounds/20250502_152600.jpg',
-    '/backgrounds/20250502_152748~2.jpg',
-    '/backgrounds/20250814_204013-EDIT (2).jpg',
-    '/backgrounds/20250906_201009.jpg',
-    '/backgrounds/20250908_200811.jpg',
-    '/backgrounds/20230305_160446.jpg',
-    '/backgrounds/20230305_194111.jpg',
-    '/backgrounds/20230310_113926.jpg',
-    '/backgrounds/20230310_170323.jpg',
-    '/backgrounds/20230311_114327~2.jpg',
-    '/backgrounds/20230415_091146.jpg',
-    '/backgrounds/20230603_095027~2.jpg',
-    '/backgrounds/20231214_174753.jpg',
-    '/backgrounds/20231220_091305.jpg',
-    '/backgrounds/20231222_135934.jpg',
-    '/backgrounds/20231224_132745.jpg',
-    '/backgrounds/20240309_174427.jpg',
-    '/backgrounds/20240601_192412.jpg',
-    '/backgrounds/20240704_201604.jpg',
-    '/backgrounds/20240805_191606.jpg',
-    '/backgrounds/20241227_162337.jpg',
-    '/backgrounds/20250104_150527-EDIT.jpg',
-    '/backgrounds/20250329_172513.jpg',
-    '/backgrounds/bg.jpg'
-  ]).current;
 
   const textLines = useRef([
     "Hello, I'm Cory.",
@@ -83,52 +51,28 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const showLocationNav = completedText.includes('phoenix') || completedText.includes('desert');
   const showContactButton = isComplete; // After all text is complete
 
-  // Preload background images
+  // Handle images loaded callback from BackgroundManager
+  const handleImagesLoaded = useCallback((loaded: boolean) => {
+    setImagesLoaded(loaded);
+  }, []);
+
+  // Loading step progression with 1 second delays
   useEffect(() => {
-    let isMounted = true;
-    const imageObjects: HTMLImageElement[] = [];
+    if (imagesLoaded) return; // Don't run if images are already loaded
 
-    const preloadImage = (src: string) => {
-      return new Promise<void>((resolve, reject) => {
-        const img = new Image();
-        imageObjects.push(img); // Track for cleanup
+    const loadingTimers: NodeJS.Timeout[] = [];
 
-        img.onload = () => {
-          if (isMounted) resolve();
-        };
-        img.onerror = () => {
-          if (isMounted) reject(new Error(`Failed to load ${src}`));
-        };
-        img.src = src;
-      });
-    };
+    // Show each loading line with 1 second delay
+    const timer1 = setTimeout(() => setLoadingStep(1), 1000);
+    const timer2 = setTimeout(() => setLoadingStep(2), 2000);
+    const timer3 = setTimeout(() => setLoadingStep(3), 3000);
 
-    const preloadAllImages = async () => {
-      try {
-        await Promise.all(backgroundImages.map(preloadImage));
-        if (isMounted) {
-          setImagesLoaded(true);
-        }
-      } catch (error) {
-        console.warn('Some images failed to load:', error);
-        if (isMounted) {
-          setImagesLoaded(true); // Still show the site
-        }
-      }
-    };
-
-    preloadAllImages();
+    loadingTimers.push(timer1, timer2, timer3);
 
     return () => {
-      isMounted = false;
-      // Clean up image objects
-      imageObjects.forEach(img => {
-        img.onload = null;
-        img.onerror = null;
-        img.src = '';
-      });
+      loadingTimers.forEach(timer => clearTimeout(timer));
     };
-  }, [backgroundImages]);
+  }, [imagesLoaded]);
 
   // Current time display (updates every second)
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -141,61 +85,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     return () => clearInterval(interval);
   }, []);
 
-  // Background cycling with flash effect
-  useEffect(() => {
-    if (!effectsReduced && !isPaused) {
-      const activeTimers = new Set<NodeJS.Timeout>();
-
-      const interval = setInterval(() => {
-        // Show flash
-        setShowFlash(true);
-
-        // Change background after brief flash
-        const bgTimer = setTimeout(() => {
-          setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
-          activeTimers.delete(bgTimer);
-        }, 100);
-
-        // Hide flash after longer duration
-        const flashTimer = setTimeout(() => {
-          setShowFlash(false);
-          activeTimers.delete(flashTimer);
-        }, 600);
-
-        activeTimers.add(bgTimer);
-        activeTimers.add(flashTimer);
-      }, 15000);
-
-      return () => {
-        clearInterval(interval);
-        activeTimers.forEach(timer => clearTimeout(timer));
-        activeTimers.clear();
-      };
-    }
-  }, [effectsReduced, isPaused, backgroundImages.length]);
-
   const handleFastForward = useCallback(() => {
-    // Clear any existing fast forward timers
-    fastForwardTimers.current.forEach(timer => clearTimeout(timer));
-    fastForwardTimers.current.clear();
-
-    // Show flash
-    setShowFlash(true);
-
-    // Track timers for cleanup
-    const bgTimer = setTimeout(() => {
-      setCurrentBackgroundIndex(prev => (prev + 1) % backgroundImages.length);
-      fastForwardTimers.current.delete(bgTimer);
-    }, 100);
-
-    const flashTimer = setTimeout(() => {
-      setShowFlash(false);
-      fastForwardTimers.current.delete(flashTimer);
-    }, 600);
-
-    fastForwardTimers.current.add(bgTimer);
-    fastForwardTimers.current.add(flashTimer);
-  }, [backgroundImages.length]);
+    // Trigger manual background change via global function
+    if ((window as any).changeBackgroundManually) {
+      (window as any).changeBackgroundManually();
+    }
+  }, []);
 
   // Keyboard commands
   useEffect(() => {
@@ -208,13 +103,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       }
 
       switch (e.key.toLowerCase()) {
-        case ' ': // Spacebar for static burst
-          setShowFlash(true);
-          const flashTimer = setTimeout(() => {
-            setShowFlash(false);
-            keyboardTimers.delete(flashTimer);
-          }, 300);
-          keyboardTimers.add(flashTimer);
+        case ' ': // Spacebar for background change
+          handleFastForward();
           break;
 
         case 'g': // 'g' for text glitch
@@ -355,14 +245,9 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
   // Comprehensive cleanup on unmount
   useEffect(() => {
-    const currentFastForwardTimers = fastForwardTimers.current;
     const currentReopenTimer = reopenTimerRef.current;
 
     return () => {
-      // Clear fast forward timers
-      currentFastForwardTimers.forEach(timer => clearTimeout(timer));
-      currentFastForwardTimers.clear();
-
       // Clear reopen timer
       if (currentReopenTimer) {
         clearTimeout(currentReopenTimer);
@@ -375,31 +260,37 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     return (
       <div className="vhs-loading-container">
         <div className="vhs-loading-text">
-          <div className="loading-line">LOADING VHS PORTFOLIO...</div>
-          <div className="loading-line">PREPARING BACKGROUND IMAGES...</div>
-          <div className="loading-progress">
-            <div className="loading-bar"></div>
-          </div>
+          {loadingStep >= 1 && <div className="loading-line">VHS TAPE LOADING...</div>}
+          {loadingStep >= 2 && <div className="loading-line">PREPARING BACKGROUND IMAGES...</div>}
+          {loadingStep >= 3 && <div className="loading-line">MUTING BACKGROUND NOISES...</div>}
+          {loadingStep >= 3 && (
+            <div className="loading-progress">
+              <div className="loading-bar"></div>
+            </div>
+          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''}`}
-      style={{
-        backgroundImage: `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${backgroundImages[currentBackgroundIndex]}')`
-      }}
-    >
+    <>
+      {/* Background Manager handles all background cycling and effects */}
+      <BackgroundManager
+        onImagesLoaded={handleImagesLoaded}
+        isEjected={isEjected}
+        isPaused={isPaused}
+      />
+
+      <div
+        className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''}`}
+      >
       {/* VHS Effects */}
       <div className="vhs-scramble"></div>
       <div className="static-overlay"></div>
       <div className="scan-lines"></div>
       <div className="tracking-lines"></div>
 
-      {/* Static Flash for background transitions */}
-      {showFlash && <div className="static-flash"></div>}
 
       {/* Static Text Overlay for paused state */}
       {isPaused && <div className="static-text-overlay"></div>}
@@ -543,6 +434,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         <RecordingModal onClose={handleRecordingClose} />
       )}
     </div>
+    </>
   );
 };
 
