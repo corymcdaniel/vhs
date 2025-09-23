@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AboutModal.css';
+import VideoModal from './VideoModal';
 
 interface AboutModalProps {
   onClose: () => void;
 }
 
 const AboutModal: React.FC<AboutModalProps> = ({ onClose }) => {
+  const [showVideoModal, setShowVideoModal] = useState(false);
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -43,7 +46,15 @@ const AboutModal: React.FC<AboutModalProps> = ({ onClose }) => {
           <div className="blog-content">
             <h2>The hell is this?</h2>
             <p>
-              An experiment in UI, UX, and escapism with code and the influence of AI in my field.
+              An experiment in UI, UX, and{' '}
+              <button
+                className="escapism-link"
+                onClick={() => setShowVideoModal(true)}
+                title="Click to experience"
+              >
+                escapism (I keep telling myself)
+              </button>{' '}
+              with code and the influence of AI in my field.
             </p>
 
             <h2>AI: The juice</h2>
@@ -60,7 +71,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ onClose }) => {
             the family computer or watching TV at 480p</p>
 
             <h2>Photography Meets Code</h2>
-            <p>
+            <p className={'claude-pop'}>
               As both a developer and photographer, I wanted to showcase my work in a way
               that honored both disciplines. The VHS aesthetic bridges the gap between
               the digital and analog worlds, much like how my career spans both technical
@@ -83,7 +94,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ onClose }) => {
 
 
             <h2>A Love Letter to the Past</h2>
-            <p>
+            <p className={'claude-pop'}>
               This website is my tribute to an era when technology felt magical because
               you could see and hear it working. When loading meant something was actually
               happening, not just an artificial delay to make you think the system was busy.
@@ -109,6 +120,15 @@ const AboutModal: React.FC<AboutModalProps> = ({ onClose }) => {
           </div>
         </div>
       </div>
+
+      {/* Video Modal */}
+      {showVideoModal && (
+        <VideoModal
+          videoId="x9yp2wVWdiU"
+          title="Escapism"
+          onClose={() => setShowVideoModal(false)}
+        />
+      )}
     </div>
   );
 };

@@ -19,3 +19,6 @@ build/
 # Cache
 .cache/
 *.cache
+
+# Auto-generated files
+src/data/backgroundImages.js
