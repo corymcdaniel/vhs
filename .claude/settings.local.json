@@ -3,7 +3,8 @@
     "allow": [
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
