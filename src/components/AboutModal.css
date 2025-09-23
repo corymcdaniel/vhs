@@ -216,6 +216,41 @@
   box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.1);
 }
 
+.escapism-link {
+  background: none;
+  border: none;
+  color: #ff0000;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: italic;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  text-decoration: underline;
+  text-decoration-color: #ff0000;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.escapism-link:hover {
+  color: #ff6666;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+  animation: escapismGlow 1s ease-in-out infinite alternate;
+}
+
+.escapism-link:active {
+  transform: scale(0.98);
+}
+
+@keyframes escapismGlow {
+  0% {
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+  }
+  100% {
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.9), 0 0 25px rgba(255, 0, 0, 0.4);
+  }
+}
+
 /* Animations */
 @keyframes titleGlow {
   0% {

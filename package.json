@@ -21,6 +21,9 @@
     "sharp": "^0.33.5"
   },
   "scripts": {
+    "generate-images": "node scripts/generateImageList.js",
+    "prestart": "npm run generate-images",
+    "prebuild": "npm run generate-images",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

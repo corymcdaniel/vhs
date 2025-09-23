@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './BackgroundManager.css';
 import './VHSContainer.css'; // Import for .static-flash class
+import { backgroundImages } from '../data/backgroundImages';
 
 
 interface SimpleBackgroundManagerProps {
@@ -18,36 +19,8 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const backgroundImages = useRef([
-    '/bg/20250906_194829.jpg',
-    '/bg/20250312_095352.jpg',
-    '/bg/20250315_152239.jpg',
-    '/bg/20250329_180257.jpg',
-    '/bg/20250502_152600.jpg',
-    '/bg/20250502_152748~2.jpg',
-    '/bg/20250814_204013-EDIT (2).jpg',
-    '/bg/20250906_201009.jpg',
-    '/bg/20250908_200811.jpg',
-    '/bg/20230305_160446.jpg',
-    '/bg/20230305_194111.jpg',
-    '/bg/20230310_113926.jpg',
-    '/bg/20230310_170323.jpg',
-    '/bg/20230311_114327~2.jpg',
-    '/bg/20230415_091146.jpg',
-    '/bg/20230603_095027~2.jpg',
-    '/bg/20231214_174753.jpg',
-    '/bg/20231220_091305.jpg',
-    '/bg/20231222_135934.jpg',
-    '/bg/20231224_132745.jpg',
-    '/bg/20240309_174427.jpg',
-    '/bg/20240601_192412.jpg',
-    '/bg/20240704_201604.jpg',
-    '/bg/20240805_191606.jpg',
-    '/bg/20241227_162337.jpg',
-    '/bg/20250104_150527-EDIT.jpg',
-    '/bg/20250329_172513.jpg',
-    '/bg/bg.jpg'
-  ]).current;
+  // Auto-generated background images from /public/bg/ directory
+  // No need to manually update - just add images to /public/bg/
 
   // Preload all background images
   useEffect(() => {
