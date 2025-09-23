@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './BackgroundManager.css';
+import './VHSContainer.css'; // Import for .static-flash class
 
 interface SimpleBackgroundManagerProps {
   onImagesLoaded: (loaded: boolean) => void;
