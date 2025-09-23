@@ -1,0 +1,18 @@
+[build]
+  publish = "build"
+  command = "npm run build"
+
+[build.processing]
+  skip_processing = false
+
+[[plugins]]
+  package = "@netlify/plugin-forms"
+
+# Explicit form definition
+[[forms]]
+  name = "contact"
+  fields = [
+    { name = "name", type = "text" },
+    { name = "email", type = "email" },
+    { name = "message", type = "textarea" }
+  ]

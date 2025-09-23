@@ -1,0 +1,308 @@
+/* Contact Modal Styles */
+.contact-modal {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  animation: modalFadeIn 0.3s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-modal-content {
+  position: relative;
+  background: #000;
+  padding: 0;
+  border: 2px solid #00ff00;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow:
+    0 0 20px #00ff00,
+    inset 0 0 20px rgba(0, 255, 0, 0.1);
+  font-family: 'VT323', monospace;
+}
+
+.contact-modal-static {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="contact-noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23contact-noise)" opacity="0.05"/></svg>');
+  opacity: 0.1;
+  animation: modalStaticFlicker 3s infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.contact-modal-scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 0, 0.01) 2px,
+    rgba(0, 255, 0, 0.01) 4px
+  );
+  pointer-events: none;
+  z-index: 2;
+  animation: modalScanlineMove 4s linear infinite;
+}
+
+.contact-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: #ff0000;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  text-shadow: 0 0 10px #ff0000;
+  transition: all 0.2s;
+  background: none;
+  border: none;
+  font-family: inherit;
+}
+
+.contact-modal-close:hover {
+  color: #ff6666;
+  text-shadow: 0 0 15px #ff0000;
+  transform: scale(1.2);
+}
+
+.contact-modal-header {
+  background: rgba(0, 255, 0, 0.1);
+  padding: 15px 60px 15px 15px;
+  border-bottom: 1px solid #00ff00;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+}
+
+.contact-title {
+  color: #00ff00;
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px #00ff00;
+}
+
+.contact-modal-timestamp {
+  color: #ff0000;
+  font-size: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.contact-modal-body {
+  padding: 20px;
+  position: relative;
+  z-index: 5;
+  background: #000;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  color: #00ff00;
+  font-size: 18px;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.form-group input,
+.form-group textarea {
+  background: rgba(0, 255, 0, 0.05);
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  padding: 10px;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  background: rgba(0, 255, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+  border-color: #00ffff;
+}
+
+.form-group input:disabled,
+.form-group textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-group input.error,
+.form-group textarea.error {
+  border-color: #ff0000;
+  background: rgba(255, 0, 0, 0.05);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+.validation-error {
+  color: #ff0000;
+  font-size: 14px;
+  margin-top: 5px;
+  text-shadow: 0 0 5px #ff0000;
+  text-transform: uppercase;
+  font-family: 'VT323', monospace;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.contact-submit {
+  background: rgba(0, 255, 0, 0.1);
+  border: 2px solid #00ff00;
+  color: #00ff00;
+  padding: 12px 20px;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+  text-shadow: 0 0 5px #00ff00;
+  margin-top: 10px;
+}
+
+.contact-submit:hover:not(:disabled) {
+  background: rgba(0, 255, 0, 0.2);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+  transform: scale(1.02);
+}
+
+.contact-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact-success {
+  text-align: center;
+  padding: 20px;
+}
+
+.success-message {
+  color: #00ff00;
+  font-size: 24px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px #00ff00;
+  margin-bottom: 10px;
+  animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+.success-subtitle {
+  color: #00ffff;
+  font-size: 18px;
+  text-shadow: 0 0 5px #00ffff;
+}
+
+.contact-error {
+  color: #ff0000;
+  font-size: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px #ff0000;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ff0000;
+  background: rgba(255, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+/* Contact Button (will be added to main nav area) */
+.contact-button {
+  background: rgba(255, 255, 0, 0.1);
+  border: 2px solid #ffff00;
+  color: #ffff00;
+  padding: 10px 20px;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+  text-shadow: 0 0 5px #ffff00;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.2);
+  margin-top: 20px;
+  opacity: 0;
+  transform: translateY(30px) scale(0.9);
+  animation: contactButtonSlideUp 1.0s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.contact-button:hover {
+  background: rgba(255, 255, 0, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 0, 0.4);
+  transform: scale(1.05);
+}
+
+@keyframes contactButtonSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.7);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+}
+
+/* Reuse existing modal animations */
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalStaticFlicker {
+  0%, 95%, 100% { opacity: 0.1; }
+  97% { opacity: 0.2; }
+}
+
+@keyframes modalScanlineMove {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes textGlow {
+  0% {
+    text-shadow: 0 0 10px #00ff00;
+  }
+  100% {
+    text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
+  }
+}
