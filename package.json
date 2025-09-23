@@ -18,7 +18,8 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "@netlify/plugin-forms": "^2.1.5"
   },
   "scripts": {
     "start": "react-scripts start",
