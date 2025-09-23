@@ -3,6 +3,9 @@ import './VHSContainer.css';
 import { useTypewriter } from '../hooks/useTypewriter';
 import ContactModal from './ContactModal';
 import RecordingModal from './RecordingModal';
+import HelpModal from './HelpModal';
+import VHSHelpBox from './VHSHelpBox';
+import AboutModal from './AboutModal';
 import SimpleBackgroundManager from './SimpleBackgroundManager';
 import VHSEffects from './VHSEffects';
 import VHSTimestamp from './VHSTimestamp';
@@ -24,6 +27,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 }) => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
   const [isEjected, setIsEjected] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -209,6 +214,30 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     setShowRecordingModal(false);
   };
 
+  const handleHelpClick = () => {
+    setShowHelpModal(true);
+  };
+
+  const handleHelpClose = () => {
+    setShowHelpModal(false);
+  };
+
+  const handleAboutClick = useCallback(() => {
+    setShowAboutModal(true);
+  }, []);
+
+  const handleAboutClose = useCallback(() => {
+    setShowAboutModal(false);
+  }, []);
+
+  // Set up global function for AboutModal
+  useEffect(() => {
+    (window as any).openAboutModal = handleAboutClick;
+    return () => {
+      delete (window as any).openAboutModal;
+    };
+  }, [handleAboutClick]);
+
   const handleEject = () => {
     setIsEjected(true);
   };
@@ -247,16 +276,10 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     };
   }, []);
 
-  // Debug logging
-  console.log('VHSContainer render - imagesLoaded:', imagesLoaded, 'loadingStep:', loadingStep);
-
   // Show loading screen while images are preloading
   if (!imagesLoaded) {
-    console.log('Showing loading screen');
     return <VHSLoadingScreen loadingStep={loadingStep} />;
   }
-
-  console.log('Showing main VHS interface');
 
   return (
     <>
@@ -272,6 +295,16 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       >
       {/* VHS Effects Component */}
       <VHSEffects effectsReduced={effectsReduced} isPaused={isPaused} />
+
+      {/* Top Button Container */}
+      <div className="top-button-container">
+        <VHSHelpBox onHelpClick={handleHelpClick} />
+        {isEjected && (
+          <button className="reopen-icon" onClick={handleReopen}>
+            ⏏ REOPEN
+          </button>
+        )}
+      </div>
 
       {/* Timestamp */}
       <VHSTimestamp onRecordingClick={handleRecordingClick} />
@@ -317,6 +350,16 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* Recording Modal */}
       {showRecordingModal && (
         <RecordingModal onClose={handleRecordingClose} />
+      )}
+
+      {/* Help Modal */}
+      {showHelpModal && (
+        <HelpModal onClose={handleHelpClose} />
+      )}
+
+      {/* About Modal */}
+      {showAboutModal && (
+        <AboutModal onClose={handleAboutClose} />
       )}
     </div>
     </>
