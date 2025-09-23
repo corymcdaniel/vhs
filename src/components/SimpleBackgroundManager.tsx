@@ -56,7 +56,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
       };
       img.src = imageSrc;
     });
-  }, [onImagesLoaded, backgroundImages]);
+  }, [onImagesLoaded]);
 
   // VHS background change with authentic static flash effect
   const changeBackground = useCallback(() => {
@@ -87,7 +87,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
         }, 1200); // Match the CSS animation duration (--vhs-static-flash-duration)
       }
     }, 200);
-  }, [currentImageIndex, backgroundImages]);
+  }, [currentImageIndex]);
 
   // Manual background change
   const changeBackgroundManually = useCallback(() => {
