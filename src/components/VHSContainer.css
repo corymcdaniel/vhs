@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
+/* VHS Animation Timing Variables - centralized for easy debugging */
+:root {
+  --vhs-background-scan-duration: 8s;
+  --vhs-background-scan-paused-duration: 5s;
+  --vhs-static-flash-duration: 1200ms;
+  --vhs-lightning-strike-duration: 2s;
+  --vhs-scanline-move-duration: 25s;
+  --vhs-scanline-move-paused-duration: 8s;
+}
+
 .vhs-container {
   position: relative;
   width: 100vw;
@@ -45,7 +55,7 @@
     blur(0.3px);
   pointer-events: none;
   z-index: 1;
-  animation: backgroundScan 5s linear infinite;
+  animation: backgroundScan var(--vhs-background-scan-duration) linear infinite;
   mix-blend-mode: multiply;
 }
 
@@ -159,7 +169,7 @@
     rgba(0, 255, 0, 0.03) 4px
   );
   pointer-events: none;
-  animation: scanlineMove 6s linear infinite;
+  animation: scanlineMove var(--vhs-scanline-move-duration) linear infinite;
   z-index: 5;
 }
 
@@ -223,7 +233,7 @@
   opacity: 1;
   z-index: 5;
   pointer-events: none;
-  animation: staticNoise 800ms ease-out;
+  animation: staticNoise var(--vhs-static-flash-duration) ease-out;
   mix-blend-mode: screen;
 }
 
@@ -494,9 +504,9 @@
   position: absolute;
   bottom: 20px;
   right: 120px;
-  background: rgba(255, 165, 0, 0.2);
-  border: 1px solid #ffa500;
-  color: #ffa500;
+  background: rgba(255, 255, 0, 0.2);
+  border: 1px solid #ffff00;
+  color: #ffff00;
   padding: 10px;
   font-family: 'VT323', monospace;
   cursor: pointer;
@@ -506,8 +516,8 @@
 }
 
 .pause-btn:hover {
-  background: rgba(255, 165, 0, 0.3);
-  box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+  background: rgba(255, 255, 0, 0.3);
+  box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
 }
 
 /* Contact Button */
@@ -566,17 +576,14 @@
 
 /* Reopen Icon */
 .reopen-icon {
-  position: absolute;
-  top: 20px;
-  left: 20px;
   background: rgba(255, 0, 0, 0.6);
-  border: none;
+  border: 2px solid #ff0000;
   color: #ff0000;
-  padding: 8px 12px;
+  padding: 6px 12px;
   font-family: 'VT323', monospace;
-  font-size: 18px;
+  font-size: 14px;
+  text-transform: uppercase;
   cursor: pointer;
-  z-index: 1004;
   transition: all 0.3s;
   border-radius: 4px;
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
@@ -590,6 +597,44 @@
   background: rgba(255, 0, 0, 0.5);
   box-shadow: 0 0 25px rgba(255, 0, 0, 0.5);
   transform: scale(1.1);
+}
+
+/* Top Button Container */
+.top-button-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1002;
+}
+
+/* Help Button - Mini Nav Style */
+.help-button {
+  background: rgba(255, 255, 0, 0.2);
+  border: 2px solid #ffff00;
+  color: #ffff00;
+  padding: 6px 12px;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: helpFadeIn 0.8s ease-out 0.2s forwards;
+}
+
+.help-button:hover {
+  background: rgba(255, 255, 0, 0.3);
+  box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.help-button:active {
+  transform: scale(0.95);
 }
 
 .test-btn {
@@ -670,7 +715,7 @@
 
 /* Paused State - lightning strike effects */
 .vhs-container.paused::before {
-  animation: backgroundScan 3s linear infinite, lightningStrike 2s ease-in-out infinite;
+  animation: backgroundScan var(--vhs-background-scan-paused-duration) linear infinite, lightningStrike var(--vhs-lightning-strike-duration) ease-in-out infinite;
 }
 
 .vhs-container.paused .static-overlay {
@@ -679,7 +724,7 @@
 }
 
 .vhs-container.paused .scan-lines {
-  animation: scanlineMove 1s linear infinite, lightningGlitch 2.5s ease-in-out infinite;
+  animation: scanlineMove var(--vhs-scanline-move-paused-duration) linear infinite, lightningGlitch 2.5s ease-in-out infinite;
 }
 
 /* Animations */
@@ -1035,6 +1080,17 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes helpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

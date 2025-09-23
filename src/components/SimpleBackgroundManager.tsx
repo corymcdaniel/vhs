@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './BackgroundManager.css';
+import './VHSContainer.css'; // Import for .static-flash class
+
 
 interface SimpleBackgroundManagerProps {
   onImagesLoaded: (loaded: boolean) => void;
@@ -83,7 +85,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
     });
   }, [onImagesLoaded, backgroundImages]);
 
-  // Simple background change with static effect
+  // VHS background change with authentic static flash effect
   const changeBackground = useCallback(() => {
     if (!containerRef.current) return;
 
@@ -92,25 +94,24 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
 
     console.log(`🔄 Changing background to: ${newBackground}`);
 
-    // Add static effect
+    // Add proper VHS static flash effect using CSS class
+    // NOTE: Uses .static-flash CSS class from VHSContainer.css - DO NOT replace with inline styles!
     const container = containerRef.current;
-    container.style.filter = 'contrast(8) brightness(0.1) blur(3px) hue-rotate(180deg)';
-    container.style.transform = 'translateX(20px) skewX(5deg)';
+    container.classList.add('static-flash');
 
-    // Change background after brief static
+    // Change background after static flash
     setTimeout(() => {
       if (containerRef.current) {
         containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
         setCurrentImageIndex(nextIndex);
         console.log(`📺 Background changed to: ${newBackground}`);
 
-        // Remove static effect
+        // Remove static flash effect
         setTimeout(() => {
           if (containerRef.current) {
-            containerRef.current.style.filter = '';
-            containerRef.current.style.transform = '';
+            containerRef.current.classList.remove('static-flash');
           }
-        }, 300);
+        }, 1200); // Match the CSS animation duration (--vhs-static-flash-duration)
       }
     }, 200);
   }, [currentImageIndex, backgroundImages]);
@@ -130,10 +131,10 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
       return;
     }
 
-    // Start background cycling every 15 seconds
+    // Start background cycling every 10 seconds
     cycleTimerRef.current = setInterval(() => {
       changeBackground();
-    }, 15000);
+    }, 10000);
 
     return () => {
       if (cycleTimerRef.current) {

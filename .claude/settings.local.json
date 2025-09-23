@@ -4,7 +4,8 @@
       "Bash(dir:*)",
       "Bash(findstr:*)",
       "Bash(git checkout:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx kill-port:*)"
     ],
     "deny": [],
     "ask": []

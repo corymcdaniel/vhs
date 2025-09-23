@@ -1,3 +1,11 @@
+/* VHS Effect Styles - Centralized Animation Timing */
+:root {
+  --vhs-scanlines-duration: 17s;        /* 25s * 0.7 = ~17s */
+  --vhs-static-flicker-duration: 0.1s;  /* 0.15s * 0.7 = ~0.1s */
+  --vhs-tracking-duration: 5.5s;        /* 8s * 0.7 = ~5.5s */
+  --vhs-static-noise-duration: 0.07s;   /* 0.1s * 0.7 = ~0.07s */
+}
+
 /* VHS Effect Styles */
 .vhs-scramble {
   position: absolute;
@@ -32,7 +40,7 @@
   pointer-events: none;
   z-index: 8;
   opacity: 0.6;
-  animation: static-flicker 0.15s infinite linear alternate;
+  animation: static-flicker var(--vhs-static-flicker-duration) infinite linear alternate;
 }
 
 .scan-lines {
@@ -49,7 +57,7 @@
   );
   pointer-events: none;
   z-index: 9;
-  animation: scanlines 2s linear infinite;
+  animation: scanlines var(--vhs-scanlines-duration) linear infinite;
 }
 
 .tracking-lines {
@@ -66,7 +74,7 @@
   );
   pointer-events: none;
   z-index: 7;
-  animation: tracking 4s ease-in-out infinite;
+  animation: tracking var(--vhs-tracking-duration) ease-in-out infinite;
 }
 
 .static-text-overlay {
@@ -84,7 +92,7 @@
     );
   pointer-events: none;
   z-index: 15;
-  animation: static-noise 0.1s infinite;
+  animation: static-noise var(--vhs-static-noise-duration) infinite;
 }
 
 /* Animations */

@@ -81,7 +81,7 @@
   font-weight: bold;
   cursor: pointer;
   z-index: 10;
-  text-shadow: 0 0 10px #ff0000;
+  
   transition: all 0.2s;
   background: none;
   border: none;
@@ -90,7 +90,7 @@
 
 .cat-modal-close:hover {
   color: #ff6666;
-  text-shadow: 0 0 15px #ff0000;
+  
   transform: scale(1.2);
 }
 
@@ -110,7 +110,7 @@
   font-size: 24px;
   font-weight: bold;
   text-transform: uppercase;
-  text-shadow: 0 0 10px #00ff00;
+  
 }
 
 .cat-modal-timestamp {
