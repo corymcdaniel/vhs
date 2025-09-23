@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
+/* VHS Animation Timing Variables - centralized for easy debugging */
+:root {
+  --vhs-background-scan-duration: 8s;
+  --vhs-background-scan-paused-duration: 5s;
+  --vhs-static-flash-duration: 1200ms;
+  --vhs-lightning-strike-duration: 2s;
+  --vhs-scanline-move-duration: 25s;
+  --vhs-scanline-move-paused-duration: 8s;
+}
+
 .vhs-container {
   position: relative;
   width: 100vw;
@@ -45,7 +55,7 @@
     blur(0.3px);
   pointer-events: none;
   z-index: 1;
-  animation: backgroundScan 8s linear infinite;
+  animation: backgroundScan var(--vhs-background-scan-duration) linear infinite;
   mix-blend-mode: multiply;
 }
 
@@ -159,7 +169,7 @@
     rgba(0, 255, 0, 0.03) 4px
   );
   pointer-events: none;
-  animation: scanlineMove 6s linear infinite;
+  animation: scanlineMove var(--vhs-scanline-move-duration) linear infinite;
   z-index: 5;
 }
 
@@ -223,7 +233,7 @@
   opacity: 1;
   z-index: 5;
   pointer-events: none;
-  animation: staticNoise 1200ms ease-out;
+  animation: staticNoise var(--vhs-static-flash-duration) ease-out;
   mix-blend-mode: screen;
 }
 
@@ -670,7 +680,7 @@
 
 /* Paused State - lightning strike effects */
 .vhs-container.paused::before {
-  animation: backgroundScan 5s linear infinite, lightningStrike 2s ease-in-out infinite;
+  animation: backgroundScan var(--vhs-background-scan-paused-duration) linear infinite, lightningStrike var(--vhs-lightning-strike-duration) ease-in-out infinite;
 }
 
 .vhs-container.paused .static-overlay {
@@ -679,7 +689,7 @@
 }
 
 .vhs-container.paused .scan-lines {
-  animation: scanlineMove 1s linear infinite, lightningGlitch 2.5s ease-in-out infinite;
+  animation: scanlineMove var(--vhs-scanline-move-paused-duration) linear infinite, lightningGlitch 2.5s ease-in-out infinite;
 }
 
 /* Animations */

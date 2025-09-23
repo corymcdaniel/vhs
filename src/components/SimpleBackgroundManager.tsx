@@ -2,6 +2,21 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './BackgroundManager.css';
 import './VHSContainer.css'; // Import for .static-flash class
 
+// Utility to get VHS animation durations from CSS variables
+const getVHSAnimationDuration = (variableName: string): number => {
+  const duration = getComputedStyle(document.documentElement)
+    .getPropertyValue(variableName)
+    .trim();
+
+  // Convert CSS time values to milliseconds
+  if (duration.endsWith('ms')) {
+    return parseInt(duration.replace('ms', ''));
+  } else if (duration.endsWith('s')) {
+    return parseFloat(duration.replace('s', '')) * 1000;
+  }
+  return 1200; // Fallback
+};
+
 interface SimpleBackgroundManagerProps {
   onImagesLoaded: (loaded: boolean) => void;
   isEjected: boolean;
@@ -110,7 +125,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
           if (containerRef.current) {
             containerRef.current.classList.remove('static-flash');
           }
-        }, 1200); // Match the CSS animation duration
+        }, getVHSAnimationDuration('--vhs-static-flash-duration')); // Match the CSS animation duration
       }
     }, 200);
   }, [currentImageIndex, backgroundImages]);
