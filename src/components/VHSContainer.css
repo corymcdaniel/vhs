@@ -45,7 +45,7 @@
     blur(0.3px);
   pointer-events: none;
   z-index: 1;
-  animation: backgroundScan 5s linear infinite;
+  animation: backgroundScan 8s linear infinite;
   mix-blend-mode: multiply;
 }
 
@@ -223,7 +223,7 @@
   opacity: 1;
   z-index: 5;
   pointer-events: none;
-  animation: staticNoise 800ms ease-out;
+  animation: staticNoise 1200ms ease-out;
   mix-blend-mode: screen;
 }
 
@@ -670,7 +670,7 @@
 
 /* Paused State - lightning strike effects */
 .vhs-container.paused::before {
-  animation: backgroundScan 3s linear infinite, lightningStrike 2s ease-in-out infinite;
+  animation: backgroundScan 5s linear infinite, lightningStrike 2s ease-in-out infinite;
 }
 
 .vhs-container.paused .static-overlay {

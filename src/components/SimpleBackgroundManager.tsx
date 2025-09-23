@@ -110,7 +110,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
           if (containerRef.current) {
             containerRef.current.classList.remove('static-flash');
           }
-        }, 800); // Match the CSS animation duration
+        }, 1200); // Match the CSS animation duration
       }
     }, 200);
   }, [currentImageIndex, backgroundImages]);
