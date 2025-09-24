@@ -152,18 +152,19 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     };
   }, [handleFastForward]);
 
-  // Random glitch effects with useRef
+  // Random glitch effects with useRef - OPTIMIZED for performance
   useEffect(() => {
     if (!effectsReduced) {
       const activeTimers = new Set<NodeJS.Timeout>();
 
       const glitchInterval = setInterval(() => {
-        if (Math.random() < 0.1 && textElementRef.current) {
+        // Reduced frequency from 10% to 3% and increased interval
+        if (Math.random() < 0.03 && textElementRef.current) {
           const textElement = textElementRef.current;
-          const randomX = Math.random() * 4 - 2;
-          const randomY = Math.random() * 4 - 2;
-          const randomHue = Math.random() * 360;
-          const randomContrast = 1 + Math.random() * 0.5;
+          const randomX = Math.random() * 2 - 1; // Reduced movement
+          const randomY = Math.random() * 2 - 1;
+          const randomHue = Math.random() * 180; // Reduced hue range
+          const randomContrast = 1 + Math.random() * 0.2; // Reduced contrast
 
           textElement.style.transform = `translate(${randomX}px, ${randomY}px)`;
           textElement.style.filter = `hue-rotate(${randomHue}deg) contrast(${randomContrast})`;
@@ -174,11 +175,11 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
               textElementRef.current.style.filter = '';
             }
             activeTimers.delete(resetTimer);
-          }, 50 + Math.random() * 100);
+          }, 50 + Math.random() * 50); // Shorter duration
 
           activeTimers.add(resetTimer);
         }
-      }, 200);
+      }, 1000); // Increased from 200ms to 1000ms (5x less frequent)
 
       return () => {
         clearInterval(glitchInterval);

@@ -1,9 +1,9 @@
-/* VHS Effect Styles - Centralized Animation Timing */
+/* VHS Effect Styles - OPTIMIZED Animation Timing for Performance */
 :root {
-  --vhs-scanlines-duration: 17s;        /* 25s * 0.7 = ~17s */
-  --vhs-static-flicker-duration: 0.1s;  /* 0.15s * 0.7 = ~0.1s */
-  --vhs-tracking-duration: 5.5s;        /* 8s * 0.7 = ~5.5s */
-  --vhs-static-noise-duration: 0.07s;   /* 0.1s * 0.7 = ~0.07s */
+  --vhs-scanlines-duration: 25s;        /* Increased for less CPU usage */
+  --vhs-static-flicker-duration: 2s;    /* Increased from 0.1s to reduce flicker frequency */
+  --vhs-tracking-duration: 8s;          /* Increased for smoother animation */
+  --vhs-static-noise-duration: 1s;      /* Increased from 0.07s to drastically reduce CPU */
 }
 
 /* VHS Effect Styles */
@@ -83,13 +83,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background:
-    repeating-conic-gradient(
-      from 0deg,
-      rgba(255, 255, 255, 0.1) 0deg,
-      transparent 2deg,
-      rgba(255, 255, 255, 0.1) 4deg
-    );
+  background: rgba(255, 255, 255, 0.03);
   pointer-events: none;
   z-index: 15;
   animation: static-noise var(--vhs-static-noise-duration) infinite;
@@ -113,23 +107,15 @@
 
 @keyframes static-noise {
   0% {
-    filter: hue-rotate(0deg) contrast(1);
+    opacity: 0.1;
     transform: translateX(0px);
   }
-  25% {
-    filter: hue-rotate(90deg) contrast(1.2);
+  50% {
+    opacity: 0.05;
     transform: translateX(1px);
   }
-  50% {
-    filter: hue-rotate(180deg) contrast(0.8);
-    transform: translateX(-1px);
-  }
-  75% {
-    filter: hue-rotate(270deg) contrast(1.1);
-    transform: translateX(0.5px);
-  }
   100% {
-    filter: hue-rotate(360deg) contrast(1);
+    opacity: 0.1;
     transform: translateX(0px);
   }
 }
