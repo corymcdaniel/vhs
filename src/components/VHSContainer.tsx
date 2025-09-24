@@ -39,6 +39,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [isTextScrambled, setIsTextScrambled] = useState(false);
   const [showOsakaFlash, setShowOsakaFlash] = useState(false);
   const [showOsakaBurn, setShowOsakaBurn] = useState(false);
+  const [cyclingCharacters, setCyclingCharacters] = useState<{[key: string]: string}>({});
   const textElementRef = useRef<HTMLDivElement>(null);
   const autoEjectTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -53,7 +54,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       "Eject to see the pictures without my rambling."
   ]).current;
 
-  // Hiragana characters for scrambling
+  // Character sets for scrambling
   const hiraganaChars = [
     'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'が', 'ぎ', 'ぐ', 'げ', 'ご',
     'さ', 'し', 'す', 'せ', 'そ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ', 'た', 'ち', 'つ', 'て', 'と',
@@ -62,10 +63,34 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     'や', 'ゆ', 'よ', 'ら', 'り', 'る', 'れ', 'ろ', 'わ', 'ゐ', 'ゑ', 'を', 'ん'
   ];
 
-  // Utility function to generate random hiragana text matching original length
+  const katakanaChars = [
+    'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'ガ', 'ギ', 'グ', 'ゲ', 'ゴ',
+    'サ', 'シ', 'ス', 'セ', 'ソ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ', 'タ', 'チ', 'ツ', 'テ', 'ト',
+    'ダ', 'ヂ', 'ヅ', 'デ', 'ド', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ',
+    'バ', 'ビ', 'ブ', 'ベ', 'ボ', 'パ', 'ピ', 'プ', 'ペ', 'ポ', 'マ', 'ミ', 'ム', 'メ', 'モ',
+    'ヤ', 'ユ', 'ヨ', 'ラ', 'リ', 'ル', 'レ', 'ロ', 'ワ', 'ヰ', 'ヱ', 'ヲ', 'ン'
+  ];
+
+  const romajiChars = [
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+  ];
+
+  // Utility function to get random character from any character set
+  const getRandomCharacter = useCallback(() => {
+    const characterSets = [hiraganaChars, katakanaChars, romajiChars];
+    const randomSet = characterSets[Math.floor(Math.random() * characterSets.length)];
+    return randomSet[Math.floor(Math.random() * randomSet.length)];
+  }, []);
+
+  // Utility function to generate random text with cycling characters
   const generateRandomHiraganaText = useCallback((originalText: string): string => {
     const chars = originalText.split('');
-    const randomChars = chars.map(char => {
+    const randomChars = chars.map((char, index) => {
+      const charKey = `${originalText}-${index}`;
+
       // Preserve spaces and some punctuation for readability
       if (char === ' ') {
         return ' ';
@@ -77,13 +102,18 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         return ',';
       }
 
-      // Everything else becomes random hiragana
-      const randomHiragana = hiraganaChars[Math.floor(Math.random() * hiraganaChars.length)];
-      return randomHiragana;
+      // If this character is in the cycling characters state, use it
+      if (cyclingCharacters[charKey]) {
+        return cyclingCharacters[charKey];
+      }
+
+      // Everything else becomes random character from any set
+      const randomChar = getRandomCharacter();
+      return randomChar;
     });
 
     return randomChars.join('');
-  }, []);
+  }, [cyclingCharacters, getRandomCharacter]);
 
   const { displayTexts, isComplete, currentLineIndex } = useTypewriter({
     texts: textLines,
@@ -335,11 +365,52 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
     // Start text scrambling immediately
     setIsTextScrambled(true);
-    console.log('⚡ Text scrambling to hiragana started');
+    console.log('⚡ Text scrambling with character cycling started');
+
+    // Start character cycling for 60-80% of characters
+    const startCharacterCycling = () => {
+      const cyclingPercentage = 0.6 + (Math.random() * 0.2); // 60-80%
+      console.log(`🔄 Starting character cycling for ${Math.round(cyclingPercentage * 100)}% of characters`);
+
+      textLines.forEach((line, lineIndex) => {
+        line.split('').forEach((char, charIndex) => {
+          if (char !== ' ' && char !== '.' && char !== ',' && Math.random() < cyclingPercentage) {
+            const charKey = `${line}-${charIndex}`;
+
+            // Initial character assignment
+            setCyclingCharacters(prev => ({
+              ...prev,
+              [charKey]: getRandomCharacter()
+            }));
+
+            // Cycle this character every 100ms for more dynamic effect
+            const cycleInterval = setInterval(() => {
+              setCyclingCharacters(prev => ({
+                ...prev,
+                [charKey]: getRandomCharacter()
+              }));
+            }, 100);
+
+            // Stop cycling after 3 seconds
+            setTimeout(() => {
+              clearInterval(cycleInterval);
+              setCyclingCharacters(prev => {
+                const newState = { ...prev };
+                delete newState[charKey];
+                return newState;
+              });
+            }, 3000);
+          }
+        });
+      });
+    };
+
+    startCharacterCycling();
 
     // Stop text scrambling after lightning sequence (3 seconds)
     setTimeout(() => {
       setIsTextScrambled(false);
+      setCyclingCharacters({}); // Clear all cycling characters
       console.log('⚡ Text scrambling ended - returning to normal');
     }, 3000);
 
