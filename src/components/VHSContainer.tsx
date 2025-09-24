@@ -39,6 +39,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [isTextScrambled, setIsTextScrambled] = useState(false);
   const [showOsakaFlash, setShowOsakaFlash] = useState(false);
   const [showOsakaBurn, setShowOsakaBurn] = useState(false);
+  const [showOhNoMessage, setShowOhNoMessage] = useState(false);
   const [cyclingCharacters, setCyclingCharacters] = useState<{[key: string]: string}>({});
   const textElementRef = useRef<HTMLDivElement>(null);
   const autoEjectTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -360,6 +361,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     setShowOsakaFlash(true);
     console.log('🔴 OSAKA kanji flash started - 5 second duration');
 
+    // Show "oh no...." message slightly delayed for natural staggered effect
+    setTimeout(() => {
+      setShowOhNoMessage(true);
+      console.log('😰 "oh no...." message appeared');
+    }, 300);
+
     // Generate scrambled hiragana text during flash
     generateScrambledTexts();
 
@@ -418,8 +425,15 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     setTimeout(() => {
       setShowOsakaFlash(false);
       setShowOsakaBurn(true);
+      // Keep "oh no...." visible - it will fade on its own after 30s
       console.log('🔴 OSAKA flickering stopped - switching to burn screen');
     }, 5000);
+
+    // Hide "oh no...." message after 30 seconds
+    setTimeout(() => {
+      setShowOhNoMessage(false);
+      console.log('😰 "oh no...." message ended after 30 seconds');
+    }, 30000);
 
     // Hide burn effect after 15 seconds total
     setTimeout(() => {
@@ -432,7 +446,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       setIsAutoEjecting(false);
       setIsEjected(true);
       setIsTextScrambled(false); // Ensure text is normal when ejected
-      console.log('🎬 Auto-eject sequence complete - ejected! Burn continues...');
+      // Don't hide "oh no...." here - let it run for 30 seconds total
+      console.log('🎬 Auto-eject sequence complete - ejected! "oh no" continues for 25 more seconds...');
     }, 5000);
   }, [generateScrambledTexts]);
 
@@ -483,6 +498,13 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {showOsakaBurn && (
         <div className="osaka-burn-overlay">
           <div className="osaka-burn-kanji">大阪</div>
+        </div>
+      )}
+
+      {/* "oh no...." Message - Top left, typewriter style */}
+      {showOhNoMessage && (
+        <div className="oh-no-message">
+          oh no....
         </div>
       )}
 
