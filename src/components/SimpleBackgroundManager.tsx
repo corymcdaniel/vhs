@@ -8,12 +8,14 @@ interface SimpleBackgroundManagerProps {
   onImagesLoaded: (loaded: boolean) => void;
   isEjected: boolean;
   isPaused: boolean;
+  effectsReduced: boolean;
 }
 
 const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
   onImagesLoaded,
   isEjected,
-  isPaused
+  isPaused,
+  effectsReduced
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,27 +69,34 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
 
     console.log(`🔄 Changing background to: ${newBackground}`);
 
-    // Add proper VHS static flash effect using CSS class
-    // NOTE: Uses .static-flash CSS class from VHSContainer.css - DO NOT replace with inline styles!
-    const container = containerRef.current;
-    container.classList.add('static-flash');
+    if (effectsReduced) {
+      // Skip static flash effect when effects are reduced - just change immediately
+      containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
+      setCurrentImageIndex(nextIndex);
+      console.log(`📺 Background changed to: ${newBackground} (effects reduced)`);
+    } else {
+      // Add proper VHS static flash effect using CSS class
+      // NOTE: Uses .static-flash CSS class from VHSContainer.css - DO NOT replace with inline styles!
+      const container = containerRef.current;
+      container.classList.add('static-flash');
 
-    // Change background after static flash
-    setTimeout(() => {
-      if (containerRef.current) {
-        containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
-        setCurrentImageIndex(nextIndex);
-        console.log(`📺 Background changed to: ${newBackground}`);
+      // Change background after static flash
+      setTimeout(() => {
+        if (containerRef.current) {
+          containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
+          setCurrentImageIndex(nextIndex);
+          console.log(`📺 Background changed to: ${newBackground}`);
 
-        // Remove static flash effect
-        setTimeout(() => {
-          if (containerRef.current) {
-            containerRef.current.classList.remove('static-flash');
-          }
-        }, 1200); // Match the CSS animation duration (--vhs-static-flash-duration)
-      }
-    }, 200);
-  }, [currentImageIndex]);
+          // Remove static flash effect
+          setTimeout(() => {
+            if (containerRef.current) {
+              containerRef.current.classList.remove('static-flash');
+            }
+          }, 1200); // Match the CSS animation duration (--vhs-static-flash-duration)
+        }
+      }, 200);
+    }
+  }, [currentImageIndex, effectsReduced]);
 
   // Manual background change
   const changeBackgroundManually = useCallback(() => {

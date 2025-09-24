@@ -672,13 +672,25 @@
   border-radius: 4px;
 }
 
-/* Effects Reduced State */
+/* Effects Reduced State - Complete removal for better performance */
 .effects-reduced .static-overlay,
 .effects-reduced .scan-lines,
 .effects-reduced .tracking-lines,
-.effects-reduced .vhs-scramble {
-  opacity: 0.01;
-  animation: none;
+.effects-reduced .vhs-scramble,
+.effects-reduced .static-text-overlay {
+  display: none !important;
+}
+
+/* Disable background static flash effect when effects are reduced */
+.effects-reduced .static-flash {
+  animation: none !important;
+  background: none !important;
+}
+
+/* Disable VHS timestamp glitch effects when effects reduced */
+.effects-reduced .timestamp-display {
+  text-shadow: none !important;
+  filter: none !important;
 }
 
 /* Ejected State - slide text to top left */

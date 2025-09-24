@@ -289,6 +289,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         onImagesLoaded={handleImagesLoaded}
         isEjected={isEjected}
         isPaused={isPaused}
+        effectsReduced={effectsReduced}
       />
 
       <div
