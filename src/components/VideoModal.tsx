@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './VideoModal.css';
 
 interface VideoModalProps {
@@ -8,6 +8,8 @@ interface VideoModalProps {
 }
 
 const VideoModal: React.FC<VideoModalProps> = ({ onClose, videoId, title = "VHS Video Player" }) => {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -27,15 +29,34 @@ const VideoModal: React.FC<VideoModalProps> = ({ onClose, videoId, title = "VHS 
     }
   };
 
+  const handlePlayPause = () => {
+    if (iframeRef.current) {
+      const iframe = iframeRef.current;
+      const message = isPlaying ? '{"event":"command","func":"pauseVideo","args":""}' : '{"event":"command","func":"playVideo","args":""}';
+      iframe.contentWindow?.postMessage(message, '*');
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleRewind = () => {
+    if (iframeRef.current) {
+      const iframe = iframeRef.current;
+      iframe.contentWindow?.postMessage('{"event":"command","func":"seekTo","args":[0, true]}', '*');
+    }
+  };
+
+  const handleFastForward = () => {
+    if (iframeRef.current) {
+      const iframe = iframeRef.current;
+      iframe.contentWindow?.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
+    }
+  };
+
   return (
     <div className="video-modal-backdrop" onClick={handleBackdropClick}>
       <div className="video-modal-content">
         <div className="video-modal-static"></div>
         <div className="video-modal-scanlines"></div>
-
-        <button className="video-modal-close" onClick={onClose}>
-          ×
-        </button>
 
         <div className="video-modal-header">
           <div className="vhs-player-controls">
@@ -47,12 +68,16 @@ const VideoModal: React.FC<VideoModalProps> = ({ onClose, videoId, title = "VHS 
             </div>
           </div>
           <h2 className="video-title">{title}</h2>
+          <button className="video-modal-close" onClick={onClose}>
+            ×
+          </button>
         </div>
 
         <div className="video-modal-body">
           <div className="video-container">
             <iframe
-              src={`https://www.youtube.com/embed/${videoId}?autoplay=1&color=white&modestbranding=1`}
+              ref={iframeRef}
+              src={`https://www.youtube.com/embed/${videoId}?autoplay=1&color=white&modestbranding=1&enablejsapi=1`}
               title={title}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -63,9 +88,11 @@ const VideoModal: React.FC<VideoModalProps> = ({ onClose, videoId, title = "VHS 
 
           <div className="vhs-controls-panel">
             <div className="control-group">
-              <button className="vhs-control-btn">⏮</button>
-              <button className="vhs-control-btn">⏸</button>
-              <button className="vhs-control-btn">⏭</button>
+              <button className="vhs-control-btn" onClick={handleRewind} title="Rewind to start">⏮</button>
+              <button className="vhs-control-btn" onClick={handlePlayPause} title={isPlaying ? "Pause" : "Play"}>
+                {isPlaying ? "⏸" : "▶"}
+              </button>
+              <button className="vhs-control-btn" onClick={handleFastForward} title="Fast forward">⏭</button>
             </div>
             <div className="volume-control">
               <span>VOL</span>
