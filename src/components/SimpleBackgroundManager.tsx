@@ -9,17 +9,20 @@ interface SimpleBackgroundManagerProps {
   isEjected: boolean;
   isPaused: boolean;
   effectsReduced: boolean;
+  onAutoEject?: () => void;
 }
 
 const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
   onImagesLoaded,
   isEjected,
   isPaused,
-  effectsReduced
+  effectsReduced,
+  onAutoEject
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [hasAutoEjected, setHasAutoEjected] = useState(false);
 
   // Auto-generated background images from /public/bg/ directory
   // No need to manually update - just add images to /public/bg/
@@ -69,6 +72,20 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
 
     console.log(`🔄 Changing background to: ${newBackground}`);
 
+    // Check if this is the fifth image and we haven't auto-ejected yet
+    if (nextIndex === 4 && !hasAutoEjected && !effectsReduced && onAutoEject) {
+      console.log('🎬 Triggering dramatic auto-eject sequence!');
+      setHasAutoEjected(true);
+
+      // Change background immediately for dramatic effect
+      containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
+      setCurrentImageIndex(nextIndex);
+
+      // Trigger the dramatic auto-eject sequence
+      onAutoEject();
+      return;
+    }
+
     if (effectsReduced) {
       // Skip static flash effect when effects are reduced - just change immediately
       containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
@@ -96,7 +113,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
         }
       }, 200);
     }
-  }, [currentImageIndex, effectsReduced]);
+  }, [currentImageIndex, effectsReduced, hasAutoEjected, onAutoEject]);
 
   // Manual background change
   const changeBackgroundManually = useCallback(() => {

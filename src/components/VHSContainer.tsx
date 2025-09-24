@@ -34,7 +34,13 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [isPaused, setIsPaused] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(true);
   const [loadingStep, setLoadingStep] = useState(0);
+  const [isAutoEjecting, setIsAutoEjecting] = useState(false);
+  const [scrambledTexts, setScrambledTexts] = useState<string[]>([]);
+  const [isTextScrambled, setIsTextScrambled] = useState(false);
+  const [showOsakaFlash, setShowOsakaFlash] = useState(false);
+  const [showOsakaBurn, setShowOsakaBurn] = useState(false);
   const textElementRef = useRef<HTMLDivElement>(null);
+  const autoEjectTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const textLines = useRef([
     "Hello, I'm Cory.",
@@ -47,12 +53,56 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       "Eject to see the pictures without my rambling."
   ]).current;
 
+  // Hiragana characters for scrambling
+  const hiraganaChars = [
+    'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'が', 'ぎ', 'ぐ', 'げ', 'ご',
+    'さ', 'し', 'す', 'せ', 'そ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ', 'た', 'ち', 'つ', 'て', 'と',
+    'だ', 'ぢ', 'づ', 'で', 'ど', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ',
+    'ば', 'び', 'ぶ', 'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ', 'ま', 'み', 'む', 'め', 'も',
+    'や', 'ゆ', 'よ', 'ら', 'り', 'る', 'れ', 'ろ', 'わ', 'ゐ', 'ゑ', 'を', 'ん'
+  ];
+
+  // Utility function to generate random hiragana text matching original length
+  const generateRandomHiraganaText = useCallback((originalText: string): string => {
+    const chars = originalText.split('');
+    const randomChars = chars.map(char => {
+      // Preserve spaces and some punctuation for readability
+      if (char === ' ') {
+        return ' ';
+      }
+      if (char === '.' && Math.random() < 0.3) {
+        return '.';
+      }
+      if (char === ',' && Math.random() < 0.2) {
+        return ',';
+      }
+
+      // Everything else becomes random hiragana
+      const randomHiragana = hiraganaChars[Math.floor(Math.random() * hiraganaChars.length)];
+      return randomHiragana;
+    });
+
+    return randomChars.join('');
+  }, []);
+
   const { displayTexts, isComplete, currentLineIndex } = useTypewriter({
     texts: textLines,
     speed: 60,
     delay: 800,
     startDelay: 500
   });
+
+  // Generate random hiragana versions of all text lines
+  const generateScrambledTexts = useCallback(() => {
+    console.log('📝 Generating scrambled hiragana texts...');
+    console.log('📝 Current displayTexts:', displayTexts);
+    console.log('📝 Using textLines instead:', textLines);
+
+    // Use the original textLines instead of displayTexts which might be incomplete
+    const scrambled = textLines.map(text => generateRandomHiraganaText(text));
+    console.log('📝 Scrambled texts generated:', scrambled);
+    setScrambledTexts(scrambled);
+  }, [displayTexts, generateRandomHiraganaText, textLines]);
 
   // Track which navigation sections should be visible based on content
   const completedText = displayTexts.slice(0, currentLineIndex + 1).join(' ').toLowerCase();
@@ -100,7 +150,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       // Prevent default for our custom keys
-      if (['g', 'b', 'r', 'n', ' '].includes(e.key.toLowerCase())) {
+      if (['g', 'b', 'r', 'n', 'e', ' '].includes(e.key.toLowerCase())) {
         e.preventDefault();
       }
 
@@ -137,6 +187,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
         case 'r': // 'r' to reset/reload page
           window.location.reload();
+          break;
+
+        case 'e': // 'e' for dramatic eject sequence
+          if (!isEjected && !isAutoEjecting && !effectsReduced) {
+            handleAutoEject();
+          }
           break;
 
         default:
@@ -265,14 +321,63 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     setIsPaused(!isPaused);
   };
 
+  // Handle dramatic auto-eject sequence
+  const handleAutoEject = useCallback(() => {
+    console.log('🎬 Starting dramatic auto-eject sequence with OSAKA kanji flash');
+    setIsAutoEjecting(true);
+
+    // Show OSAKA kanji flash immediately for full duration
+    setShowOsakaFlash(true);
+    console.log('🔴 OSAKA kanji flash started - 5 second duration');
+
+    // Generate scrambled hiragana text during flash
+    generateScrambledTexts();
+
+    // Start text scrambling immediately
+    setIsTextScrambled(true);
+    console.log('⚡ Text scrambling to hiragana started');
+
+    // Stop text scrambling after lightning sequence (3 seconds)
+    setTimeout(() => {
+      setIsTextScrambled(false);
+      console.log('⚡ Text scrambling ended - returning to normal');
+    }, 3000);
+
+    // After 5 seconds, stop flickering and switch to burn effect
+    setTimeout(() => {
+      setShowOsakaFlash(false);
+      setShowOsakaBurn(true);
+      console.log('🔴 OSAKA flickering stopped - switching to burn screen');
+    }, 5000);
+
+    // Hide burn effect after 15 seconds total
+    setTimeout(() => {
+      setShowOsakaBurn(false);
+      console.log('🔴 OSAKA burn effect ended');
+    }, 15000);
+
+    // After 5 seconds of dramatic effects, complete the eject
+    autoEjectTimerRef.current = setTimeout(() => {
+      setIsAutoEjecting(false);
+      setIsEjected(true);
+      setIsTextScrambled(false); // Ensure text is normal when ejected
+      console.log('🎬 Auto-eject sequence complete - ejected! Burn continues...');
+    }, 5000);
+  }, [generateScrambledTexts]);
+
   // Comprehensive cleanup on unmount
   useEffect(() => {
     const currentReopenTimer = reopenTimerRef.current;
+    const currentAutoEjectTimer = autoEjectTimerRef.current;
 
     return () => {
       // Clear reopen timer
       if (currentReopenTimer) {
         clearTimeout(currentReopenTimer);
+      }
+      // Clear auto-eject timer
+      if (currentAutoEjectTimer) {
+        clearTimeout(currentAutoEjectTimer);
       }
     };
   }, []);
@@ -290,13 +395,28 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         isEjected={isEjected}
         isPaused={isPaused}
         effectsReduced={effectsReduced}
+        onAutoEject={handleAutoEject}
       />
 
       <div
-        className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''}`}
+        className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''} ${isAutoEjecting ? 'auto-ejecting' : ''}`}
       >
+      {/* OSAKA Kanji Flash Overlay - Outside main content */}
+      {showOsakaFlash && (
+        <div className="osaka-flash-overlay">
+          <div className="osaka-kanji">大阪</div>
+        </div>
+      )}
+
+      {/* OSAKA Burn Screen Effect - Static burn after chaos */}
+      {showOsakaBurn && (
+        <div className="osaka-burn-overlay">
+          <div className="osaka-burn-kanji">大阪</div>
+        </div>
+      )}
+
       {/* VHS Effects Component */}
-      <VHSEffects effectsReduced={effectsReduced} isPaused={isPaused} />
+      <VHSEffects effectsReduced={effectsReduced} isPaused={isPaused} isAutoEjecting={isAutoEjecting} />
 
       {/* Top Navigation Bar */}
       <VHSTopNavBar
@@ -311,6 +431,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* Main Text */}
       <VHSTextDisplay
         displayTexts={displayTexts}
+        scrambledTexts={scrambledTexts}
+        isTextScrambled={isTextScrambled}
         currentLineIndex={currentLineIndex}
         isComplete={isComplete}
         textElementRef={textElementRef}

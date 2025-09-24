@@ -18,6 +18,7 @@ const HelpContent: React.FC<HelpContentProps> = ({ onAboutClick }) => {
         <li><strong>SPACEBAR</strong> - Change background image</li>
         <li><strong>N</strong> - Next background image</li>
         <li><strong>G</strong> - Text glitch effect</li>
+        <li><strong>E</strong> - Dramatic eject sequence</li>
         <li><strong>R</strong> - Reset/reload page</li>
       </ul>
 
