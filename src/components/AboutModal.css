@@ -206,7 +206,8 @@
 }
 
 /* Claude AI Content Styling */
-.claude-pop {
+.claude-pop,
+.blog-content blockquote {
   background: rgba(0, 255, 0, 0.08);
   border-left: 3px solid #00ff00;
   padding: 15px;
@@ -214,6 +215,24 @@
   font-style: italic;
   border-radius: 4px;
   box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.1);
+}
+
+.blog-content blockquote p {
+  margin: 0;
+}
+
+.blog-content hr {
+  border: none;
+  border-top: 1px solid #00ff00;
+  margin: 30px 0;
+}
+
+.blog-content em {
+  color: #aaffaa;
+}
+
+.blog-content strong {
+  color: #88ff88;
 }
 
 .escapism-link {
