@@ -4,9 +4,10 @@ import './VHSEffects.css';
 interface VHSEffectsProps {
   effectsReduced: boolean;
   isPaused: boolean;
+  isAutoEjecting?: boolean;
 }
 
-const VHSEffects: React.FC<VHSEffectsProps> = ({ effectsReduced, isPaused }) => {
+const VHSEffects: React.FC<VHSEffectsProps> = ({ effectsReduced, isPaused, isAutoEjecting = false }) => {
   if (effectsReduced) {
     return null; // No effects when reduced
   }
@@ -20,6 +21,9 @@ const VHSEffects: React.FC<VHSEffectsProps> = ({ effectsReduced, isPaused }) => 
 
       {/* Static Text Overlay for paused state */}
       {isPaused && <div className="static-text-overlay"></div>}
+
+      {/* Dramatic static overlay for auto-eject sequence */}
+      {isAutoEjecting && <div className="dramatic-static"></div>}
     </>
   );
 };

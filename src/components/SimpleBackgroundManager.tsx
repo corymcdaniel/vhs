@@ -8,16 +8,21 @@ interface SimpleBackgroundManagerProps {
   onImagesLoaded: (loaded: boolean) => void;
   isEjected: boolean;
   isPaused: boolean;
+  effectsReduced: boolean;
+  onAutoEject?: () => void;
 }
 
 const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
   onImagesLoaded,
   isEjected,
-  isPaused
+  isPaused,
+  effectsReduced,
+  onAutoEject
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [hasAutoEjected, setHasAutoEjected] = useState(false);
 
   // Auto-generated background images from /public/bg/ directory
   // No need to manually update - just add images to /public/bg/
@@ -67,27 +72,48 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
 
     console.log(`🔄 Changing background to: ${newBackground}`);
 
-    // Add proper VHS static flash effect using CSS class
-    // NOTE: Uses .static-flash CSS class from VHSContainer.css - DO NOT replace with inline styles!
-    const container = containerRef.current;
-    container.classList.add('static-flash');
+    // Check if this is the fifth image and we haven't auto-ejected yet
+    if (nextIndex === 4 && !hasAutoEjected && !effectsReduced && onAutoEject) {
+      console.log('🎬 Triggering dramatic auto-eject sequence!');
+      setHasAutoEjected(true);
 
-    // Change background after static flash
-    setTimeout(() => {
-      if (containerRef.current) {
-        containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
-        setCurrentImageIndex(nextIndex);
-        console.log(`📺 Background changed to: ${newBackground}`);
+      // Change background immediately for dramatic effect
+      containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
+      setCurrentImageIndex(nextIndex);
 
-        // Remove static flash effect
-        setTimeout(() => {
-          if (containerRef.current) {
-            containerRef.current.classList.remove('static-flash');
-          }
-        }, 1200); // Match the CSS animation duration (--vhs-static-flash-duration)
-      }
-    }, 200);
-  }, [currentImageIndex]);
+      // Trigger the dramatic auto-eject sequence
+      onAutoEject();
+      return;
+    }
+
+    if (effectsReduced) {
+      // Skip static flash effect when effects are reduced - just change immediately
+      containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
+      setCurrentImageIndex(nextIndex);
+      console.log(`📺 Background changed to: ${newBackground} (effects reduced)`);
+    } else {
+      // Add proper VHS static flash effect using CSS class
+      // NOTE: Uses .static-flash CSS class from VHSContainer.css - DO NOT replace with inline styles!
+      const container = containerRef.current;
+      container.classList.add('static-flash');
+
+      // Change background after static flash
+      setTimeout(() => {
+        if (containerRef.current) {
+          containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
+          setCurrentImageIndex(nextIndex);
+          console.log(`📺 Background changed to: ${newBackground}`);
+
+          // Remove static flash effect
+          setTimeout(() => {
+            if (containerRef.current) {
+              containerRef.current.classList.remove('static-flash');
+            }
+          }, 1200); // Match the CSS animation duration (--vhs-static-flash-duration)
+        }
+      }, 200);
+    }
+  }, [currentImageIndex, effectsReduced, hasAutoEjected, onAutoEject]);
 
   // Manual background change
   const changeBackgroundManually = useCallback(() => {

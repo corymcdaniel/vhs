@@ -2,6 +2,8 @@ import React from 'react';
 
 interface VHSTextDisplayProps {
   displayTexts: string[];
+  scrambledTexts: string[];
+  isTextScrambled: boolean;
   currentLineIndex: number;
   isComplete: boolean;
   textElementRef: React.RefObject<HTMLDivElement | null>;
@@ -13,6 +15,8 @@ interface VHSTextDisplayProps {
 
 const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
   displayTexts,
+  scrambledTexts,
+  isTextScrambled,
   currentLineIndex,
   isComplete,
   textElementRef,
@@ -21,12 +25,15 @@ const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
   onEjectClick,
   isEjected
 }) => {
+  // Use scrambled text during lightning sequence, otherwise use normal text
+  const currentTexts = isTextScrambled && scrambledTexts.length > 0 ? scrambledTexts : displayTexts;
   return (
     <div className="vhs-text chromatic" ref={textElementRef}>
-      {displayTexts.map((text, index) => {
-        const isVisible = index <= currentLineIndex;
+      {currentTexts.map((text, index) => {
+        // During text scrambling, show all lines at full opacity
+        const isVisible = isTextScrambled || index <= currentLineIndex;
         const opacity = isVisible ? 1 : 0;
-        const isCurrentLine = index === currentLineIndex && !isComplete;
+        const isCurrentLine = index === currentLineIndex && !isComplete && !isTextScrambled;
         const lineClass = `line ${isCurrentLine ? 'typing' : ''}`;
 
         return (
