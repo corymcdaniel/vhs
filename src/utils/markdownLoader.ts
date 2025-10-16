@@ -28,7 +28,7 @@ export const loadAboutPost = async (onVideoClick: (videoId: string) => void): Pr
     let match;
 
     while ((match = videoLinkRegex.exec(markdownContent)) !== null) {
-      const [fullMatch, linkText, videoId] = match;
+      const [, linkText, videoId] = match;
       videoLinks.push({ text: linkText, videoId });
 
       // Replace the markdown link with a button placeholder

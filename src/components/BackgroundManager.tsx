@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './BackgroundManager.css';
 import VHSTransition from './VHSTransition';
+import { backgroundImages } from '../data/backgroundImages';
 
 interface BackgroundManagerProps {
   onImagesLoaded: (loaded: boolean) => void;
@@ -18,36 +19,6 @@ const BackgroundManager: React.FC<BackgroundManagerProps> = ({
   const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
   const triggerTransitionRef = useRef<((callback: () => void) => void) | null>(null);
 
-  const backgroundImages = useRef([
-    '/bg/20250906_194829.jpg',
-    '/bg/20250312_095352.jpg',
-    '/bg/20250315_152239.jpg',
-    '/bg/20250329_180257.jpg',
-    '/bg/20250502_152600.jpg',
-    '/bg/20250502_152748~2.jpg',
-    '/bg/20250814_204013-EDIT (2).jpg',
-    '/bg/20250906_201009.jpg',
-    '/bg/20250908_200811.jpg',
-    '/bg/20230305_160446.jpg',
-    '/bg/20230305_194111.jpg',
-    '/bg/20230310_113926.jpg',
-    '/bg/20230310_170323.jpg',
-    '/bg/20230311_114327~2.jpg',
-    '/bg/20230415_091146.jpg',
-    '/bg/20230603_095027~2.jpg',
-    '/bg/20231214_174753.jpg',
-    '/bg/20231220_091305.jpg',
-    '/bg/20231222_135934.jpg',
-    '/bg/20231224_132745.jpg',
-    '/bg/20240309_174427.jpg',
-    '/bg/20240601_192412.jpg',
-    '/bg/20240704_201604.jpg',
-    '/bg/20240805_191606.jpg',
-    '/bg/20241227_162337.jpg',
-    '/bg/20250104_150527-EDIT.jpg',
-    '/bg/20250329_172513.jpg',
-    '/bg/bg.jpg'
-  ]).current;
 
   // Skip preloading for now - just proceed to main site immediately
   useEffect(() => {
@@ -61,7 +32,7 @@ const BackgroundManager: React.FC<BackgroundManagerProps> = ({
       containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${initialBackground}')`;
       console.log('🖼️ Initial background set:', initialBackground);
     }
-  }, [onImagesLoaded, backgroundImages]);
+  }, [onImagesLoaded]);
 
   // Handle transition trigger from VHSTransition component
   const handleTransitionTrigger = useCallback((triggerFn: (callback: () => void) => void) => {
@@ -87,7 +58,7 @@ const BackgroundManager: React.FC<BackgroundManagerProps> = ({
         console.log(`📺 Background changed to: ${newBackground}`);
       }
     });
-  }, [currentImageIndex, backgroundImages]);
+  }, [currentImageIndex]);
 
   // Manual background change (for keyboard shortcut)
   const changeBackgroundManually = useCallback(() => {
@@ -104,12 +75,17 @@ const BackgroundManager: React.FC<BackgroundManagerProps> = ({
       return;
     }
 
-    // Start background cycling every 15 seconds
-    cycleTimerRef.current = setInterval(() => {
+    // Start first background change after 3 seconds, then every 10 seconds
+    const firstTimer = setTimeout(() => {
       changeBackground();
-    }, 15000);
+      // Then start regular interval
+      cycleTimerRef.current = setInterval(() => {
+        changeBackground();
+      }, 10000);
+    }, 3000);
 
     return () => {
+      clearTimeout(firstTimer);
       if (cycleTimerRef.current) {
         clearInterval(cycleTimerRef.current);
       }

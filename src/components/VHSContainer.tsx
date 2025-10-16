@@ -14,6 +14,30 @@ import VHSTextDisplay from './VHSTextDisplay';
 import VHSNavigationBar from './VHSNavigationBar';
 import VHSControlPanel from './VHSControlPanel';
 
+// Static character arrays - moved outside component to prevent recreation on every render
+const HIRAGANA_CHARS = [
+  'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'が', 'ぎ', 'ぐ', 'げ', 'ご',
+  'さ', 'し', 'す', 'せ', 'そ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ', 'た', 'ち', 'つ', 'て', 'と',
+  'だ', 'ぢ', 'づ', 'で', 'ど', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ',
+  'ば', 'び', 'ぶ', 'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ', 'ま', 'み', 'む', 'め', 'も',
+  'や', 'ゆ', 'よ', 'ら', 'り', 'る', 'れ', 'ろ', 'わ', 'ゐ', 'ゑ', 'を', 'ん'
+];
+
+const KATAKANA_CHARS = [
+  'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'ガ', 'ギ', 'グ', 'ゲ', 'ゴ',
+  'サ', 'シ', 'ス', 'セ', 'ソ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ', 'タ', 'チ', 'ツ', 'テ', 'ト',
+  'ダ', 'ヂ', 'ヅ', 'デ', 'ド', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ',
+  'バ', 'ビ', 'ブ', 'ベ', 'ボ', 'パ', 'ピ', 'プ', 'ペ', 'ポ', 'マ', 'ミ', 'ム', 'メ', 'モ',
+  'ヤ', 'ユ', 'ヨ', 'ラ', 'リ', 'ル', 'レ', 'ロ', 'ワ', 'ヰ', 'ヱ', 'ヲ', 'ン'
+];
+
+const ROMAJI_CHARS = [
+  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+  'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+];
+
 interface VHSContainerProps {
   effectsReduced: boolean;
   onCatClick: (catName: string) => void;
@@ -55,36 +79,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       "Eject to see the pictures without my rambling."
   ]).current;
 
-  // Character sets for scrambling
-  const hiraganaChars = [
-    'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'が', 'ぎ', 'ぐ', 'げ', 'ご',
-    'さ', 'し', 'す', 'せ', 'そ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ', 'た', 'ち', 'つ', 'て', 'と',
-    'だ', 'ぢ', 'づ', 'で', 'ど', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ',
-    'ば', 'び', 'ぶ', 'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ', 'ま', 'み', 'む', 'め', 'も',
-    'や', 'ゆ', 'よ', 'ら', 'り', 'る', 'れ', 'ろ', 'わ', 'ゐ', 'ゑ', 'を', 'ん'
-  ];
-
-  const katakanaChars = [
-    'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'ガ', 'ギ', 'グ', 'ゲ', 'ゴ',
-    'サ', 'シ', 'ス', 'セ', 'ソ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ', 'タ', 'チ', 'ツ', 'テ', 'ト',
-    'ダ', 'ヂ', 'ヅ', 'デ', 'ド', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ',
-    'バ', 'ビ', 'ブ', 'ベ', 'ボ', 'パ', 'ピ', 'プ', 'ペ', 'ポ', 'マ', 'ミ', 'ム', 'メ', 'モ',
-    'ヤ', 'ユ', 'ヨ', 'ラ', 'リ', 'ル', 'レ', 'ロ', 'ワ', 'ヰ', 'ヱ', 'ヲ', 'ン'
-  ];
-
-  const romajiChars = [
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-  ];
-
   // Utility function to get random character from any character set
   const getRandomCharacter = useCallback(() => {
-    const characterSets = [hiraganaChars, katakanaChars, romajiChars];
+    const characterSets = [HIRAGANA_CHARS, KATAKANA_CHARS, ROMAJI_CHARS];
     const randomSet = characterSets[Math.floor(Math.random() * characterSets.length)];
     return randomSet[Math.floor(Math.random() * randomSet.length)];
-  }, []);
+  }, []); // No dependencies needed - arrays are static constants
 
   // Utility function to generate random text with cycling characters
   const generateRandomHiraganaText = useCallback((originalText: string): string => {
@@ -122,18 +122,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     delay: 800,
     startDelay: 500
   });
-
-  // Generate random hiragana versions of all text lines
-  const generateScrambledTexts = useCallback(() => {
-    console.log('📝 Generating scrambled hiragana texts...');
-    console.log('📝 Current displayTexts:', displayTexts);
-    console.log('📝 Using textLines instead:', textLines);
-
-    // Use the original textLines instead of displayTexts which might be incomplete
-    const scrambled = textLines.map(text => generateRandomHiraganaText(text));
-    console.log('📝 Scrambled texts generated:', scrambled);
-    setScrambledTexts(scrambled);
-  }, [displayTexts, generateRandomHiraganaText, textLines]);
 
   // Track which navigation sections should be visible based on content
   const completedText = displayTexts.slice(0, currentLineIndex + 1).join(' ').toLowerCase();
@@ -174,6 +162,116 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       (window as any).changeBackgroundManually();
     }
   }, []);
+
+  const generateScrambledTexts = useCallback(() => {
+    console.log('📝 Generating scrambled hiragana texts...');
+    console.log('📝 Current displayTexts:', displayTexts);
+    console.log('📝 Using textLines instead:', textLines);
+
+    // Use the original textLines instead of displayTexts which might be incomplete
+    const scrambled = textLines.map(text => generateRandomHiraganaText(text));
+    console.log('📝 Scrambled texts generated:', scrambled);
+    setScrambledTexts(scrambled);
+  }, [displayTexts, generateRandomHiraganaText, textLines]);
+
+  // Handle dramatic auto-eject sequence
+  const handleAutoEject = useCallback(() => {
+    console.log('🎬 Starting dramatic auto-eject sequence with OSAKA kanji flash');
+    setIsAutoEjecting(true);
+
+    // Show OSAKA kanji flash immediately for full duration
+    setShowOsakaFlash(true);
+    console.log('🔴 OSAKA kanji flash started - 5 second duration');
+
+    // Show "oh no...." message slightly delayed for natural staggered effect
+    setTimeout(() => {
+      setShowOhNoMessage(true);
+      console.log('😰 "oh no...." message appeared');
+    }, 300);
+
+    // Generate scrambled hiragana text during flash
+    generateScrambledTexts();
+
+    // Start text scrambling immediately
+    setIsTextScrambled(true);
+    console.log('⚡ Text scrambling with character cycling started');
+
+    // Start character cycling for 60-80% of characters
+    const startCharacterCycling = () => {
+      const cyclingPercentage = 0.6 + (Math.random() * 0.2); // 60-80%
+      console.log(`🔄 Starting character cycling for ${Math.round(cyclingPercentage * 100)}% of characters`);
+
+      textLines.forEach((line, lineIndex) => {
+        line.split('').forEach((char, charIndex) => {
+          if (char !== ' ' && char !== '.' && char !== ',' && Math.random() < cyclingPercentage) {
+            const charKey = `${line}-${charIndex}`;
+
+            // Initial character assignment
+            setCyclingCharacters(prev => ({
+              ...prev,
+              [charKey]: getRandomCharacter()
+            }));
+
+            // Cycle this character every 100ms for more dynamic effect
+            const cycleInterval = setInterval(() => {
+              setCyclingCharacters(prev => ({
+                ...prev,
+                [charKey]: getRandomCharacter()
+              }));
+            }, 100);
+
+            // Stop cycling after 3 seconds
+            setTimeout(() => {
+              clearInterval(cycleInterval);
+              setCyclingCharacters(prev => {
+                const newState = { ...prev };
+                delete newState[charKey];
+                return newState;
+              });
+            }, 3000);
+          }
+        });
+      });
+    };
+
+    startCharacterCycling();
+
+    // Stop text scrambling after lightning sequence (3 seconds)
+    setTimeout(() => {
+      setIsTextScrambled(false);
+      setCyclingCharacters({}); // Clear all cycling characters
+      console.log('⚡ Text scrambling ended - returning to normal');
+    }, 3000);
+
+    // After 5 seconds, stop flickering and switch to burn effect
+    setTimeout(() => {
+      setShowOsakaFlash(false);
+      setShowOsakaBurn(true);
+      // Keep "oh no...." visible - it will fade on its own after 30s
+      console.log('🔴 OSAKA flickering stopped - switching to burn screen');
+    }, 5000);
+
+    // Hide "oh no...." message after 30 seconds
+    setTimeout(() => {
+      setShowOhNoMessage(false);
+      console.log('😰 "oh no...." message ended after 30 seconds');
+    }, 30000);
+
+    // Hide burn effect after 15 seconds total
+    setTimeout(() => {
+      setShowOsakaBurn(false);
+      console.log('🔴 OSAKA burn effect ended');
+    }, 15000);
+
+    // After 5 seconds of dramatic effects, complete the eject
+    autoEjectTimerRef.current = setTimeout(() => {
+      setIsAutoEjecting(false);
+      setIsEjected(true);
+      setIsTextScrambled(false); // Ensure text is normal when ejected
+      // Don't hide "oh no...." here - let it run for 30 seconds total
+      console.log('🎬 Auto-eject sequence complete - ejected! "oh no" continues for 25 more seconds...');
+    }, 5000);
+  }, [generateScrambledTexts, getRandomCharacter, textLines]);
 
   // Keyboard commands
   useEffect(() => {
@@ -237,7 +335,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       keyboardTimers.forEach(timer => clearTimeout(timer));
       keyboardTimers.clear();
     };
-  }, [handleFastForward]);
+  }, [handleFastForward, handleAutoEject, isEjected, isAutoEjecting, effectsReduced]);
 
   // Random glitch effects with useRef - OPTIMIZED for performance
   useEffect(() => {
@@ -351,105 +449,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const handlePause = () => {
     setIsPaused(!isPaused);
   };
-
-  // Handle dramatic auto-eject sequence
-  const handleAutoEject = useCallback(() => {
-    console.log('🎬 Starting dramatic auto-eject sequence with OSAKA kanji flash');
-    setIsAutoEjecting(true);
-
-    // Show OSAKA kanji flash immediately for full duration
-    setShowOsakaFlash(true);
-    console.log('🔴 OSAKA kanji flash started - 5 second duration');
-
-    // Show "oh no...." message slightly delayed for natural staggered effect
-    setTimeout(() => {
-      setShowOhNoMessage(true);
-      console.log('😰 "oh no...." message appeared');
-    }, 300);
-
-    // Generate scrambled hiragana text during flash
-    generateScrambledTexts();
-
-    // Start text scrambling immediately
-    setIsTextScrambled(true);
-    console.log('⚡ Text scrambling with character cycling started');
-
-    // Start character cycling for 60-80% of characters
-    const startCharacterCycling = () => {
-      const cyclingPercentage = 0.6 + (Math.random() * 0.2); // 60-80%
-      console.log(`🔄 Starting character cycling for ${Math.round(cyclingPercentage * 100)}% of characters`);
-
-      textLines.forEach((line, lineIndex) => {
-        line.split('').forEach((char, charIndex) => {
-          if (char !== ' ' && char !== '.' && char !== ',' && Math.random() < cyclingPercentage) {
-            const charKey = `${line}-${charIndex}`;
-
-            // Initial character assignment
-            setCyclingCharacters(prev => ({
-              ...prev,
-              [charKey]: getRandomCharacter()
-            }));
-
-            // Cycle this character every 100ms for more dynamic effect
-            const cycleInterval = setInterval(() => {
-              setCyclingCharacters(prev => ({
-                ...prev,
-                [charKey]: getRandomCharacter()
-              }));
-            }, 100);
-
-            // Stop cycling after 3 seconds
-            setTimeout(() => {
-              clearInterval(cycleInterval);
-              setCyclingCharacters(prev => {
-                const newState = { ...prev };
-                delete newState[charKey];
-                return newState;
-              });
-            }, 3000);
-          }
-        });
-      });
-    };
-
-    startCharacterCycling();
-
-    // Stop text scrambling after lightning sequence (3 seconds)
-    setTimeout(() => {
-      setIsTextScrambled(false);
-      setCyclingCharacters({}); // Clear all cycling characters
-      console.log('⚡ Text scrambling ended - returning to normal');
-    }, 3000);
-
-    // After 5 seconds, stop flickering and switch to burn effect
-    setTimeout(() => {
-      setShowOsakaFlash(false);
-      setShowOsakaBurn(true);
-      // Keep "oh no...." visible - it will fade on its own after 30s
-      console.log('🔴 OSAKA flickering stopped - switching to burn screen');
-    }, 5000);
-
-    // Hide "oh no...." message after 30 seconds
-    setTimeout(() => {
-      setShowOhNoMessage(false);
-      console.log('😰 "oh no...." message ended after 30 seconds');
-    }, 30000);
-
-    // Hide burn effect after 15 seconds total
-    setTimeout(() => {
-      setShowOsakaBurn(false);
-      console.log('🔴 OSAKA burn effect ended');
-    }, 15000);
-
-    // After 5 seconds of dramatic effects, complete the eject
-    autoEjectTimerRef.current = setTimeout(() => {
-      setIsAutoEjecting(false);
-      setIsEjected(true);
-      setIsTextScrambled(false); // Ensure text is normal when ejected
-      // Don't hide "oh no...." here - let it run for 30 seconds total
-      console.log('🎬 Auto-eject sequence complete - ejected! "oh no" continues for 25 more seconds...');
-    }, 5000);
-  }, [generateScrambledTexts]);
 
   // Comprehensive cleanup on unmount
   useEffect(() => {
