@@ -9,11 +9,29 @@ interface BlogPost {
   }>;
 }
 
+// List of possible escapism video IDs to randomly choose from
+const ESCAPISM_VIDEO_IDS = [
+  'x9yp2wVWdiU', // Nine is god
+  '7XDU7Y-HbzE', // Cherry Blossom Girl
+
+];
+
+// Function to get a random video ID
+const getRandomEscapismVideoId = (): string => {
+  const randomIndex = Math.floor(Math.random() * ESCAPISM_VIDEO_IDS.length);
+  return ESCAPISM_VIDEO_IDS[randomIndex];
+};
+
 export const loadAboutPost = async (onVideoClick: (videoId: string) => void): Promise<BlogPost> => {
   try {
     // Fetch the markdown file from public folder
     const response = await fetch('/blog/0001.md');
-    const markdownContent = await response.text();
+    let markdownContent = await response.text();
+
+    // Replace the escapism video ID with a random one from the list
+    const randomVideoId = getRandomEscapismVideoId();
+    const videoIdPattern = /\[escapism\]\([a-zA-Z0-9_-]{11}\)/;
+    markdownContent = markdownContent.replace(videoIdPattern, `[escapism](${randomVideoId})`);
 
     // Parse the markdown content
     let htmlContent = marked.parse(markdownContent) as string;
