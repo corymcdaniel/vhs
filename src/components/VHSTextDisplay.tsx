@@ -45,7 +45,7 @@ const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
 
       // Check if this character is part of a word flash
       for (const wordKey of wordFlashKeys) {
-        if (wordKey.startsWith(text)) {
+        if (wordKey.startsWith(originalText)) {
           const match = wordKey.match(/-word-(\d+)-(\d+)$/);
           if (match) {
             const start = parseInt(match[1]);
@@ -81,7 +81,7 @@ const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
         if (cyclingChar) {
           // Check if this is a random character flash (shorter animation) or word flash (longer animation)
           const isRandomFlash = !wordFlashKeys.some(key => {
-            if (key.startsWith(text)) {
+            if (key.startsWith(originalText)) {
               const match = key.match(/-word-(\d+)-(\d+)$/);
               if (match) {
                 const start = parseInt(match[1]);

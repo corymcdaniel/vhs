@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './PhotoGalleryModal.css';
 import { backgroundImages } from '../data/backgroundImages';
 
@@ -9,6 +9,28 @@ interface PhotoGalleryModalProps {
 const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+
+  const handleNext = useCallback(() => {
+    setSelectedIndex(prevIndex => {
+      if (prevIndex < backgroundImages.length - 1) {
+        const newIndex = prevIndex + 1;
+        setSelectedImage(backgroundImages[newIndex]);
+        return newIndex;
+      }
+      return prevIndex;
+    });
+  }, []);
+
+  const handlePrevious = useCallback(() => {
+    setSelectedIndex(prevIndex => {
+      if (prevIndex > 0) {
+        const newIndex = prevIndex - 1;
+        setSelectedImage(backgroundImages[newIndex]);
+        return newIndex;
+      }
+      return prevIndex;
+    });
+  }, []);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -40,7 +62,7 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('keydown', handleArrowKeys);
     };
-  }, [onClose, selectedImage, selectedIndex]);
+  }, [onClose, selectedImage, selectedIndex, handleNext, handlePrevious]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -56,22 +78,6 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
   const handleImageClick = (image: string, index: number) => {
     setSelectedImage(image);
     setSelectedIndex(index);
-  };
-
-  const handleNext = () => {
-    if (selectedIndex < backgroundImages.length - 1) {
-      const newIndex = selectedIndex + 1;
-      setSelectedIndex(newIndex);
-      setSelectedImage(backgroundImages[newIndex]);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (selectedIndex > 0) {
-      const newIndex = selectedIndex - 1;
-      setSelectedIndex(newIndex);
-      setSelectedImage(backgroundImages[newIndex]);
-    }
   };
 
   return (

@@ -40,7 +40,7 @@ export const useTypewriter = ({
 
   // Random character flash effect - flash characters randomly as they appear
   useEffect(() => {
-    if (!hasStarted || currentLineIndex < 0) return;
+    if (!hasStarted) return;
 
     // Flash random characters in already-typed lines
     const flashInterval = setInterval(() => {
@@ -50,7 +50,7 @@ export const useTypewriter = ({
         if (!lineText) continue;
 
         // Random chance to flash a character in this completed line
-        if (Math.random() < 0.15) { // 15% chance per line per interval
+        if (Math.random() < 0.05) { // 5% chance per line per interval
           const chars = lineText.split('');
           const validIndices = chars
             .map((char, idx) => ({ char, idx }))
@@ -108,7 +108,7 @@ export const useTypewriter = ({
 
         // Random chance to flash the character that was just typed
         const justTypedChar = currentText[currentCharIndex];
-        if (justTypedChar && justTypedChar.match(/[a-zA-Z]/) && Math.random() < 0.15) { // 15% chance
+        if (justTypedChar && justTypedChar.match(/[a-zA-Z]/) && Math.random() < 0.05) { // 5% chance
           // Use the FULL original text as key base, not the partial display text
           const charKey = `${currentText}-${currentCharIndex}`;
           const randomJapanese = getRandomFlashCharacter();

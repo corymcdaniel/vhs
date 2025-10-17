@@ -80,7 +80,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     "I have two cats, Charlie and Papago.",
     "I live in Phoenix, Arizona and love the desert.",
       "................",
-      "Eject to see the pictures without my rambling."
+      "Eject to see the pictures."
   ]).current;
 
   // Utility function to get random character from any character set
