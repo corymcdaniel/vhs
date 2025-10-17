@@ -33,7 +33,8 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
   }, []);
 
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
+    const handleKeyboard = (e: KeyboardEvent) => {
+      // Handle Escape key
       if (e.key === 'Escape') {
         if (selectedImage) {
           setSelectedImage(null);
@@ -41,10 +42,10 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
         } else {
           onClose();
         }
+        return;
       }
-    };
 
-    const handleArrowKeys = (e: KeyboardEvent) => {
+      // Handle arrow keys (only when image is selected)
       if (selectedImage !== null && selectedIndex >= 0) {
         if (e.key === 'ArrowLeft') {
           e.preventDefault();
@@ -56,11 +57,9 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    document.addEventListener('keydown', handleArrowKeys);
+    document.addEventListener('keydown', handleKeyboard);
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.removeEventListener('keydown', handleArrowKeys);
+      document.removeEventListener('keydown', handleKeyboard);
     };
   }, [onClose, selectedImage, selectedIndex, handleNext, handlePrevious]);
 

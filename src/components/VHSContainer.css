@@ -2123,6 +2123,11 @@
   white-space: nowrap;
 }
 
+/* Hide the original English text when random char is showing */
+.random-char-flash + span {
+  animation: randomEnglishFadeOut 1.2s ease-in-out forwards;
+}
+
 @keyframes randomCharFlash {
   0% {
     opacity: 0;
@@ -2151,5 +2156,23 @@
   100% {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.72);
+  }
+}
+
+@keyframes randomEnglishFadeOut {
+  0% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0;
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
   }
 }
