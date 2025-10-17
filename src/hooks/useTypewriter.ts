@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getRandomFlashCharacter } from '../utils/japaneseFlash';
+import { getTypingFlashEffect, getCompletedLineFlashEffect } from '../utils/japaneseCharacterEffects';
 
 interface UseTypewriterProps {
   texts: string[];
@@ -38,48 +38,39 @@ export const useTypewriter = ({
     return () => clearTimeout(startTimer);
   }, [startDelay]);
 
-  // Random character flash effect - flash characters randomly as they appear
+  // Phonetic/kanji flash effect - flash contextual Japanese syllables/words in completed lines
   useEffect(() => {
     if (!hasStarted) return;
 
-    // Flash random characters in already-typed lines
     const flashInterval = setInterval(() => {
       // Only flash in lines that have been fully typed (not the current typing line)
       for (let lineIndex = 0; lineIndex < currentLineIndex; lineIndex++) {
         const lineText = displayTexts[lineIndex];
         if (!lineText) continue;
 
-        // Random chance to flash a character in this completed line
-        if (Math.random() < 0.05) { // 5% chance per line per interval
-          const chars = lineText.split('');
-          const validIndices = chars
-            .map((char, idx) => ({ char, idx }))
-            .filter(({ char }) => char.match(/[a-zA-Z]/))
-            .map(({ idx }) => idx);
+        // 8% chance to flash a phonetic/kanji replacement per line per interval
+        if (Math.random() < 0.08) {
+          const flashEffect = getCompletedLineFlashEffect(lineText);
 
-          if (validIndices.length > 0) {
-            const randomIdx = validIndices[Math.floor(Math.random() * validIndices.length)];
-            const charKey = `${lineText}-${randomIdx}`;
-            const randomJapanese = getRandomFlashCharacter();
-
-            console.log(`🔥 Flashing character at completed line "${lineText}" index ${randomIdx} with "${randomJapanese}"`);
+          if (flashEffect) {
+            console.log(`🎌 Flashing ${flashEffect.type} in completed line: "${flashEffect.character}"`);
 
             setWordFlashCharacters(prev => ({
               ...prev,
-              [charKey]: randomJapanese
+              [flashEffect.key]: flashEffect.character
             }));
 
             setTimeout(() => {
               setWordFlashCharacters(prev => {
                 const newState = { ...prev };
-                delete newState[charKey];
+                delete newState[flashEffect.key];
                 return newState;
               });
-            }, 1200);
+            }, flashEffect.duration);
           }
         }
       }
-    }, 2000); // Check every 2 seconds
+    }, 3000); // Check every 3 seconds
 
     return () => clearInterval(flashInterval);
   }, [hasStarted, currentLineIndex, displayTexts]);
@@ -106,27 +97,25 @@ export const useTypewriter = ({
           return newTexts;
         });
 
-        // Random chance to flash the character that was just typed
+        // Flash effect for newly typed character (contextual or random)
         const justTypedChar = currentText[currentCharIndex];
-        if (justTypedChar && justTypedChar.match(/[a-zA-Z]/) && Math.random() < 0.05) { // 5% chance
-          // Use the FULL original text as key base, not the partial display text
-          const charKey = `${currentText}-${currentCharIndex}`;
-          const randomJapanese = getRandomFlashCharacter();
+        const flashEffect = getTypingFlashEffect(currentText, currentCharIndex, justTypedChar);
 
-          console.log(`⚡ Flashing newly typed character "${justTypedChar}" at index ${currentCharIndex} with "${randomJapanese}", key: "${charKey}"`);
+        if (flashEffect) {
+          console.log(`⚡ Flashing typed char "${justTypedChar}" at index ${currentCharIndex} with "${flashEffect.character}" (${flashEffect.type})`);
 
           setWordFlashCharacters(prev => ({
             ...prev,
-            [charKey]: randomJapanese
+            [flashEffect.key]: flashEffect.character
           }));
 
           setTimeout(() => {
             setWordFlashCharacters(prev => {
               const newState = { ...prev };
-              delete newState[charKey];
+              delete newState[flashEffect.key];
               return newState;
             });
-          }, 1200);
+          }, flashEffect.duration);
         }
 
         setCurrentCharIndex(prev => prev + 1);

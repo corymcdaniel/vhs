@@ -33,7 +33,10 @@ const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
   // Helper function to render text with cycling character overlays and word flashes
   const renderTextWithOverlay = (text: string, lineIndex: number) => {
     const originalText = originalTexts[lineIndex]; // Get the full original text for this line
-    const chars = text.split('');
+
+    // During scramble, use the full original text length, otherwise use display text
+    const textToRender = isTextScrambled ? originalText : text;
+    const chars = textToRender.split('');
     const result: React.JSX.Element[] = [];
 
     // Check for word-level flashes (Japanese replacements)
@@ -43,30 +46,34 @@ const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
       const char = chars[charIndex];
       let isPartOfWordFlash = false;
 
-      // Check if this character is part of a word flash
-      for (const wordKey of wordFlashKeys) {
-        if (wordKey.startsWith(originalText)) {
-          const match = wordKey.match(/-word-(\d+)-(\d+)$/);
-          if (match) {
-            const start = parseInt(match[1]);
-            const end = parseInt(match[2]);
+      // Check if this character is part of a word flash (only for non-scrambled text)
+      if (!isTextScrambled) {
+        for (const wordKey of wordFlashKeys) {
+          if (wordKey.startsWith(originalText)) {
+            const match = wordKey.match(/-word-(\d+)-(\d+)$/);
+            if (match) {
+              const start = parseInt(match[1]);
+              const end = parseInt(match[2]);
 
-            if (charIndex >= start && charIndex <= end) {
-              isPartOfWordFlash = true;
+              if (charIndex >= start && charIndex <= end) {
+                isPartOfWordFlash = true;
 
-              // Only render the Japanese text at the start position
-              if (charIndex === start) {
-                const japaneseText = cyclingCharacters[wordKey];
-                result.push(
-                  <span
-                    key={`word-${charIndex}`}
-                    className="japanese-flash"
-                  >
-                    {japaneseText}
-                  </span>
-                );
+                // Only render the Japanese text at the start position, hide original chars
+                if (charIndex === start) {
+                  const japaneseText = cyclingCharacters[wordKey];
+                  // Calculate how many English characters to hide
+                  const replacedChars = textToRender.substring(start, end + 1);
+                  result.push(
+                    <span key={`word-${charIndex}`} style={{ position: 'relative', display: 'inline-block', minWidth: `${replacedChars.length * 0.6}em` }}>
+                      <span style={{ visibility: 'hidden' }}>{replacedChars}</span>
+                      <span className="japanese-flash">
+                        {japaneseText}
+                      </span>
+                    </span>
+                  );
+                }
+                break;
               }
-              break;
             }
           }
         }
@@ -79,29 +86,39 @@ const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
         const cyclingChar = cyclingCharacters[charKey];
 
         if (cyclingChar) {
-          // Check if this is a random character flash (shorter animation) or word flash (longer animation)
-          const isRandomFlash = !wordFlashKeys.some(key => {
-            if (key.startsWith(originalText)) {
-              const match = key.match(/-word-(\d+)-(\d+)$/);
-              if (match) {
-                const start = parseInt(match[1]);
-                const end = parseInt(match[2]);
-                return charIndex >= start && charIndex <= end;
-              }
-            }
-            return false;
-          });
-
-          result.push(
-            <span key={charIndex} style={{ position: 'relative', display: 'inline-block', minWidth: '0.6em' }}>
-              <span style={{ visibility: 'hidden' }}>{char}</span>
-              <span
-                className={isRandomFlash ? "random-char-flash" : "cycling-char"}
-              >
+          // During text scramble (chaos), render directly without positioning/overlay
+          if (isTextScrambled) {
+            result.push(
+              <span key={charIndex} className="cycling-char">
                 {cyclingChar}
               </span>
-            </span>
-          );
+            );
+          } else {
+            // For phonetic flashes, use overlay with positioning
+            // Check if this is a random character flash (shorter animation)
+            const isRandomFlash = !wordFlashKeys.some(key => {
+              if (key.startsWith(originalText)) {
+                const match = key.match(/-word-(\d+)-(\d+)$/);
+                if (match) {
+                  const start = parseInt(match[1]);
+                  const end = parseInt(match[2]);
+                  return charIndex >= start && charIndex <= end;
+                }
+              }
+              return false;
+            });
+
+            result.push(
+              <span key={charIndex} style={{ position: 'relative', display: 'inline-block', minWidth: '0.6em' }}>
+                <span style={{ visibility: 'hidden' }}>{char}</span>
+                <span
+                  className={isRandomFlash ? "random-char-flash" : "cycling-char"}
+                >
+                  {cyclingChar}
+                </span>
+              </span>
+            );
+          }
         } else {
           result.push(<span key={charIndex}>{char}</span>);
         }
