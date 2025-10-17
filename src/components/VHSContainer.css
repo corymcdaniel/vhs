@@ -460,85 +460,75 @@
   margin-top: 2px;
 }
 
-/* Control Buttons */
-.toggle-effects-btn {
+/* Control Buttons Container - Left Side */
+.control-buttons-left {
   position: absolute;
   bottom: 20px;
   left: 20px;
-  background: rgba(255, 255, 0, 0.2);
-  border: 1px solid #ffff00;
-  color: #ffff00;
-  padding: 10px;
-  font-family: 'VT323', monospace;
-  cursor: pointer;
-  z-index: 1000;
-  transition: all 0.2s;
-  border-radius: 4px;
-  height: 44px;
-  min-width: 50px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  line-height: 1;
+  gap: 10px;
+  z-index: 1000;
 }
 
-.toggle-effects-btn:hover {
-  background: rgba(255, 255, 0, 0.3);
-}
-
-.fast-forward-btn {
+/* Control Buttons Container - Right Side */
+.control-buttons-right {
   position: absolute;
   bottom: 20px;
   right: 20px;
-  background: rgba(0, 255, 255, 0.2);
-  border: 1px solid #00ffff;
-  color: #00ffff;
-  padding: 10px;
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+/* Base Button Styles */
+.toggle-effects-btn,
+.photo-gallery-btn,
+.pause-btn,
+.fast-forward-btn {
+  background: rgba(255, 255, 0, 0.2);
+  border: 1px solid #ffff00;
+  color: #ffff00;
+  padding: 10px 15px;
   font-family: 'VT323', monospace;
   cursor: pointer;
-  z-index: 1000;
   transition: all 0.2s;
   border-radius: 4px;
   height: 44px;
-  min-width: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
   line-height: 1;
+  white-space: nowrap;
+}
+
+.toggle-effects-btn:hover,
+.pause-btn:hover {
+  background: rgba(255, 255, 0, 0.3);
+  box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+}
+
+.photo-gallery-btn {
+  background: rgba(255, 0, 255, 0.2);
+  border-color: #ff00ff;
+  color: #ff00ff;
+  gap: 5px;
+}
+
+.photo-gallery-btn:hover {
+  background: rgba(255, 0, 255, 0.3);
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+}
+
+.fast-forward-btn {
+  background: rgba(0, 255, 255, 0.2);
+  border-color: #00ffff;
+  color: #00ffff;
 }
 
 .fast-forward-btn:hover {
   background: rgba(0, 255, 255, 0.3);
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-}
-
-.pause-btn {
-  position: absolute;
-  bottom: 20px;
-  right: 120px;
-  background: rgba(255, 255, 0, 0.2);
-  border: 1px solid #ffff00;
-  color: #ffff00;
-  padding: 10px;
-  font-family: 'VT323', monospace;
-  cursor: pointer;
-  z-index: 1000;
-  transition: all 0.2s;
-  border-radius: 4px;
-  height: 44px;
-  min-width: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  line-height: 1;
-}
-
-.pause-btn:hover {
-  background: rgba(255, 255, 0, 0.3);
-  box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
 }
 
 /* Contact Button */
@@ -907,7 +897,7 @@
   }
 }
 
-/* OSAKA Burn Screen Overlay - Static burn effect */
+/* OSAKA Burn Screen Overlay - Static burn effect that lasts longer */
 .osaka-burn-overlay {
   position: absolute;
   top: 0;
@@ -919,7 +909,7 @@
   align-items: center;
   z-index: 999;
   pointer-events: none;
-  animation: osakaBurnScreenFade 10s ease-out;
+  animation: osakaBurnScreenFade 45s ease-out;
 }
 
 
@@ -935,27 +925,55 @@
   position: relative;
 }
 
-/* Static burn screen fade - no flickering */
+/* Static burn screen fade - slow exponential decay like real phosphor burn-in */
 @keyframes osakaBurnScreenFade {
   0% {
-    opacity: 0.8;
+    opacity: 0.85;
     filter: blur(1px);
   }
+  10% {
+    opacity: 0.75;
+    filter: blur(1.2px);
+  }
   20% {
-    opacity: 0.7;
+    opacity: 0.65;
     filter: blur(1.5px);
   }
-  50% {
-    opacity: 0.5;
+  30% {
+    opacity: 0.55;
+    filter: blur(1.8px);
+  }
+  40% {
+    opacity: 0.48;
     filter: blur(2px);
   }
-  80% {
-    opacity: 0.3;
+  50% {
+    opacity: 0.42;
+    filter: blur(2.3px);
+  }
+  60% {
+    opacity: 0.35;
+    filter: blur(2.6px);
+  }
+  70% {
+    opacity: 0.28;
     filter: blur(3px);
+  }
+  80% {
+    opacity: 0.20;
+    filter: blur(3.5px);
+  }
+  90% {
+    opacity: 0.10;
+    filter: blur(4px);
+  }
+  95% {
+    opacity: 0.05;
+    filter: blur(4.5px);
   }
   100% {
     opacity: 0;
-    filter: blur(4px);
+    filter: blur(5px);
   }
 }
 
@@ -2023,5 +2041,115 @@
   }
   100% {
     transform: translateX(100%);
+  }
+}
+/* Japanese Word Flash Effect - Crossfade replacement */
+.japanese-flash {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.72);
+  font-size: inherit;
+  line-height: inherit;
+  animation: japaneseFlashFade 3s ease-in-out forwards;
+  color: #00ffaa;
+  font-weight: normal;
+  text-shadow:
+    0 0 10px #00ffaa,
+    0 0 20px #00ffaa;
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+/* Hide the original English text when Japanese is showing */
+.japanese-flash + span {
+  animation: englishFadeOut 3s ease-in-out forwards;
+}
+
+@keyframes japaneseFlashFade {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes englishFadeOut {
+  0% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Random Character Flash - Quick glitchy crossfade */
+.random-char-flash {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.72);
+  font-size: inherit;
+  line-height: inherit;
+  animation: randomCharFlash 1.2s ease-in-out forwards;
+  color: #ff00ff;
+  text-shadow:
+    0 0 8px #ff00ff,
+    0 0 16px #ff00ff;
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+@keyframes randomCharFlash {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.72);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, calc(-50% - 1px)) scale(0.72);
+  }
+  25% {
+    opacity: 0.9;
+    transform: translate(-50%, calc(-50% + 1px)) scale(0.72);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.72);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.72);
+  }
+  85% {
+    opacity: 0.4;
+    transform: translate(-50%, calc(-50% - 1px)) scale(0.72);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.72);
   }
 }

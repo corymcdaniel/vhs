@@ -8,6 +8,7 @@ interface VHSControlPanelProps {
   onPause: () => void;
   onFastForward: () => void;
   onReopen: () => void;
+  onPhotoGalleryClick: () => void;
 }
 
 const VHSControlPanel: React.FC<VHSControlPanelProps> = ({
@@ -17,23 +18,32 @@ const VHSControlPanel: React.FC<VHSControlPanelProps> = ({
   onToggleEffects,
   onPause,
   onFastForward,
-  onReopen
+  onReopen,
+  onPhotoGalleryClick
 }) => {
   return (
     <>
-      {/* Controls */}
-      <button className="toggle-effects-btn" onClick={onToggleEffects}>
-        {effectsReduced ? 'RESTORE EFFECTS' : 'REDUCE EFFECTS'}
-      </button>
+      {/* Left Side Controls */}
+      <div className="control-buttons-left">
+        <button className="toggle-effects-btn" onClick={onToggleEffects}>
+          {effectsReduced ? 'RESTORE EFFECTS' : 'REDUCE EFFECTS'}
+        </button>
 
-      <button className="pause-btn" onClick={onPause}>
-        {isPaused ? '▶ PLAY' : '⏸ PAUSE'}
-      </button>
+        <button className="photo-gallery-btn" onClick={onPhotoGalleryClick}>
+          📷 GALLERY
+        </button>
+      </div>
 
-      <button className="fast-forward-btn" onClick={onFastForward}>
-        {'>> FF'}
-      </button>
+      {/* Right Side Controls */}
+      <div className="control-buttons-right">
+        <button className="pause-btn" onClick={onPause}>
+          {isPaused ? '▶ PLAY' : '⏸ PAUSE'}
+        </button>
 
+        <button className="fast-forward-btn" onClick={onFastForward}>
+          {'>> FF'}
+        </button>
+      </div>
     </>
   );
 };
