@@ -51,68 +51,43 @@ const TextScrambleEffect: React.FC<TextScrambleEffectProps> = ({
   useEffect(() => {
     if (!isActive) return;
 
-    console.log('⚡ Text scrambling effect started');
+    console.log('⚡ Text scrambling effect started - FROZEN Japanese characters');
 
     generateScrambledTexts();
     setIsTextScrambled(true);
-    console.log('⚡ Text scrambling with character cycling started');
 
-    // Start character cycling for 60-80% of characters
-    const cyclingPercentage = 0.6 + (Math.random() * 0.2); // 60-80%
-    console.log(`🔄 Starting character cycling for ${Math.round(cyclingPercentage * 100)}% of characters`);
+    // Freeze all characters to Japanese - no cycling, just set once and freeze
+    const frozenCharacters: {[key: string]: string} = {};
 
-    const intervals: NodeJS.Timeout[] = [];
-    const timeouts: NodeJS.Timeout[] = [];
-
-    textLines.forEach((line, lineIndex) => {
+    textLines.forEach((line) => {
       line.split('').forEach((char, charIndex) => {
-        if (char !== ' ' && char !== '.' && char !== ',' && Math.random() < cyclingPercentage) {
+        // Convert ALL non-space characters to frozen Japanese
+        if (char !== ' ') {
           const charKey = `${line}-${charIndex}`;
-
-          // Initial character assignment
-          setCyclingCharacters(prev => ({
-            ...prev,
-            [charKey]: getRandomCharacter()
-          }));
-
-          // Cycle this character every 100ms for more dynamic effect
-          const cycleInterval = setInterval(() => {
-            setCyclingCharacters(prev => ({
-              ...prev,
-              [charKey]: getRandomCharacter()
-            }));
-          }, 100);
-
-          intervals.push(cycleInterval);
-
-          // Stop cycling after 3 seconds
-          const stopTimeout = setTimeout(() => {
-            clearInterval(cycleInterval);
-            setCyclingCharacters(prev => {
-              const newState = { ...prev };
-              delete newState[charKey];
-              return newState;
-            });
-          }, 3000);
-
-          timeouts.push(stopTimeout);
+          frozenCharacters[charKey] = getRandomCharacter();
         }
       });
     });
 
-    // Stop text scrambling after lightning sequence (3 seconds)
+    // Set all frozen characters at once
+    setCyclingCharacters(frozenCharacters);
+    console.log('⚡ All text frozen to Japanese characters - NO CYCLING');
+
+    const timeouts: NodeJS.Timeout[] = [];
+
+    // Keep text scrambled and frozen for duration of the effect
+    // Text will stay frozen until parent component clears it
     const endTimeout = setTimeout(() => {
       setIsTextScrambled(false);
-      setCyclingCharacters({}); // Clear all cycling characters
+      setCyclingCharacters({}); // Clear all frozen characters
       console.log('⚡ Text scrambling ended - returning to normal');
       onComplete?.();
-    }, 3000);
+    }, 8000); // Longer duration to show frozen effect
 
     timeouts.push(endTimeout);
 
     // Cleanup
     return () => {
-      intervals.forEach(clearInterval);
       timeouts.forEach(clearTimeout);
       setIsTextScrambled(false);
       setCyclingCharacters({});
