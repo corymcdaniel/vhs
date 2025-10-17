@@ -106,9 +106,9 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
   useEffect(() => {
     console.log('🎬 Setting up background cycling timer');
 
-    // Only stop if user manually pauses or ejects
-    if (isPaused || isEjected) {
-      console.log('🛑 Cycling paused/ejected:', { isPaused, isEjected });
+    // Only stop if user manually pauses (backgrounds should continue after auto-eject)
+    if (isPaused) {
+      console.log('🛑 Cycling paused:', { isPaused });
       if (cycleTimerRef.current) {
         clearInterval(cycleTimerRef.current);
         cycleTimerRef.current = null;
@@ -138,7 +138,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
         clearInterval(cycleTimerRef.current);
       }
     };
-  }, [isPaused, isEjected, changeBackground]);
+  }, [isPaused, changeBackground]);
 
   // Comprehensive cleanup on unmount
   useEffect(() => {

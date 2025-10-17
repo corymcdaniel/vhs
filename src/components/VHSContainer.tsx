@@ -6,6 +6,7 @@ import RecordingModal from './RecordingModal';
 import HelpModal from './HelpModal';
 import VHSTopNavBar from './VHSTopNavBar';
 import AboutModal from './AboutModal';
+import PhotoGalleryModal from './PhotoGalleryModal';
 import SimpleBackgroundManager from './SimpleBackgroundManager';
 import VHSEffects from './VHSEffects';
 import VHSTimestamp from './VHSTimestamp';
@@ -14,7 +15,6 @@ import VHSTextDisplay from './VHSTextDisplay';
 import VHSNavigationBar from './VHSNavigationBar';
 import VHSControlPanel from './VHSControlPanel';
 import { useAutoEjectSequence } from './AutoEjectSequence';
-import { useOsakaEffects } from './OsakaEffects';
 import { useOhNoMessage } from './OhNoMessage';
 import TextScrambleEffect from './TextScrambleEffect';
 
@@ -46,17 +46,20 @@ interface VHSContainerProps {
   effectsReduced: boolean;
   onCatClick: (catName: string) => void;
   onToggleEffects: () => void;
+  onAutoEjectStart: () => void;
 }
 
 const VHSContainer: React.FC<VHSContainerProps> = ({
   effectsReduced,
   onCatClick,
-  onToggleEffects
+  onToggleEffects,
+  onAutoEjectStart
 }) => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState(false);
   const [isEjected, setIsEjected] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -179,7 +182,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const handleAutoEject = useCallback(() => {
     console.log('🎬 Manual auto-eject triggered');
     setIsAutoEjecting(true);
-  }, []);
+    onAutoEjectStart(); // Notify App to show Osaka effects
+  }, [onAutoEjectStart]);
 
   // Handle auto-eject completion
   const handleAutoEjectComplete = useCallback(() => {
@@ -191,7 +195,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
   // Use auto-eject hooks
   useAutoEjectSequence({ isActive: isAutoEjecting, onComplete: handleAutoEjectComplete });
-  const { showFlash: showOsakaFlash, showBurn: showOsakaBurn } = useOsakaEffects({ isActive: isAutoEjecting });
   const showOhNoMessage = useOhNoMessage({ isActive: isAutoEjecting });
 
   // Auto-trigger eject 20 seconds after typewriter completes (when contact button shows)
@@ -201,6 +204,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       autoEjectTimerRef.current = setTimeout(() => {
         console.log('🎬 20 seconds elapsed - triggering auto-eject chaos!');
         setIsAutoEjecting(true);
+        onAutoEjectStart(); // Notify App to show Osaka effects
       }, 20000);
 
       return () => {
@@ -210,7 +214,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         }
       };
     }
-  }, [isComplete, effectsReduced, isAutoEjecting, isEjected]);
+  }, [isComplete, effectsReduced, isAutoEjecting, isEjected, onAutoEjectStart]);
 
 
   // Keyboard commands
@@ -364,6 +368,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     };
   }, [handleAboutClick]);
 
+  const handlePhotoGalleryClick = () => {
+    setShowPhotoGalleryModal(true);
+  };
+
+  const handlePhotoGalleryClose = () => {
+    setShowPhotoGalleryModal(false);
+  };
+
   const handleEject = () => {
     setIsEjected(true);
   };
@@ -426,20 +438,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       <div
         className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''} ${isAutoEjecting ? 'auto-ejecting' : ''}`}
       >
-      {/* OSAKA Kanji Flash Overlay - Direct rendering */}
-      {showOsakaFlash && (
-        <div className="osaka-flash-overlay">
-          <div className="osaka-kanji">大阪</div>
-        </div>
-      )}
-
-      {/* OSAKA Burn Screen Effect - Direct rendering */}
-      {showOsakaBurn && (
-        <div className="osaka-burn-overlay">
-          <div className="osaka-burn-kanji">大阪</div>
-        </div>
-      )}
-
       {/* "oh no...." Message - Direct rendering */}
       {showOhNoMessage && (
         <div className="oh-no-message">
@@ -504,6 +502,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         onPause={handlePause}
         onFastForward={handleFastForward}
         onReopen={handleReopen}
+        onPhotoGalleryClick={handlePhotoGalleryClick}
       />
 
       {/* Contact Modal */}
@@ -524,6 +523,11 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* About Modal */}
       {showAboutModal && (
         <AboutModal onClose={handleAboutClose} />
+      )}
+
+      {/* Photo Gallery Modal */}
+      {showPhotoGalleryModal && (
+        <PhotoGalleryModal onClose={handlePhotoGalleryClose} />
       )}
     </div>
     </>

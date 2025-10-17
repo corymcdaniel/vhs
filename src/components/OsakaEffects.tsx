@@ -31,15 +31,15 @@ export const useOsakaEffects = ({ isActive, onComplete }: OsakaEffectsProps): Os
     const flashTimer = setTimeout(() => {
       setShowFlash(false);
       setShowBurn(true);
-      console.log('🔴 OSAKA flickering stopped - switching to burn screen');
+      console.log('🔴 OSAKA flickering stopped - switching to burn screen - will burn for 45 seconds');
     }, 5000);
 
-    // Hide burn effect after 15 seconds total (not 25)
+    // Hide burn effect after 50 seconds total (5s flash + 45s burn)
     const burnTimer = setTimeout(() => {
       setShowBurn(false);
-      console.log('🔴 OSAKA burn effect ended after 15 seconds total');
+      console.log('🔴 OSAKA burn effect ended after 50 seconds total');
       onComplete?.();
-    }, 15000);
+    }, 50000);
 
     // Cleanup
     return () => {

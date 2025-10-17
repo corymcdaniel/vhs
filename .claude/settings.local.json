@@ -5,7 +5,9 @@
       "Bash(findstr:*)",
       "Bash(git checkout:*)",
       "Bash(git commit:*)",
-      "Bash(npx kill-port:*)"
+      "Bash(npx kill-port:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm start)"
     ],
     "deny": [],
     "ask": []

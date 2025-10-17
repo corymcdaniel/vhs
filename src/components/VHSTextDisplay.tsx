@@ -93,14 +93,13 @@ const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
           });
 
           result.push(
-            <span
-              key={charIndex}
-              className={isRandomFlash ? "random-char-flash" : "cycling-char"}
-              style={{
-                color: 'inherit'
-              }}
-            >
-              {cyclingChar}
+            <span key={charIndex} style={{ position: 'relative', display: 'inline-block', minWidth: '0.6em' }}>
+              <span style={{ visibility: 'hidden' }}>{char}</span>
+              <span
+                className={isRandomFlash ? "random-char-flash" : "cycling-char"}
+              >
+                {cyclingChar}
+              </span>
             </span>
           );
         } else {
