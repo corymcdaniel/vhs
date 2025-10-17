@@ -23,7 +23,6 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
   const activeTimers = useRef(new Set<NodeJS.Timeout>());
-  const [hasAutoEjected, setHasAutoEjected] = useState(false);
 
   // Auto-generated background images from /public/bg/ directory
   // No need to manually update - just add images to /public/bg/
@@ -61,20 +60,6 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
 
     console.log(`🔄 Changing background to: ${newBackground}`);
 
-    // Check if this is the fifth image and we haven't auto-ejected yet
-    if (nextIndex === 4 && !hasAutoEjected && !effectsReduced && onAutoEject) {
-      console.log('🎬 Triggering dramatic auto-eject sequence!');
-      setHasAutoEjected(true);
-
-      // Change background immediately for dramatic effect
-      containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
-      setCurrentImageIndex(nextIndex);
-
-      // Trigger the dramatic auto-eject sequence
-      onAutoEject();
-      return;
-    }
-
     if (effectsReduced) {
       // Skip static flash effect when effects are reduced - just change immediately
       containerRef.current.style.backgroundImage = `linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)), url('${newBackground}')`;
@@ -110,7 +95,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
 
       activeTimers.current.add(flashTimer);
     }
-  }, [currentImageIndex, effectsReduced, hasAutoEjected, onAutoEject]);
+  }, [currentImageIndex, effectsReduced]);
 
   // Manual background change
   const changeBackgroundManually = useCallback(() => {
@@ -131,8 +116,10 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
       return;
     }
 
-    // Start first background change after 3 seconds, then every 10 seconds
-    console.log('⏰ Starting background cycling - first change in 3 seconds, then every 10 seconds');
+    // Start first background change after 6 seconds, then every 10 seconds
+    // This ensures the 4th background (auto-eject trigger) appears around 26s,
+    // which is after typewriter completion (~22.5s) + giving time for 5s delay
+    console.log('⏰ Starting background cycling - first change in 6 seconds, then every 10 seconds');
     const firstTimer = setTimeout(() => {
       console.log('🔄 First background change triggered');
       changeBackground();
@@ -142,7 +129,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
         console.log('🔄 Regular background change triggered');
         changeBackground();
       }, 10000);
-    }, 3000);
+    }, 6000);
 
     return () => {
       console.log('🧹 Cleaning up background cycling timers');
@@ -151,7 +138,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
         clearInterval(cycleTimerRef.current);
       }
     };
-  }, [isPaused, isEjected, changeBackground, hasAutoEjected, effectsReduced, onAutoEject]);
+  }, [isPaused, isEjected, changeBackground]);
 
   // Comprehensive cleanup on unmount
   useEffect(() => {

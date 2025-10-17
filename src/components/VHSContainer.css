@@ -2025,3 +2025,104 @@
     transform: translateX(100%);
   }
 }
+/* Japanese Word Flash Effect - Crossfade replacement */
+.japanese-flash {
+  display: inline;
+  position: relative;
+  font-size: inherit;
+  line-height: inherit;
+  animation: japaneseFlashFade 3s ease-in-out forwards;
+  color: #00ffaa;
+  font-weight: normal;
+  text-shadow:
+    0 0 10px #00ffaa,
+    0 0 20px #00ffaa;
+  transform: scale(0.8);
+  transform-origin: center;
+}
+
+/* Hide the original English text when Japanese is showing */
+.japanese-flash + span {
+  animation: englishFadeOut 3s ease-in-out forwards;
+}
+
+@keyframes japaneseFlashFade {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes englishFadeOut {
+  0% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Random Character Flash - Quick glitchy crossfade */
+.random-char-flash {
+  display: inline;
+  position: relative;
+  font-size: inherit;
+  line-height: inherit;
+  animation: randomCharFlash 1.2s ease-in-out forwards;
+  color: #ff00ff;
+  text-shadow:
+    0 0 8px #ff00ff,
+    0 0 16px #ff00ff;
+  transform: scale(0.9);
+}
+
+@keyframes randomCharFlash {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(0px);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(0.9) translateY(-1px);
+  }
+  25% {
+    opacity: 0.9;
+    transform: scale(0.9) translateY(1px);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(0.9) translateY(0px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(0.9) translateY(0px);
+  }
+  85% {
+    opacity: 0.4;
+    transform: scale(0.9) translateY(-1px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(0px);
+  }
+}
