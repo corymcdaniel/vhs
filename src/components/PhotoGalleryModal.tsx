@@ -111,7 +111,7 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
             <div className="photo-detail-content" onClick={() => { setSelectedImage(null); setSelectedIndex(-1); }}>
               <img
                 src={selectedImage}
-                alt="Selected photo"
+                alt={`Gallery item ${selectedIndex + 1} of ${backgroundImages.length}`}
                 className="photo-detail-image"
               />
               <div className="photo-detail-info">
@@ -139,7 +139,7 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
                 className="photo-gallery-item"
                 onClick={() => handleImageClick(image, index)}
               >
-                <img src={image} alt={`Photo ${index + 1}`} />
+                <img src={image} alt={`Gallery item ${index + 1}`} />
                 <div className="photo-overlay">
                   <span className="photo-number">#{index + 1}</span>
                 </div>
