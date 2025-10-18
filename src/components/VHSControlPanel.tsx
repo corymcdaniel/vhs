@@ -30,7 +30,7 @@ const VHSControlPanel: React.FC<VHSControlPanelProps> = ({
         </button>
 
         <button className="photo-gallery-btn" onClick={onPhotoGalleryClick}>
-          📷 GALLERY
+          PHOTO GALLERY
         </button>
       </div>
 

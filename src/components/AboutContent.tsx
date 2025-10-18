@@ -30,6 +30,8 @@ const AboutContent: React.FC<AboutContentProps> = ({ onVideoClick }) => {
     const handleVideoButtonClick = (event: Event) => {
       const target = event.target as HTMLButtonElement;
       if (target.classList.contains('escapism-link')) {
+        event.preventDefault();
+        event.stopPropagation();
         const videoId = target.getAttribute('data-video-id');
         if (videoId) {
           onVideoClick(videoId);
@@ -37,10 +39,14 @@ const AboutContent: React.FC<AboutContentProps> = ({ onVideoClick }) => {
       }
     };
 
-    document.addEventListener('click', handleVideoButtonClick);
-    return () => {
-      document.removeEventListener('click', handleVideoButtonClick);
-    };
+    // Only attach to the blog content area, not the entire document
+    const blogContentEl = document.querySelector('.blog-content');
+    if (blogContentEl) {
+      blogContentEl.addEventListener('click', handleVideoButtonClick);
+      return () => {
+        blogContentEl.removeEventListener('click', handleVideoButtonClick);
+      };
+    }
   }, [onVideoClick, blogContent]);
 
   if (isLoading) {

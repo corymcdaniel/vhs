@@ -13,7 +13,7 @@ interface BlogPost {
 const ESCAPISM_VIDEO_IDS = [
   'x9yp2wVWdiU', // Nine is god
   '7XDU7Y-HbzE', // Cherry Blossom Girl
-
+  'QBN-1Q0_Fiw', // Crosses - Bitches Brew
 ];
 
 // Function to get a random video ID
@@ -39,6 +39,10 @@ export const loadAboutPost = async (onVideoClick: (videoId: string) => void): Pr
     // Extract title from first h1 tag
     const titleMatch = markdownContent.match(/^# (.+)$/m);
     const title = titleMatch ? titleMatch[1] : 'About This Website';
+
+    // Process custom marker: ==text== for non-green bold text
+    // This converts ==text== to <span class="plain-bold">text</span>
+    htmlContent = htmlContent.replace(/==([^=]+)==/g, '<span class="plain-bold">$1</span>');
 
     // Find video links and replace them with buttons
     const videoLinks: Array<{text: string; videoId: string}> = [];
