@@ -17,6 +17,7 @@ import VHSControlPanel from './VHSControlPanel';
 import { useAutoEjectSequence } from './AutoEjectSequence';
 import { useOhNoMessage } from './OhNoMessage';
 import TextScrambleEffect from './TextScrambleEffect';
+import { logger } from '../utils/logger';
 
 // Static character arrays - moved outside component to prevent recreation on every render
 const HIRAGANA_CHARS = [
@@ -168,19 +169,19 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   }, []);
 
   const generateScrambledTexts = useCallback(() => {
-    console.log('📝 Generating scrambled hiragana texts...');
-    console.log('📝 Current displayTexts:', displayTexts);
-    console.log('📝 Using textLines instead:', textLines);
+    logger.log('📝 Generating scrambled hiragana texts...');
+    logger.log('📝 Current displayTexts:', displayTexts);
+    logger.log('📝 Using textLines instead:', textLines);
 
     // Use the original textLines instead of displayTexts which might be incomplete
     const scrambled = textLines.map(text => generateRandomHiraganaText(text));
-    console.log('📝 Scrambled texts generated:', scrambled);
+    logger.log('📝 Scrambled texts generated:', scrambled);
     setScrambledTexts(scrambled);
   }, [displayTexts, generateRandomHiraganaText, textLines]);
 
   // Handle dramatic auto-eject sequence - for manual triggers only
   const handleAutoEject = useCallback(() => {
-    console.log('🎬 Manual auto-eject triggered');
+    logger.log('🎬 Manual auto-eject triggered');
     setIsAutoEjecting(true);
     onAutoEjectStart(); // Notify App to show Osaka effects
   }, [onAutoEjectStart]);
@@ -190,7 +191,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     setIsAutoEjecting(false);
     setIsEjected(true);
     setIsTextScrambled(false); // Ensure text is normal when ejected
-    console.log('🎬 Auto-eject sequence complete - ejected!');
+    logger.log('🎬 Auto-eject sequence complete - ejected!');
   }, []);
 
   // Use auto-eject hooks
@@ -200,9 +201,9 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   // Auto-trigger eject 20 seconds after typewriter completes (when contact button shows)
   useEffect(() => {
     if (isComplete && !effectsReduced && !isAutoEjecting && !isEjected) {
-      console.log('🎬 Typewriter complete, starting 20 second countdown to chaos...');
+      logger.log('🎬 Typewriter complete, starting 20 second countdown to chaos...');
       autoEjectTimerRef.current = setTimeout(() => {
-        console.log('🎬 20 seconds elapsed - triggering auto-eject chaos!');
+        logger.log('🎬 20 seconds elapsed - triggering auto-eject chaos!');
         setIsAutoEjecting(true);
         onAutoEjectStart(); // Notify App to show Osaka effects
       }, 20000);

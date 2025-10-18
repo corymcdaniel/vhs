@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getTypingFlashEffect, getCompletedLineFlashEffect } from '../utils/japaneseCharacterEffects';
+import { logger } from '../utils/logger';
 
 interface UseTypewriterProps {
   texts: string[];
@@ -42,6 +43,8 @@ export const useTypewriter = ({
   useEffect(() => {
     if (!hasStarted) return;
 
+    const activeTimeouts = new Set<NodeJS.Timeout>();
+
     const flashInterval = setInterval(() => {
       // Only flash in lines that have been fully typed (not the current typing line)
       for (let lineIndex = 0; lineIndex < currentLineIndex; lineIndex++) {
@@ -53,26 +56,33 @@ export const useTypewriter = ({
           const flashEffect = getCompletedLineFlashEffect(lineText);
 
           if (flashEffect) {
-            console.log(`🎌 Flashing ${flashEffect.type} in completed line: "${flashEffect.character}"`);
+            logger.log(`🎌 Flashing ${flashEffect.type} in completed line: "${flashEffect.character}"`);
 
             setWordFlashCharacters(prev => ({
               ...prev,
               [flashEffect.key]: flashEffect.character
             }));
 
-            setTimeout(() => {
+            const timeout = setTimeout(() => {
               setWordFlashCharacters(prev => {
                 const newState = { ...prev };
                 delete newState[flashEffect.key];
                 return newState;
               });
+              activeTimeouts.delete(timeout);
             }, flashEffect.duration);
+
+            activeTimeouts.add(timeout);
           }
         }
       }
     }, 3000); // Check every 3 seconds
 
-    return () => clearInterval(flashInterval);
+    return () => {
+      clearInterval(flashInterval);
+      activeTimeouts.forEach(timeout => clearTimeout(timeout));
+      activeTimeouts.clear();
+    };
   }, [hasStarted, currentLineIndex, displayTexts]);
 
 
@@ -82,6 +92,7 @@ export const useTypewriter = ({
     }
 
     const currentText = texts[currentLineIndex];
+    const activeTimeouts = new Set<NodeJS.Timeout>();
 
     if (currentCharIndex < currentText.length) {
       // Normal character reveal with natural variation
@@ -102,26 +113,33 @@ export const useTypewriter = ({
         const flashEffect = getTypingFlashEffect(currentText, currentCharIndex, justTypedChar);
 
         if (flashEffect) {
-          console.log(`⚡ Flashing typed char "${justTypedChar}" at index ${currentCharIndex} with "${flashEffect.character}" (${flashEffect.type})`);
+          logger.log(`⚡ Flashing typed char "${justTypedChar}" at index ${currentCharIndex} with "${flashEffect.character}" (${flashEffect.type})`);
 
           setWordFlashCharacters(prev => ({
             ...prev,
             [flashEffect.key]: flashEffect.character
           }));
 
-          setTimeout(() => {
+          const flashTimeout = setTimeout(() => {
             setWordFlashCharacters(prev => {
               const newState = { ...prev };
               delete newState[flashEffect.key];
               return newState;
             });
+            activeTimeouts.delete(flashTimeout);
           }, flashEffect.duration);
+
+          activeTimeouts.add(flashTimeout);
         }
 
         setCurrentCharIndex(prev => prev + 1);
       }, totalDelay);
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        activeTimeouts.forEach(timeout => clearTimeout(timeout));
+        activeTimeouts.clear();
+      };
     } else {
       // Line complete, move to next line
       const nextLineTimer = setTimeout(() => {

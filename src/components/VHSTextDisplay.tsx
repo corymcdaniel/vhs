@@ -65,10 +65,10 @@ const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
                   const replacedChars = textToRender.substring(start, end + 1);
                   result.push(
                     <span key={`word-${charIndex}`} style={{ position: 'relative', display: 'inline-block', minWidth: `${replacedChars.length * 0.6}em` }}>
-                      <span style={{ visibility: 'hidden' }}>{replacedChars}</span>
                       <span className="japanese-flash">
                         {japaneseText}
                       </span>
+                      <span>{replacedChars}</span>
                     </span>
                   );
                 }
@@ -110,12 +110,10 @@ const VHSTextDisplay: React.FC<VHSTextDisplayProps> = ({
 
             result.push(
               <span key={charIndex} style={{ position: 'relative', display: 'inline-block', minWidth: '0.6em' }}>
-                <span style={{ visibility: 'hidden' }}>{char}</span>
-                <span
-                  className={isRandomFlash ? "random-char-flash" : "cycling-char"}
-                >
+                <span className={isRandomFlash ? "random-char-flash" : "cycling-char"}>
                   {cyclingChar}
                 </span>
+                <span>{char}</span>
               </span>
             );
           }

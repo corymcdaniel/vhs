@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
+import { logger } from '../utils/logger';
 
 // Static character arrays
 const HIRAGANA_CHARS = [
@@ -51,7 +52,7 @@ const TextScrambleEffect: React.FC<TextScrambleEffectProps> = ({
   useEffect(() => {
     if (!isActive) return;
 
-    console.log('⚡ Text scrambling effect started - FROZEN Japanese characters');
+    logger.log('⚡ Text scrambling effect started - FROZEN Japanese characters');
 
     generateScrambledTexts();
     setIsTextScrambled(true);
@@ -71,7 +72,7 @@ const TextScrambleEffect: React.FC<TextScrambleEffectProps> = ({
 
     // Set all frozen characters at once
     setCyclingCharacters(frozenCharacters);
-    console.log('⚡ All text frozen to Japanese characters - NO CYCLING');
+    logger.log('⚡ All text frozen to Japanese characters - NO CYCLING');
 
     const timeouts: NodeJS.Timeout[] = [];
 
@@ -80,7 +81,7 @@ const TextScrambleEffect: React.FC<TextScrambleEffectProps> = ({
     const endTimeout = setTimeout(() => {
       setIsTextScrambled(false);
       setCyclingCharacters({}); // Clear all frozen characters
-      console.log('⚡ Text scrambling ended - returning to normal');
+      logger.log('⚡ Text scrambling ended - returning to normal');
       onComplete?.();
     }, 8000); // Longer duration to show frozen effect
 

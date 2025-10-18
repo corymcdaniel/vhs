@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ContactModal.css';
 
 interface ContactModalProps {
@@ -14,7 +14,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
-  const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
+  const autoCloseTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -27,11 +27,11 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
     return () => {
       document.removeEventListener('keydown', handleEscape);
       // Clean up auto-close timer on unmount
-      if (autoCloseTimer) {
-        clearTimeout(autoCloseTimer);
+      if (autoCloseTimerRef.current) {
+        clearTimeout(autoCloseTimerRef.current);
       }
     };
-  }, [onClose, autoCloseTimer]);
+  }, [onClose]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -120,10 +120,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
         setValidationErrors({});
 
         // Auto-close after success with proper cleanup
-        const timer = setTimeout(() => {
+        autoCloseTimerRef.current = setTimeout(() => {
           onClose();
         }, 2000);
-        setAutoCloseTimer(timer);
       } else {
         throw new Error(`Form submission failed with status: ${response.status}`);
       }

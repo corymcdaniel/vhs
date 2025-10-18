@@ -235,6 +235,15 @@
   color: #88ff88;
 }
 
+/* Plain bold text without green styling - uses ==text== syntax */
+.blog-content .plain-bold {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: inherit;
+  text-shadow: none;
+  letter-spacing: 0.5px;
+}
+
 .escapism-link {
   background: none;
   border: none;

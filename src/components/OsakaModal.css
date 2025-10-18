@@ -1,0 +1,295 @@
+/* Osaka Modal - VHS Red Theme */
+.osaka-modal-backdrop {
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  animation: modalFadeIn 0.4s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2vh;
+}
+
+.osaka-modal-content {
+  position: relative;
+  background: #000;
+  border: 3px solid #ff0000;
+  width: 70vw;
+  max-width: 900px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow:
+    0 0 30px #ff0000,
+    inset 0 0 30px rgba(255, 0, 0, 0.1);
+  font-family: 'VT323', monospace;
+  display: flex;
+  flex-direction: column;
+}
+
+.osaka-modal-static {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="osaka-noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23osaka-noise)" opacity="0.03"/></svg>');
+  opacity: 0.1;
+  animation: modalStaticFlicker 4s infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.osaka-modal-scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 0, 0, 0.03) 2px,
+    rgba(255, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.osaka-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: 2px solid #ff0000;
+  color: #ff0000;
+  width: 35px;
+  height: 35px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'VT323', monospace;
+  font-weight: bold;
+}
+
+.osaka-modal-close:hover {
+  background: rgba(255, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  transform: scale(1.1);
+}
+
+.osaka-modal-header {
+  position: relative;
+  z-index: 2;
+  padding: 25px 30px 15px;
+  border-bottom: 2px solid #ff0000;
+  background: rgba(255, 0, 0, 0.05);
+  text-align: center;
+}
+
+.osaka-modal-title {
+  color: #ff0000;
+  font-size: 64px;
+  font-weight: bold;
+  margin: 0;
+  letter-spacing: 8px;
+  text-shadow:
+    0 0 10px #ff0000,
+    0 0 20px #ff0000,
+    0 0 30px #ff0000;
+  animation: osakaGlow 2s ease-in-out infinite alternate;
+}
+
+.osaka-modal-subtitle {
+  color: #ffaaaa;
+  font-size: 28px;
+  margin: 5px 0 0 0;
+  letter-spacing: 4px;
+  opacity: 0.9;
+}
+
+.osaka-modal-body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.osaka-content {
+  padding: 30px;
+  color: #ff6666;
+  line-height: 1.6;
+  font-size: 22px;
+}
+
+.osaka-content h2 {
+  color: #ff8888;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 25px 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-left: 4px solid #ff0000;
+  padding-left: 15px;
+}
+
+.osaka-content h3 {
+  color: #ffaaaa;
+  font-size: 24px;
+  margin: 15px 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.osaka-content h2:first-child {
+  margin-top: 0;
+}
+
+.osaka-content p {
+  margin: 0 0 20px 0;
+  text-align: justify;
+}
+
+.osaka-intro {
+  font-size: 24px;
+  color: #ffaaaa;
+  font-style: italic;
+  background: rgba(255, 0, 0, 0.05);
+  padding: 15px;
+  border-left: 3px solid #ff0000;
+  border-radius: 4px;
+  margin-bottom: 30px !important;
+}
+
+.osaka-technical {
+  background: rgba(255, 0, 0, 0.08);
+  border: 1px solid #ff0000;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 25px 0;
+}
+
+.osaka-technical h3 {
+  margin-top: 0;
+}
+
+.osaka-technical ul {
+  margin: 15px 0 0 0;
+  padding-left: 30px;
+  list-style-type: none;
+}
+
+.osaka-technical li {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.osaka-technical li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #ff0000;
+  font-size: 18px;
+}
+
+.osaka-footer {
+  text-align: center;
+  color: #ff8888;
+  font-size: 20px;
+  margin-top: 30px !important;
+  padding-top: 20px;
+  border-top: 1px solid #ff0000;
+}
+
+/* Custom scrollbar */
+.osaka-modal-body::-webkit-scrollbar {
+  width: 12px;
+}
+
+.osaka-modal-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #ff0000;
+}
+
+.osaka-modal-body::-webkit-scrollbar-thumb {
+  background: #ff0000;
+  border-radius: 6px;
+}
+
+.osaka-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #ff6666;
+}
+
+/* Animations */
+@keyframes osakaGlow {
+  0% {
+    opacity: 0.8;
+    text-shadow:
+      0 0 10px #ff0000,
+      0 0 20px #ff0000,
+      0 0 30px #ff0000;
+  }
+  100% {
+    opacity: 1;
+    text-shadow:
+      0 0 15px #ff0000,
+      0 0 30px #ff0000,
+      0 0 45px #ff0000;
+  }
+}
+
+@keyframes modalStaticFlicker {
+  0%, 100% { opacity: 0.05; }
+  50% { opacity: 0.1; }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .osaka-modal-content {
+    width: 95vw;
+    max-height: 90vh;
+  }
+
+  .osaka-modal-title {
+    font-size: 48px;
+    letter-spacing: 6px;
+  }
+
+  .osaka-modal-subtitle {
+    font-size: 22px;
+  }
+
+  .osaka-content {
+    padding: 20px;
+    font-size: 20px;
+  }
+
+  .osaka-content h2 {
+    font-size: 24px;
+  }
+
+  .osaka-content h3 {
+    font-size: 20px;
+  }
+}

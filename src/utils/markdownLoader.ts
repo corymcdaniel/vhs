@@ -9,11 +9,29 @@ interface BlogPost {
   }>;
 }
 
+// List of possible escapism video IDs to randomly choose from
+const ESCAPISM_VIDEO_IDS = [
+  'x9yp2wVWdiU', // Nine is god
+  '7XDU7Y-HbzE', // Cherry Blossom Girl
+  'QBN-1Q0_Fiw', // Crosses - Bitches Brew
+];
+
+// Function to get a random video ID
+const getRandomEscapismVideoId = (): string => {
+  const randomIndex = Math.floor(Math.random() * ESCAPISM_VIDEO_IDS.length);
+  return ESCAPISM_VIDEO_IDS[randomIndex];
+};
+
 export const loadAboutPost = async (onVideoClick: (videoId: string) => void): Promise<BlogPost> => {
   try {
     // Fetch the markdown file from public folder
     const response = await fetch('/blog/0001.md');
-    const markdownContent = await response.text();
+    let markdownContent = await response.text();
+
+    // Replace the escapism video ID with a random one from the list
+    const randomVideoId = getRandomEscapismVideoId();
+    const videoIdPattern = /\[escapism\]\([a-zA-Z0-9_-]{11}\)/;
+    markdownContent = markdownContent.replace(videoIdPattern, `[escapism](${randomVideoId})`);
 
     // Parse the markdown content
     let htmlContent = marked.parse(markdownContent) as string;
@@ -21,6 +39,10 @@ export const loadAboutPost = async (onVideoClick: (videoId: string) => void): Pr
     // Extract title from first h1 tag
     const titleMatch = markdownContent.match(/^# (.+)$/m);
     const title = titleMatch ? titleMatch[1] : 'About This Website';
+
+    // Process custom marker: ==text== for non-green bold text
+    // This converts ==text== to <span class="plain-bold">text</span>
+    htmlContent = htmlContent.replace(/==([^=]+)==/g, '<span class="plain-bold">$1</span>');
 
     // Find video links and replace them with buttons
     const videoLinks: Array<{text: string; videoId: string}> = [];
