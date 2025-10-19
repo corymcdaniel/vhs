@@ -299,6 +299,7 @@
     0 0 10px rgba(0, 255, 0, 0.2);
   backdrop-filter: blur(5px);
   max-width: 800px;
+  text-wrap: wrap; /* Fallback for browsers that do not support balance */
   text-wrap: balance;
   orphans: 3;
   widows: 3;
