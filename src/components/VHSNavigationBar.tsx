@@ -26,7 +26,7 @@ const VHSNavigationBar: React.FC<VHSNavigationBarProps> = ({
           onClick={() => onLinkClick('https://github.com/corymcdaniel')}
         >
           <span className="nav-label">WORK</span>
-          <span className="nav-desc">Github</span>
+          <span className="nav-desc">GitHub</span>
         </button>
       )}
 
