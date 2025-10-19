@@ -67,11 +67,13 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [imagesLoaded, setImagesLoaded] = useState(true);
   const [loadingStep, setLoadingStep] = useState(0);
   const [isAutoEjecting, setIsAutoEjecting] = useState(false);
+  const [isPreChaos, setIsPreChaos] = useState(false);
   const [scrambledTexts, setScrambledTexts] = useState<string[]>([]);
   const [isTextScrambled, setIsTextScrambled] = useState(false);
   const [cyclingCharacters, setCyclingCharacters] = useState<{[key: string]: string}>({});
   const textElementRef = useRef<HTMLDivElement>(null);
   const autoEjectTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const preChaosTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const textLines = useRef([
     "Hello, I'm Cory.",
@@ -202,6 +204,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   useEffect(() => {
     if (isComplete && !effectsReduced && !isAutoEjecting && !isEjected) {
       logger.log('🎬 Typewriter complete, starting 20 second countdown to chaos...');
+
+      // Start pre-chaos buildup at 15 seconds (5 seconds before chaos)
+      preChaosTimerRef.current = setTimeout(() => {
+        logger.log('⚠️ 15 seconds elapsed - starting pre-chaos buildup (tracking degradation)');
+        setIsPreChaos(true);
+      }, 15000);
+
+      // Full chaos at 20 seconds
       autoEjectTimerRef.current = setTimeout(() => {
         logger.log('🎬 20 seconds elapsed - triggering auto-eject chaos!');
         setIsAutoEjecting(true);
@@ -209,6 +219,10 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       }, 20000);
 
       return () => {
+        if (preChaosTimerRef.current) {
+          clearTimeout(preChaosTimerRef.current);
+          preChaosTimerRef.current = null;
+        }
         if (autoEjectTimerRef.current) {
           clearTimeout(autoEjectTimerRef.current);
           autoEjectTimerRef.current = null;
@@ -437,7 +451,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       />
 
       <div
-        className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''} ${isAutoEjecting ? 'auto-ejecting' : ''}`}
+        className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''} ${isPreChaos ? 'pre-chaos' : ''} ${isAutoEjecting ? 'auto-ejecting' : ''}`}
       >
       {/* "oh no...." Message - Direct rendering */}
       {showOhNoMessage && (
@@ -456,7 +470,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       />
 
       {/* VHS Effects Component */}
-      <VHSEffects effectsReduced={effectsReduced} isPaused={isPaused} isAutoEjecting={isAutoEjecting} />
+      <VHSEffects effectsReduced={effectsReduced} isPaused={isPaused} isPreChaos={isPreChaos} isAutoEjecting={isAutoEjecting} />
 
       {/* Top Navigation Bar */}
       <VHSTopNavBar
