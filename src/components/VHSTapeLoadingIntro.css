@@ -1,0 +1,556 @@
+/* VHS Tape Loading Intro */
+.vhs-tape-intro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'VT323', monospace;
+}
+
+.vhs-tape-intro.complete {
+  animation: introFadeOut 1s ease-out forwards;
+}
+
+/* Static/Noise Layer */
+.intro-static-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.03) 2px,
+      rgba(255, 255, 255, 0.03) 4px
+    );
+  opacity: 0.8;
+  animation: staticNoise 0.15s infinite;
+  pointer-events: none;
+}
+
+.vhs-tape-intro.tracking .intro-static-layer {
+  animation: staticNoise 0.1s infinite, heavyStatic 0.3s ease-in-out;
+  opacity: 1;
+}
+
+.vhs-tape-intro.stabilizing .intro-static-layer {
+  animation: staticFadeOut 2s ease-out forwards;
+}
+
+/* Tracking Lines */
+.intro-tracking-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    rgba(0, 255, 0, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 100% 4px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vhs-tape-intro.tracking .intro-tracking-lines {
+  animation: trackingDistortion 2.5s ease-in-out;
+  opacity: 1;
+}
+
+/* Scanlines */
+.intro-scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* VHS Tape Container */
+.intro-tape-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-tape {
+  width: 400px;
+  height: 250px;
+  background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+  border-radius: 8px;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.8),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  position: relative;
+  transform: translateY(85px);
+}
+
+.vhs-tape-intro.inserting .intro-tape {
+  animation: tapeInsert 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.vhs-tape-intro.tracking .intro-tape {
+  animation: tapeShake 0.5s ease-in-out infinite;
+}
+
+/* Tape Label */
+.intro-tape-label {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  right: 40px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #333;
+  border-radius: 4px;
+}
+
+.intro-tape-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.intro-tape-subtext {
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  margin-top: 5px;
+  letter-spacing: 1px;
+}
+
+/* Tape Reels */
+.intro-tape-reels {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 120px;
+}
+
+.intro-reel {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, #444 30%, #222 70%);
+  border-radius: 50%;
+  border: 3px solid #333;
+  position: relative;
+}
+
+.intro-reel::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background: #111;
+  border-radius: 50%;
+}
+
+.intro-reel::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 2px;
+  background: #555;
+}
+
+.vhs-tape-intro.inserting .intro-reel {
+  animation: reelSpin 1.5s linear infinite;
+}
+
+.vhs-tape-intro.tracking .intro-reel {
+  animation: reelSpin 0.8s linear infinite;
+}
+
+/* VCR Slot */
+.intro-vcr-slot {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  height: 260px;
+  background: linear-gradient(180deg, #0a0a0a, #1a1a1a);
+  border-radius: 10px;
+  box-shadow:
+    inset 0 5px 15px rgba(0, 0, 0, 0.9),
+    0 0 30px rgba(0, 255, 0, 0.1);
+  border: 2px solid #333;
+}
+
+.intro-vcr-slot::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 15px;
+  background: #00ff00;
+  box-shadow:
+    0 0 10px #00ff00,
+    0 0 20px #00ff00,
+    0 0 30px #00ff00;
+  opacity: 0;
+}
+
+.vhs-tape-intro.tracking .intro-vcr-slot::before,
+.vhs-tape-intro.stabilizing .intro-vcr-slot::before {
+  animation: powerLightBlink 0.5s ease-in-out;
+  opacity: 1;
+}
+
+/* Status Messages */
+.intro-status {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.intro-status-text {
+  font-size: 32px;
+  color: #00ff00;
+  text-shadow:
+    0 0 10px #00ff00,
+    0 0 20px #00ff00,
+    0 0 30px #00ff00;
+  letter-spacing: 4px;
+  animation: statusPulse 0.8s ease-in-out infinite;
+}
+
+/* Play Prompt */
+.intro-play-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  animation: playPromptFadeIn 0.5s ease-in forwards;
+}
+
+.intro-play-symbol {
+  font-size: 48px;
+  color: #00ff00;
+  text-shadow:
+    0 0 10px #00ff00,
+    0 0 20px #00ff00,
+    0 0 30px #00ff00,
+    0 0 40px #00ff00;
+  animation: playSymbolPulse 1.2s ease-in-out infinite;
+}
+
+.intro-play-text {
+  font-size: 36px;
+  color: #00ff00;
+  text-shadow:
+    0 0 10px #00ff00,
+    0 0 20px #00ff00,
+    0 0 30px #00ff00;
+  letter-spacing: 6px;
+  font-weight: bold;
+}
+
+/* Chromatic Aberration */
+.intro-chromatic {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.vhs-tape-intro.tracking .intro-chromatic {
+  background:
+    radial-gradient(circle at 30% 50%, rgba(255, 0, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 50%, rgba(0, 0, 255, 0.1) 0%, transparent 50%);
+  animation: chromaticPulse 0.3s ease-in-out;
+  opacity: 1;
+}
+
+/* === ANIMATIONS === */
+
+/* Tape Insert */
+@keyframes tapeInsert {
+  0% {
+    transform: translateY(-100vh) rotate(-5deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(80px) rotate(2deg);
+  }
+  80% {
+    transform: translateY(90px) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(85px) rotate(0deg);
+  }
+}
+
+/* Tape Shake (during tracking) */
+@keyframes tapeShake {
+  0%, 100% { transform: translateX(0) translateY(85px); }
+  10% { transform: translateX(-3px) translateY(87px); }
+  20% { transform: translateX(3px) translateY(83px); }
+  30% { transform: translateX(-3px) translateY(86px); }
+  40% { transform: translateX(2px) translateY(84px); }
+  50% { transform: translateX(-2px) translateY(87px); }
+  60% { transform: translateX(2px) translateY(83px); }
+  70% { transform: translateX(-1px) translateY(86px); }
+  80% { transform: translateX(1px) translateY(84px); }
+  90% { transform: translateX(-1px) translateY(85px); }
+}
+
+/* Tape Fade Out */
+@keyframes tapeFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* Reel Spin */
+@keyframes reelSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Static Noise */
+@keyframes staticNoise {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-2px, 1px); }
+  20% { transform: translate(1px, -1px); }
+  30% { transform: translate(-1px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  50% { transform: translate(-2px, 1px); }
+  60% { transform: translate(1px, -1px); }
+  70% { transform: translate(-1px, 2px); }
+  80% { transform: translate(2px, -1px); }
+  90% { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Heavy Static */
+@keyframes heavyStatic {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Static Fade Out */
+@keyframes staticFadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+/* Tracking Distortion */
+@keyframes trackingDistortion {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(-50px);
+    opacity: 1;
+  }
+  20% {
+    transform: translateX(30px);
+  }
+  30% {
+    transform: translateX(-20px);
+  }
+  40% {
+    transform: translateX(15px);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  60% {
+    transform: translateX(5px);
+  }
+  70% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  90% {
+    transform: translateX(-1px);
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+}
+
+/* Power Light Blink */
+@keyframes powerLightBlink {
+  0%, 100% { opacity: 0; }
+  20%, 80% { opacity: 1; }
+  40%, 60% { opacity: 0.5; }
+}
+
+/* Status Pulse */
+@keyframes statusPulse {
+  0%, 100% {
+    opacity: 1;
+    text-shadow:
+      0 0 10px #00ff00,
+      0 0 20px #00ff00,
+      0 0 30px #00ff00;
+  }
+  50% {
+    opacity: 0.7;
+    text-shadow:
+      0 0 5px #00ff00,
+      0 0 10px #00ff00,
+      0 0 15px #00ff00;
+  }
+}
+
+/* Chromatic Pulse */
+@keyframes chromaticPulse {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Intro Fade Out */
+@keyframes introFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Play Prompt Fade In */
+@keyframes playPromptFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Play Symbol Pulse */
+@keyframes playSymbolPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    text-shadow:
+      0 0 10px #00ff00,
+      0 0 20px #00ff00,
+      0 0 30px #00ff00,
+      0 0 40px #00ff00;
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+    text-shadow:
+      0 0 15px #00ff00,
+      0 0 30px #00ff00,
+      0 0 45px #00ff00,
+      0 0 60px #00ff00;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .intro-tape {
+    width: 280px;
+    height: 175px;
+  }
+
+  .intro-tape-label {
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    padding: 15px;
+  }
+
+  .intro-tape-text {
+    font-size: 18px;
+  }
+
+  .intro-tape-subtext {
+    font-size: 12px;
+  }
+
+  .intro-tape-reels {
+    gap: 80px;
+    bottom: 20px;
+  }
+
+  .intro-reel {
+    width: 40px;
+    height: 40px;
+  }
+
+  .intro-reel::before {
+    width: 15px;
+    height: 15px;
+  }
+
+  .intro-vcr-slot {
+    width: 300px;
+    height: 185px;
+  }
+
+  .intro-status-text {
+    font-size: 24px;
+  }
+
+  .intro-play-symbol {
+    font-size: 36px;
+  }
+
+  .intro-play-text {
+    font-size: 28px;
+  }
+}

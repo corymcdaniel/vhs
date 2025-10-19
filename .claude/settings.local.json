@@ -7,7 +7,20 @@
       "Bash(git commit:*)",
       "Bash(npx kill-port:*)",
       "Bash(npm run build:*)",
-      "Bash(npm start)"
+      "Bash(npm start)",
+      "Bash(cat /c/Code/Generative/September/package.json)",
+      "Bash(cat \"/c/Code/Generative/September/src/App.tsx\")",
+      "Bash(cat \"/c/Code/Generative/September/src/index.tsx\")",
+      "Bash(cat \"/c/Code/Generative/September/src/index.css\")",
+      "Bash(cat \"/c/Code/Generative/September/src/components/VHSContainer.tsx\")",
+      "Bash(cat \"/c/Code/Generative/September/src/components/VHSControlPanel.tsx\")",
+      "Bash(cat \"/c/Code/Generative/September/src/components/VHSContainer.css\")",
+      "Bash(cat \"/c/Code/Generative/September/src/components/VHSEffects.css\")",
+      "Bash(cat \"/c/Code/Generative/September/src/components/VHSLoadingScreen.tsx\")",
+      "Bash(cat \"/c/Code/Generative/September/src/components/VHSTransition.css\")",
+      "Bash(cat \"/c/Code/Generative/September/src/components/TextScrambleEffect.tsx\")",
+      "Bash(cat \"/c/Code/Generative/September/src/hooks/useTypewriter.ts\")",
+      "Bash(cat \"/c/Code/Generative/September/src/components/OsakaEffects.tsx\")"
     ],
     "deny": [],
     "ask": []
