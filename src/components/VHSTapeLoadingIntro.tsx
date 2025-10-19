@@ -53,7 +53,7 @@ const VHSTapeLoadingIntro: React.FC<VHSTapeLoadingIntroProps> = ({ onIntroComple
         <div className="intro-tape">
           <div className="intro-tape-label">
             <div className="intro-tape-text">CORYMCDANIEL.DEV</div>
-            <div className="intro-tape-subtext">PORTFOLIO_1986.VHS</div>
+            <div className="intro-tape-subtext">gaijin_1986.VHS</div>
           </div>
           <div className="intro-tape-reels">
             <div className="intro-reel intro-reel-left"></div>
