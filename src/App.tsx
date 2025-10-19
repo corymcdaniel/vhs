@@ -3,6 +3,7 @@ import './App.css';
 import VHSContainer from './components/VHSContainer';
 import CatModal from './components/CatModal';
 import OsakaModal from './components/OsakaModal';
+import VHSTapeLoadingIntro from './components/VHSTapeLoadingIntro';
 import { useOsakaEffects } from './components/OsakaEffects';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
   const [effectsReduced, setEffectsReduced] = useState(false);
   const [isAutoEjecting, setIsAutoEjecting] = useState(false);
   const [showOsakaModal, setShowOsakaModal] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
 
   // Osaka effects at App level so they persist independently
   const { showFlash: showOsakaFlash, showBurn: showOsakaBurn } = useOsakaEffects({
@@ -32,14 +34,22 @@ function App() {
     setIsAutoEjecting(true);
   };
 
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+  };
+
   return (
     <div className="App">
-      <VHSContainer
-        effectsReduced={effectsReduced}
-        onCatClick={handleCatClick}
-        onToggleEffects={toggleEffects}
-        onAutoEjectStart={handleAutoEjectStart}
-      />
+      {showIntro && <VHSTapeLoadingIntro onIntroComplete={handleIntroComplete} />}
+
+      {!showIntro && (
+        <VHSContainer
+          effectsReduced={effectsReduced}
+          onCatClick={handleCatClick}
+          onToggleEffects={toggleEffects}
+          onAutoEjectStart={handleAutoEjectStart}
+        />
+      )}
 
       {/* OSAKA effects at top level - persist independently */}
       {showOsakaFlash && (
