@@ -45,7 +45,7 @@ export function getTypingFlashEffect(
       return {
         key: charKey,
         character: replacement.replacement,
-        duration: 1200,
+        duration: 800,
         type: replacement.replacement.length > 1 ? 'kanji' : 'phonetic'
       };
     }
@@ -55,7 +55,7 @@ export function getTypingFlashEffect(
   return {
     key: charKey,
     character: getRandomFlashCharacter(),
-    duration: 1200,
+    duration: 800,
     type: 'random'
   };
 }
@@ -82,7 +82,7 @@ export function getCompletedLineFlashEffect(
   return {
     key: wordKey,
     character: replacement.replacement,
-    duration: 2500, // Longer duration for completed line flashes
+    duration: 1500, // Longer duration for completed line flashes
     type: replacement.replacement.length > 1 ? 'kanji' : 'phonetic'
   };
 }
