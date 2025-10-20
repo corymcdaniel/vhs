@@ -484,6 +484,11 @@
   z-index: 1000;
 }
 
+/* Mobile wrapper for all control buttons */
+.control-buttons-mobile-wrapper {
+  display: none;
+}
+
 /* Base Button Styles */
 .toggle-effects-btn,
 .photo-gallery-btn,
@@ -1863,10 +1868,10 @@
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .vhs-text {
-    font-size: 24px;
-    margin: 20px;
-    padding: 15px 20px;
-    max-width: calc(100vw - 40px);
+    font-size: 20px;
+    margin: 10px;
+    padding: 12px 16px;
+    max-width: calc(100vw - 20px);
     box-sizing: border-box;
   }
 
@@ -1878,17 +1883,18 @@
   }
 
   .vhs-nav {
-    bottom: 120px; /* Move higher to avoid mobile UI */
-    left: 20px;
-    right: 20px;
+    bottom: 100px; /* Move higher to avoid mobile UI and control buttons */
+    left: 10px;
+    right: 10px;
     transform: none; /* Remove center transform */
-    width: calc(100vw - 40px); /* Full width minus margins */
+    width: calc(100vw - 20px); /* Full width minus margins */
     max-width: none;
     margin: 0;
-    padding: 15px 20px;
+    padding: 12px 16px;
     box-sizing: border-box;
     flex-wrap: wrap;
     justify-content: center;
+    gap: 8px;
   }
 
   .vhs-nav.show {
@@ -1897,12 +1903,12 @@
   }
 
   .vhs-nav-item {
-    flex: 0 0 calc(50% - 8px); /* 2 items per row with gap */
-    min-width: 120px;
-    max-width: 150px;
-    padding: 8px 12px;
+    flex: 0 0 calc(50% - 4px); /* 2 items per row with gap */
+    min-width: 100px;
+    max-width: 140px;
+    padding: 10px 12px;
     font-size: 12px;
-    margin-bottom: 8px;
+    margin-bottom: 0;
   }
 
   .nav-label {
@@ -1912,32 +1918,134 @@
   .nav-desc {
     font-size: 10px;
   }
+
+  /* Mobile - Timestamp */
+  .vhs-timestamp {
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .rec-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Mobile - Control buttons in single row at bottom */
+  .control-buttons-left {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-100%);
+    flex-direction: row;
+    gap: 3px;
+    width: auto;
+    padding-right: 1.5px;
+  }
+
+  .control-buttons-right {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(0);
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    padding-left: 1.5px;
+  }
+
+  .toggle-effects-btn,
+  .photo-gallery-btn,
+  .pause-btn,
+  .fast-forward-btn {
+    padding: 8px 6px;
+    font-size: 10px;
+    height: 36px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.1;
+    min-width: 65px;
+  }
+
+  /* Mobile - Top buttons */
+  .top-button-container {
+    top: 10px;
+    left: 10px;
+    gap: 6px;
+  }
+
+  .help-button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  /* Mobile - Contact button */
+  .contact-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 15px;
+  }
+
+  /* Mobile - Eject button */
+  .eject-button {
+    bottom: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .reopen-icon {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  /* Mobile - OSAKA effects */
+  .osaka-flash-overlay,
+  .osaka-burn-overlay {
+    right: 10px;
+    width: 200px;
+  }
+
+  .osaka-kanji,
+  .osaka-burn-kanji {
+    font-size: 4rem;
+  }
+
+  /* Mobile - "oh no...." message */
+  .oh-no-message {
+    top: 10px;
+    left: 10px;
+    font-size: 2rem;
+  }
 }
 
 @media (max-width: 480px) {
   .vhs-text {
-    font-size: 20px;
-    margin: 15px;
-    padding: 12px 15px;
+    font-size: 18px;
+    margin: 8px;
+    padding: 10px 12px;
+    max-width: calc(100vw - 16px);
   }
 
   .vhs-nav {
-    bottom: 100px; /* Higher to avoid mobile UI */
-    left: 15px;
-    right: 15px;
-    width: calc(100vw - 30px); /* Full width with smaller margins */
-    padding: 12px 15px;
+    bottom: 90px; /* Higher to avoid mobile UI */
+    left: 8px;
+    right: 8px;
+    width: calc(100vw - 16px); /* Full width with smaller margins */
+    padding: 10px 12px;
     gap: 6px;
     flex-wrap: wrap;
     justify-content: center;
   }
 
   .vhs-nav-item {
-    flex: 0 0 calc(50% - 6px); /* 2 items per row with smaller gap */
-    min-width: 100px;
-    max-width: 130px;
-    padding: 6px 10px;
-    margin-bottom: 6px;
+    flex: 0 0 calc(50% - 3px); /* 2 items per row with smaller gap */
+    min-width: 85px;
+    max-width: 120px;
+    padding: 8px 10px;
+    margin-bottom: 0;
+    font-size: 11px;
   }
 
   .nav-label {
@@ -1946,6 +2054,99 @@
 
   .nav-desc {
     font-size: 9px;
+  }
+
+  /* Mobile - Timestamp */
+  .vhs-timestamp {
+    top: 8px;
+    right: 8px;
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+
+  .rec-dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  /* Mobile - Control buttons in single row */
+  .control-buttons-left {
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-100%);
+    gap: 2.5px;
+    padding-right: 1.25px;
+  }
+
+  .control-buttons-right {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(0);
+    display: flex;
+    gap: 2.5px;
+    padding-left: 1.25px;
+  }
+
+  .toggle-effects-btn,
+  .photo-gallery-btn,
+  .pause-btn,
+  .fast-forward-btn {
+    padding: 6px 4px;
+    font-size: 9px;
+    height: 32px;
+    min-width: 55px;
+  }
+
+  /* Mobile - Top buttons */
+  .top-button-container {
+    top: 8px;
+    left: 8px;
+    gap: 5px;
+  }
+
+  .help-button {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  /* Mobile - Contact button */
+  .contact-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+
+  /* Mobile - Eject button */
+  .eject-button {
+    bottom: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .reopen-icon {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  /* Mobile - OSAKA effects */
+  .osaka-flash-overlay,
+  .osaka-burn-overlay {
+    right: 5px;
+    width: 150px;
+  }
+
+  .osaka-kanji,
+  .osaka-burn-kanji {
+    font-size: 3rem;
+  }
+
+  /* Mobile - "oh no...." message */
+  .oh-no-message {
+    top: 8px;
+    left: 8px;
+    font-size: 1.5rem;
   }
 }
 
