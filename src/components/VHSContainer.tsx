@@ -77,6 +77,11 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const textElementRef = useRef<HTMLDivElement>(null);
   const autoEjectTimerRef = useRef<NodeJS.Timeout | null>(null);
   const preChaosTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const contactTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const helpTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const aboutTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const photoGalleryTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const textLines = useRef([
     "Hello, I'm Cory.",
@@ -347,8 +352,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   };
 
   const handleContactClick = () => {
+    if (contactTimerRef.current) {
+      clearTimeout(contactTimerRef.current);
+    }
     setShowTransition(true);
-    setTimeout(() => setShowContactModal(true), 400);
+    contactTimerRef.current = setTimeout(() => {
+      setShowContactModal(true);
+      contactTimerRef.current = null;
+    }, 400);
   };
 
   const handleContactClose = () => {
@@ -356,8 +367,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   };
 
   const handleRecordingClick = () => {
+    if (recordingTimerRef.current) {
+      clearTimeout(recordingTimerRef.current);
+    }
     setShowTransition(true);
-    setTimeout(() => setShowRecordingModal(true), 400);
+    recordingTimerRef.current = setTimeout(() => {
+      setShowRecordingModal(true);
+      recordingTimerRef.current = null;
+    }, 400);
   };
 
   const handleRecordingClose = () => {
@@ -365,8 +382,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   };
 
   const handleHelpClick = () => {
+    if (helpTimerRef.current) {
+      clearTimeout(helpTimerRef.current);
+    }
     setShowTransition(true);
-    setTimeout(() => setShowHelpModal(true), 400);
+    helpTimerRef.current = setTimeout(() => {
+      setShowHelpModal(true);
+      helpTimerRef.current = null;
+    }, 400);
   };
 
   const handleHelpClose = () => {
@@ -374,8 +397,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   };
 
   const handleAboutClick = useCallback(() => {
+    if (aboutTimerRef.current) {
+      clearTimeout(aboutTimerRef.current);
+    }
     setShowTransition(true);
-    setTimeout(() => setShowAboutModal(true), 400);
+    aboutTimerRef.current = setTimeout(() => {
+      setShowAboutModal(true);
+      aboutTimerRef.current = null;
+    }, 400);
   }, []);
 
   const handleAboutClose = useCallback(() => {
@@ -391,8 +420,14 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   }, [handleAboutClick]);
 
   const handlePhotoGalleryClick = () => {
+    if (photoGalleryTimerRef.current) {
+      clearTimeout(photoGalleryTimerRef.current);
+    }
     setShowTransition(true);
-    setTimeout(() => setShowPhotoGalleryModal(true), 400);
+    photoGalleryTimerRef.current = setTimeout(() => {
+      setShowPhotoGalleryModal(true);
+      photoGalleryTimerRef.current = null;
+    }, 400);
   };
 
   const handlePhotoGalleryClose = () => {
@@ -429,6 +464,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   useEffect(() => {
     const currentReopenTimer = reopenTimerRef.current;
     const currentAutoEjectTimer = autoEjectTimerRef.current;
+    const currentPreChaosTimer = preChaosTimerRef.current;
+    const currentContactTimer = contactTimerRef.current;
+    const currentRecordingTimer = recordingTimerRef.current;
+    const currentHelpTimer = helpTimerRef.current;
+    const currentAboutTimer = aboutTimerRef.current;
+    const currentPhotoGalleryTimer = photoGalleryTimerRef.current;
 
     return () => {
       // Clear reopen timer
@@ -438,6 +479,26 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       // Clear auto-eject timer
       if (currentAutoEjectTimer) {
         clearTimeout(currentAutoEjectTimer);
+      }
+      // Clear pre-chaos timer
+      if (currentPreChaosTimer) {
+        clearTimeout(currentPreChaosTimer);
+      }
+      // Clear modal transition timers
+      if (currentContactTimer) {
+        clearTimeout(currentContactTimer);
+      }
+      if (currentRecordingTimer) {
+        clearTimeout(currentRecordingTimer);
+      }
+      if (currentHelpTimer) {
+        clearTimeout(currentHelpTimer);
+      }
+      if (currentAboutTimer) {
+        clearTimeout(currentAboutTimer);
+      }
+      if (currentPhotoGalleryTimer) {
+        clearTimeout(currentPhotoGalleryTimer);
       }
     };
   }, []);
