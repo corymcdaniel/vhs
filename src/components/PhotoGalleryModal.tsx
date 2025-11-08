@@ -9,10 +9,15 @@ interface PhotoGalleryModalProps {
 const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [isGlitching, setIsGlitching] = useState(false);
 
   const handleNext = useCallback(() => {
     setSelectedIndex(prevIndex => {
       if (prevIndex < backgroundImages.length - 1) {
+        // Trigger glitch effect
+        setIsGlitching(true);
+        setTimeout(() => setIsGlitching(false), 300);
+
         const newIndex = prevIndex + 1;
         setSelectedImage(backgroundImages[newIndex]);
         return newIndex;
@@ -24,6 +29,10 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
   const handlePrevious = useCallback(() => {
     setSelectedIndex(prevIndex => {
       if (prevIndex > 0) {
+        // Trigger glitch effect
+        setIsGlitching(true);
+        setTimeout(() => setIsGlitching(false), 300);
+
         const newIndex = prevIndex - 1;
         setSelectedImage(backgroundImages[newIndex]);
         return newIndex;
@@ -111,7 +120,7 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
               <img
                 src={selectedImage}
                 alt={`Gallery item ${selectedIndex + 1} of ${backgroundImages.length}`}
-                className="photo-detail-image"
+                className={`photo-detail-image ${isGlitching ? 'glitching' : ''}`}
               />
               <div className="photo-detail-info">
                 <span className="photo-detail-counter">
