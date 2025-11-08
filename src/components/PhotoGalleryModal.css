@@ -240,7 +240,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 20px;
   gap: 20px;
   z-index: 2;
@@ -272,11 +272,12 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   cursor: pointer;
   max-width: 100%;
   min-height: min-content;
+  padding-top: 20px;
 }
 
 .photo-detail-image {
@@ -287,6 +288,7 @@
   box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
   border-radius: 4px;
   transition: transform 0.1s, filter 0.1s;
+  margin-bottom: 20px;
 }
 
 /* VHS Glitch Effect on Image Switch */

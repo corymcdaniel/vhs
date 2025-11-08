@@ -17,6 +17,8 @@ import VHSControlPanel from './VHSControlPanel';
 import { useAutoEjectSequence } from './AutoEjectSequence';
 import { useOhNoMessage } from './OhNoMessage';
 import TextScrambleEffect from './TextScrambleEffect';
+import VCROsd from './VCROsd';
+import CommercialBreakTransition from './CommercialBreakTransition';
 import { logger } from '../utils/logger';
 
 // Static character arrays - moved outside component to prevent recreation on every render
@@ -71,6 +73,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [scrambledTexts, setScrambledTexts] = useState<string[]>([]);
   const [isTextScrambled, setIsTextScrambled] = useState(false);
   const [cyclingCharacters, setCyclingCharacters] = useState<{[key: string]: string}>({});
+  const [showTransition, setShowTransition] = useState(false);
   const textElementRef = useRef<HTMLDivElement>(null);
   const autoEjectTimerRef = useRef<NodeJS.Timeout | null>(null);
   const preChaosTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -344,7 +347,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   };
 
   const handleContactClick = () => {
-    setShowContactModal(true);
+    setShowTransition(true);
+    setTimeout(() => setShowContactModal(true), 400);
   };
 
   const handleContactClose = () => {
@@ -352,7 +356,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   };
 
   const handleRecordingClick = () => {
-    setShowRecordingModal(true);
+    setShowTransition(true);
+    setTimeout(() => setShowRecordingModal(true), 400);
   };
 
   const handleRecordingClose = () => {
@@ -360,7 +365,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   };
 
   const handleHelpClick = () => {
-    setShowHelpModal(true);
+    setShowTransition(true);
+    setTimeout(() => setShowHelpModal(true), 400);
   };
 
   const handleHelpClose = () => {
@@ -368,7 +374,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   };
 
   const handleAboutClick = useCallback(() => {
-    setShowAboutModal(true);
+    setShowTransition(true);
+    setTimeout(() => setShowAboutModal(true), 400);
   }, []);
 
   const handleAboutClose = useCallback(() => {
@@ -384,7 +391,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   }, [handleAboutClick]);
 
   const handlePhotoGalleryClick = () => {
-    setShowPhotoGalleryModal(true);
+    setShowTransition(true);
+    setTimeout(() => setShowPhotoGalleryModal(true), 400);
   };
 
   const handlePhotoGalleryClose = () => {
@@ -471,6 +479,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
       {/* VHS Effects Component */}
       <VHSEffects effectsReduced={effectsReduced} isPaused={isPaused} isPreChaos={isPreChaos} isAutoEjecting={isAutoEjecting} />
+
+      {/* VCR On-Screen Display (OSD) - Pause Screen */}
+      <VCROsd isPaused={isPaused} />
+
+      {/* Commercial Break Transition */}
+      <CommercialBreakTransition isActive={showTransition} onComplete={() => setShowTransition(false)} />
 
       {/* Top Navigation Bar */}
       <VHSTopNavBar
