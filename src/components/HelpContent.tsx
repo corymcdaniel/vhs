@@ -24,7 +24,7 @@ const HelpContent: React.FC<HelpContentProps> = ({ onAboutClick }) => {
 
       <h3>Navigation</h3>
       <ul>
-        <li><strong>WORK</strong> - View my professional LinkedIn profile</li>
+        <li><strong>WORK</strong> - My github, but it's mostly private</li>
         <li><strong>PHOTOS</strong> - Check out my photography on Instagram</li>
         <li><strong>CHARLIE/PAPAGO</strong> - Meet my cats</li>
         <li><strong>PHOENIX/DESERT</strong> - Learn about where I live</li>
@@ -38,7 +38,7 @@ const HelpContent: React.FC<HelpContentProps> = ({ onAboutClick }) => {
         <li><strong>REDUCE EFFECTS</strong> - Disable visual effects for accessibility</li>
       </ul>
 
-      <p><em>This is a VHS-themed portfolio showcasing photography and web development work. Navigate using the controls above or click the navigation items as they appear.</em></p>
+      <p><em>I wanted to create something different while only using AI as a director.</em></p>
     </>
   );
 };
