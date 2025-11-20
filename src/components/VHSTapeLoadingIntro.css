@@ -505,6 +505,15 @@
   .intro-tape {
     width: 280px;
     height: 175px;
+    transform: translateY(60px);
+  }
+
+  .vhs-tape-intro.inserting .intro-tape {
+    animation: tapeInsertMobile 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .vhs-tape-intro.tracking .intro-tape {
+    animation: tapeShakeMobile 0.5s ease-in-out infinite;
   }
 
   .intro-tape-label {
@@ -553,4 +562,37 @@
   .intro-play-text {
     font-size: 28px;
   }
+}
+
+/* Mobile-specific tape animations */
+@keyframes tapeInsertMobile {
+  0% {
+    transform: translateY(-100vh) rotate(-5deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(55px) rotate(2deg);
+  }
+  80% {
+    transform: translateY(65px) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(60px) rotate(0deg);
+  }
+}
+
+@keyframes tapeShakeMobile {
+  0%, 100% { transform: translateX(0) translateY(60px); }
+  10% { transform: translateX(-3px) translateY(62px); }
+  20% { transform: translateX(3px) translateY(58px); }
+  30% { transform: translateX(-3px) translateY(61px); }
+  40% { transform: translateX(2px) translateY(59px); }
+  50% { transform: translateX(-2px) translateY(62px); }
+  60% { transform: translateX(2px) translateY(58px); }
+  70% { transform: translateX(-1px) translateY(61px); }
+  80% { transform: translateX(1px) translateY(59px); }
+  90% { transform: translateX(-1px) translateY(60px); }
 }
