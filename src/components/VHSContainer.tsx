@@ -208,8 +208,28 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   useAutoEjectSequence({ isActive: isAutoEjecting, onComplete: handleAutoEjectComplete });
   const showOhNoMessage = useOhNoMessage({ isActive: isAutoEjecting });
 
+  // Track if any modal is open - used to pause auto-eject timer
+  const isAnyModalOpen = showContactModal || showRecordingModal || showHelpModal || showAboutModal || showPhotoGalleryModal;
+
   // Auto-trigger eject 20 seconds after typewriter completes (when contact button shows)
+  // Pauses when any modal is open to prevent interrupting user interaction
   useEffect(() => {
+    // Don't start or continue timer if a modal is open
+    if (isAnyModalOpen) {
+      // Clear existing timers when modal opens
+      if (preChaosTimerRef.current) {
+        clearTimeout(preChaosTimerRef.current);
+        preChaosTimerRef.current = null;
+      }
+      if (autoEjectTimerRef.current) {
+        clearTimeout(autoEjectTimerRef.current);
+        autoEjectTimerRef.current = null;
+      }
+      // Reset pre-chaos state when modal is open
+      setIsPreChaos(false);
+      return;
+    }
+
     if (isComplete && !effectsReduced && !isAutoEjecting && !isEjected) {
       logger.log('🎬 Typewriter complete, starting 20 second countdown to chaos...');
 
@@ -237,7 +257,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         }
       };
     }
-  }, [isComplete, effectsReduced, isAutoEjecting, isEjected, onAutoEjectStart]);
+  }, [isComplete, effectsReduced, isAutoEjecting, isEjected, onAutoEjectStart, isAnyModalOpen]);
 
 
   // Keyboard commands
