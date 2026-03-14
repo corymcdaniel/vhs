@@ -2388,3 +2388,43 @@
     opacity: 1;
   }
 }
+
+/* ============================================================
+   CHANNEL THEMES
+   Channel 3 is the default — no overrides needed.
+   hue-rotate reference: green (#00ff00) sits at 120°
+   ============================================================ */
+
+.vhs-container {
+  transition: filter 0.4s ease;
+}
+
+/* Channel 2 — Michigan Summers
+   Rotate green toward warm yellow-gold (-65° → ~55°).
+   Desaturate slightly, brighten for daytime feel. */
+.vhs-container.channel-2 {
+  filter: hue-rotate(-65deg) saturate(0.55) brightness(1.6) sepia(0.15);
+}
+
+/* Channel 4 — Desert Nights
+   Rotate green toward blue-purple (+155° → ~275°).
+   Slightly more saturated, darker for night feel. */
+.vhs-container.channel-4 {
+  filter: hue-rotate(155deg) saturate(1.05) brightness(0.7);
+}
+
+/* Channel 3.5 — Hidden / unstable
+   Full desaturation + high contrast = grainy static look.
+   Rapid flicker simulates a bad signal. */
+.vhs-container.channel-3-5 {
+  filter: saturate(0) contrast(1.8) brightness(0.5);
+  animation: channel35Flicker 0.15s infinite;
+}
+
+@keyframes channel35Flicker {
+  0%   { filter: saturate(0) contrast(1.8) brightness(0.5); }
+  25%  { filter: saturate(0) contrast(2.2) brightness(0.35); }
+  50%  { filter: saturate(0) contrast(1.6) brightness(0.55); }
+  75%  { filter: saturate(0) contrast(2.0) brightness(0.4); }
+  100% { filter: saturate(0) contrast(1.8) brightness(0.5); }
+}

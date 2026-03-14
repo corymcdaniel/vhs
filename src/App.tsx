@@ -5,6 +5,7 @@ import CatModal from './components/CatModal';
 import OsakaModal from './components/OsakaModal';
 import VHSTapeLoadingIntro from './components/VHSTapeLoadingIntro';
 import { useOsakaEffects } from './components/OsakaEffects';
+import { useChannel } from './hooks/useChannel';
 
 function App() {
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
@@ -12,6 +13,7 @@ function App() {
   const [isAutoEjecting, setIsAutoEjecting] = useState(false);
   const [showOsakaModal, setShowOsakaModal] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
+  const { channel, switchChannel, nextChannel, prevChannel } = useChannel();
 
   // Osaka effects at App level so they persist independently
   const { showFlash: showOsakaFlash, showBurn: showOsakaBurn } = useOsakaEffects({
@@ -45,9 +47,13 @@ function App() {
       {!showIntro && (
         <VHSContainer
           effectsReduced={effectsReduced}
+          currentChannel={channel}
           onCatClick={handleCatClick}
           onToggleEffects={toggleEffects}
           onAutoEjectStart={handleAutoEjectStart}
+          onChannelChange={switchChannel}
+          onNextChannel={nextChannel}
+          onPrevChannel={prevChannel}
         />
       )}
 

@@ -1,25 +1,31 @@
 import React from 'react';
+import TVDial from './TVDial';
+import { Channel } from '../hooks/useChannel';
 
 interface VHSControlPanelProps {
   effectsReduced: boolean;
   isPaused: boolean;
   isEjected: boolean;
+  currentChannel: Channel;
   onToggleEffects: () => void;
   onPause: () => void;
   onFastForward: () => void;
   onReopen: () => void;
   onPhotoGalleryClick: () => void;
+  onChannelChange: (channel: Channel) => void;
 }
 
 const VHSControlPanel: React.FC<VHSControlPanelProps> = ({
   effectsReduced,
   isPaused,
   isEjected,
+  currentChannel,
   onToggleEffects,
   onPause,
   onFastForward,
   onReopen,
-  onPhotoGalleryClick
+  onPhotoGalleryClick,
+  onChannelChange,
 }) => {
   return (
     <>
@@ -36,6 +42,8 @@ const VHSControlPanel: React.FC<VHSControlPanelProps> = ({
 
       {/* Right Side Controls */}
       <div className="control-buttons-right">
+        <TVDial currentChannel={currentChannel} onChannelChange={onChannelChange} />
+
         <button className="pause-btn" onClick={onPause}>
           {isPaused ? '▶ PLAY' : '⏸ PAUSE'}
         </button>

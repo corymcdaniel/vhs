@@ -20,6 +20,7 @@ import TextScrambleEffect from './TextScrambleEffect';
 import VCROsd from './VCROsd';
 import CommercialBreakTransition from './CommercialBreakTransition';
 import { logger } from '../utils/logger';
+import { Channel } from '../hooks/useChannel';
 
 // Static character arrays - moved outside component to prevent recreation on every render
 const HIRAGANA_CHARS = [
@@ -47,16 +48,24 @@ const ROMAJI_CHARS = [
 
 interface VHSContainerProps {
   effectsReduced: boolean;
+  currentChannel: Channel;
   onCatClick: (catName: string) => void;
   onToggleEffects: () => void;
   onAutoEjectStart: () => void;
+  onChannelChange: (channel: Channel) => void;
+  onNextChannel: () => void;
+  onPrevChannel: () => void;
 }
 
 const VHSContainer: React.FC<VHSContainerProps> = ({
   effectsReduced,
+  currentChannel,
   onCatClick,
   onToggleEffects,
-  onAutoEjectStart
+  onAutoEjectStart,
+  onChannelChange,
+  onNextChannel,
+  onPrevChannel,
 }) => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
@@ -266,11 +275,19 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       // Prevent default for our custom keys
-      if (['g', 'b', 'r', 'n', 'e', ' '].includes(e.key.toLowerCase())) {
+      if (['g', 'b', 'r', 'n', 'e', ' ', 'arrowup', 'arrowdown'].includes(e.key.toLowerCase())) {
         e.preventDefault();
       }
 
       switch (e.key.toLowerCase()) {
+        case 'arrowup':
+          onNextChannel();
+          break;
+
+        case 'arrowdown':
+          onPrevChannel();
+          break;
+
         case ' ': // Spacebar for background change
           handleFastForward();
           break;
@@ -322,7 +339,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       keyboardTimers.forEach(timer => clearTimeout(timer));
       keyboardTimers.clear();
     };
-  }, [handleFastForward, handleAutoEject, isEjected, isAutoEjecting, effectsReduced]);
+  }, [handleFastForward, handleAutoEject, isEjected, isAutoEjecting, effectsReduced, onNextChannel, onPrevChannel]);
 
   // Random glitch effects with useRef - OPTIMIZED for performance
   useEffect(() => {
@@ -540,7 +557,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       />
 
       <div
-        className={`vhs-container ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''} ${isPreChaos ? 'pre-chaos' : ''} ${isAutoEjecting ? 'auto-ejecting' : ''}`}
+        className={`vhs-container channel-${String(currentChannel).replace('.', '-')} ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''} ${isPreChaos ? 'pre-chaos' : ''} ${isAutoEjecting ? 'auto-ejecting' : ''}`}
       >
       {/* "oh no...." Message - Direct rendering */}
       {showOhNoMessage && (
@@ -608,11 +625,13 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         effectsReduced={effectsReduced}
         isPaused={isPaused}
         isEjected={isEjected}
+        currentChannel={currentChannel}
         onToggleEffects={onToggleEffects}
         onPause={handlePause}
         onFastForward={handleFastForward}
         onReopen={handleReopen}
         onPhotoGalleryClick={handlePhotoGalleryClick}
+        onChannelChange={onChannelChange}
       />
 
       {/* Contact Modal */}
