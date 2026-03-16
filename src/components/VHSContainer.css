@@ -2428,3 +2428,9 @@
   75%  { filter: saturate(0) contrast(2.0) brightness(0.4); }
   100% { filter: saturate(0) contrast(1.8) brightness(0.5); }
 }
+
+/* Channel 6 — TBD
+   Placeholder: purple/magenta shift. Replace once vibe is decided. */
+.vhs-container.channel-6 {
+  filter: hue-rotate(80deg) saturate(0.8) brightness(0.85);
+}

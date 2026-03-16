@@ -57,6 +57,11 @@ interface VHSContainerProps {
   onPrevChannel: () => void;
 }
 
+function getChannelClass(channel: number): string {
+  if (channel === 3.5) return 'channel-3-5';
+  return `channel-${channel}`;
+}
+
 const VHSContainer: React.FC<VHSContainerProps> = ({
   effectsReduced,
   currentChannel,
@@ -553,11 +558,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         isEjected={isEjected}
         isPaused={isPaused}
         effectsReduced={effectsReduced}
+        currentChannel={currentChannel}
         onAutoEject={handleAutoEject}
       />
 
       <div
-        className={`vhs-container channel-${String(currentChannel).replace('.', '-')} ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''} ${isPreChaos ? 'pre-chaos' : ''} ${isAutoEjecting ? 'auto-ejecting' : ''}`}
+        className={`vhs-container ${getChannelClass(currentChannel)} ${effectsReduced ? 'effects-reduced' : ''} ${isEjected ? 'ejected' : ''} ${isReopening ? 'reopening' : ''} ${isPaused ? 'paused' : ''} ${isPreChaos ? 'pre-chaos' : ''} ${isAutoEjecting ? 'auto-ejecting' : ''}`}
       >
       {/* "oh no...." Message - Direct rendering */}
       {showOhNoMessage && (
@@ -587,8 +593,10 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* Top Navigation Bar */}
       <VHSTopNavBar
         isEjected={isEjected}
+        currentChannel={currentChannel}
         onHelpClick={handleHelpClick}
         onReopen={handleReopen}
+        onChannelChange={onChannelChange}
       />
 
       {/* Timestamp */}
@@ -625,13 +633,11 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         effectsReduced={effectsReduced}
         isPaused={isPaused}
         isEjected={isEjected}
-        currentChannel={currentChannel}
         onToggleEffects={onToggleEffects}
         onPause={handlePause}
         onFastForward={handleFastForward}
         onReopen={handleReopen}
         onPhotoGalleryClick={handlePhotoGalleryClick}
-        onChannelChange={onChannelChange}
       />
 
       {/* Contact Modal */}
