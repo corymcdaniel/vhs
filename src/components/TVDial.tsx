@@ -126,7 +126,6 @@ const TVDial: React.FC<TVDialProps> = ({ currentChannel, onChannelChange }) => {
   }, [currentChannel, isDragging, setRot]);
 
   const isHidden = currentChannel === 3.5;
-  const displayChannel = isHidden ? '??' : String(currentChannel);
 
   return (
     <div className={`tv-dial-container${isHidden ? ' channel-hidden' : ''}`}>
