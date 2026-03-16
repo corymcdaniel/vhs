@@ -19,7 +19,7 @@ const VHSControlPanel: React.FC<VHSControlPanelProps> = ({
   onPause,
   onFastForward,
   onReopen,
-  onPhotoGalleryClick
+  onPhotoGalleryClick,
 }) => {
   return (
     <>
