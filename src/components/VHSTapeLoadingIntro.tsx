@@ -64,6 +64,7 @@ const VHSTapeLoadingIntro: React.FC<VHSTapeLoadingIntroProps> = ({ onIntroComple
 
       {/* VCR Slot */}
       <div className="intro-vcr-slot"></div>
+      <div className="intro-vcr-window"></div>
 
       {/* Status Messages */}
       <div className="intro-status">
