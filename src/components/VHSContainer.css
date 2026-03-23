@@ -464,6 +464,54 @@
   margin-top: 2px;
 }
 
+/* Vertical screen height adjustments for nav */
+@media (max-height: 800px) {
+  .vhs-nav {
+    bottom: 76px;
+    gap: 10px;
+    padding: 8px 18px;
+    min-height: 48px;
+  }
+
+  .vhs-nav-item {
+    padding: 7px 14px;
+    min-width: 95px;
+    font-size: 13px;
+  }
+
+  .nav-label {
+    font-size: 14px;
+  }
+
+  .nav-desc {
+    font-size: 11px;
+  }
+}
+
+@media (max-height: 650px) {
+  .vhs-nav {
+    bottom: 30px;
+    gap: 10px;
+    padding: 8px 16px;
+    min-height: 44px;
+  }
+
+  .vhs-nav-item {
+    padding: 6px 12px;
+    min-width: 80px;
+    font-size: 12px;
+  }
+
+  .nav-label {
+    font-size: 13px;
+  }
+
+  .nav-desc {
+    font-size: 11px;
+    margin-top: 1px;
+  }
+}
+
 /* Control Buttons Container - Left Side */
 .control-buttons-left {
   position: absolute;
