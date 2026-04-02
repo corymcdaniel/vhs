@@ -21,7 +21,7 @@ async function compressImage(inputPath, outputPath) {
 
     console.log(`📸 Processing: ${path.basename(inputPath)} (${originalSizeKB}KB)`);
 
-    const image = sharp(inputPath);
+    const image = sharp(inputPath).rotate(); // apply EXIF orientation before anything else
     const metadata = await image.metadata();
 
     const { width, height } = metadata;
