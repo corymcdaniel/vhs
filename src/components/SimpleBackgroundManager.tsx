@@ -61,6 +61,16 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
     if (!containerRef.current) return;
     const gradient = getGradient();
     containerRef.current.style.backgroundImage = `${gradient}, url('${imageSrc}')`;
+    // Default to cover; switch to contain for portrait images to avoid extreme zoom
+    containerRef.current.style.backgroundSize = 'cover';
+    const img = new Image();
+    img.onload = () => {
+      if (!containerRef.current) return;
+      if (img.naturalHeight > img.naturalWidth) {
+        containerRef.current.style.backgroundSize = 'contain';
+      }
+    };
+    img.src = imageSrc;
   }, [getGradient]);
 
   // Set initial background immediately
