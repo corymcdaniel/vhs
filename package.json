@@ -25,7 +25,7 @@
   "scripts": {
     "generate-images": "node scripts/generateImageList.js",
     "prestart": "npm run generate-images",
-    "prebuild": "npm run generate-images",
+    "prebuild": "npm run compress-images && npm run generate-images",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
