@@ -22,3 +22,6 @@ build/
 
 # Auto-generated files
 src/data/backgroundImages.js
+
+# Background images managed outside git
+public/bg/

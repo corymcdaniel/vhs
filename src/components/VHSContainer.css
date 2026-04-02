@@ -2407,27 +2407,62 @@
   filter: hue-rotate(-65deg) saturate(0.55) brightness(1.6) sepia(0.15);
 }
 
-/* Channel 4 — Desert Nights
-   Rotate green toward blue-purple (+155° → ~275°).
-   Slightly more saturated, darker for night feel. */
+/* Channel 4 — Clearest channel: minimal processing, navy/white palette.
+   No hue rotation, full brightness — cleanest signal on the dial. */
 .vhs-container.channel-4 {
-  filter: hue-rotate(155deg) saturate(1.05) brightness(0.7);
+  filter: brightness(1.05) saturate(0.95);
+}
+
+/* Reduce VHS artifacts — this channel comes in clear */
+.vhs-container.channel-4 .vhs-scramble  { opacity: 0.03; }
+.vhs-container.channel-4 .static-overlay { opacity: 0.07; }
+.vhs-container.channel-4 .scan-lines    { opacity: 0.15; }
+.vhs-container.channel-4 .tracking-lines { opacity: 0.2; }
+.vhs-container.channel-4::before        { opacity: 0.12; }
+.vhs-container.channel-4::after         { opacity: 0.08; }
+
+/* White text on navy */
+.vhs-container.channel-4 .vhs-text {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.vhs-container.channel-4 .vhs-text .line.typing::after {
+  color: #ffffff;
+}
+
+.vhs-container.channel-4 .vhs-link {
+  color: #add8e6;
+  text-decoration-color: #add8e6;
+  text-shadow: 0 0 5px #add8e6;
+}
+
+.vhs-container.channel-4 .vhs-link:hover {
+  color: #ffffff;
+  text-decoration-color: #ffffff;
+  text-shadow: 0 0 10px #ffffff;
+}
+
+.vhs-container.channel-4 .cat-link {
+  color: #b0c4de;
+  text-decoration-color: #b0c4de;
+  text-shadow: 0 0 5px #b0c4de;
 }
 
 /* Channel 3.5 — Hidden / unstable
-   Full desaturation + high contrast = grainy static look.
+   Mostly desaturated (~10% color, extra contrast to make it pop) + dim.
    Rapid flicker simulates a bad signal. */
 .vhs-container.channel-3-5 {
-  filter: saturate(0) contrast(1.8) brightness(0.5);
+  filter: saturate(0) contrast(3) brightness(0.5);
   animation: channel35Flicker 0.15s infinite;
 }
 
 @keyframes channel35Flicker {
-  0%   { filter: saturate(0) contrast(1.8) brightness(0.5); }
-  25%  { filter: saturate(0) contrast(2.2) brightness(0.35); }
-  50%  { filter: saturate(0) contrast(1.6) brightness(0.55); }
-  75%  { filter: saturate(0) contrast(2.0) brightness(0.4); }
-  100% { filter: saturate(0) contrast(1.8) brightness(0.5); }
+  0%   { filter: saturate(0) contrast(3.0) brightness(0.50); }
+  25%  { filter: saturate(0) contrast(3.4) brightness(0.35); }
+  50%  { filter: saturate(0) contrast(2.7) brightness(0.55); }
+  75%  { filter: saturate(0) contrast(3.2) brightness(0.40); }
+  100% { filter: saturate(0) contrast(3.0) brightness(0.50); }
 }
 
 /* Channel 6 — TBD

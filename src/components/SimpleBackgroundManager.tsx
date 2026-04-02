@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import './BackgroundManager.css';
 import './VHSContainer.css'; // Import for .static-flash class
 import { backgroundImages, channelBackgroundImages } from '../data/backgroundImages';
@@ -15,24 +15,27 @@ interface SimpleBackgroundManagerProps {
 
 // Map a channel number to its image pool, falling back to the default pool
 function getImagePool(channel: Channel): string[] {
-  if (channel === 2) return channelBackgroundImages.ch2.length ? channelBackgroundImages.ch2 : backgroundImages;
-  if (channel === 4) return channelBackgroundImages.ch4.length ? channelBackgroundImages.ch4 : backgroundImages;
-  if (channel === 6) return channelBackgroundImages.ch6.length ? channelBackgroundImages.ch6 : backgroundImages;
-  return backgroundImages; // channels 3 and 3.5
+  if (channel === 2)   return channelBackgroundImages.ch2.length  ? channelBackgroundImages.ch2  : backgroundImages;
+  if (channel === 4)   return channelBackgroundImages.ch4.length  ? channelBackgroundImages.ch4  : backgroundImages;
+  if (channel === 6)   return channelBackgroundImages.ch6.length  ? channelBackgroundImages.ch6  : backgroundImages;
+  if (channel === 3.5) return channelBackgroundImages.ch35.length ? channelBackgroundImages.ch35 : backgroundImages;
+  return backgroundImages; // channel 3
 }
 
 function getChannelBgClass(channel: Channel): string {
-  if (channel === 2) return 'bg-channel-2';
-  if (channel === 4) return 'bg-channel-4';
-  if (channel === 6) return 'bg-channel-6';
+  if (channel === 2)   return 'bg-channel-2';
+  if (channel === 4)   return 'bg-channel-4';
+  if (channel === 6)   return 'bg-channel-6';
+  if (channel === 3.5) return 'bg-channel-35';
   return '';
 }
 
 const GRADIENT_BY_CHANNEL: { [key: string]: string } = {
-  'bg-channel-2': 'linear-gradient(rgba(40, 30, 10, 0.5), rgba(30, 25, 5, 0.5), rgba(20, 15, 0, 0.5))',
-  'bg-channel-4': 'linear-gradient(rgba(5, 10, 30, 0.7), rgba(5, 8, 25, 0.7), rgba(3, 5, 20, 0.7))',
-  'bg-channel-6': 'linear-gradient(rgba(20, 10, 30, 0.65), rgba(15, 5, 25, 0.65), rgba(10, 0, 20, 0.65))',
-  '':             'linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7))',
+  'bg-channel-2':  'linear-gradient(rgba(40, 30, 10, 0.5), rgba(30, 25, 5, 0.5), rgba(20, 15, 0, 0.5))',
+  'bg-channel-4':  'linear-gradient(rgba(10, 20, 80, 0.2), rgba(8, 16, 70, 0.2), rgba(6, 12, 60, 0.2))',
+  'bg-channel-6':  'linear-gradient(rgba(20, 10, 30, 0.65), rgba(15, 5, 25, 0.65), rgba(10, 0, 20, 0.65))',
+  'bg-channel-35': 'linear-gradient(rgba(5, 5, 5, 0.55), rgba(5, 5, 5, 0.55), rgba(5, 5, 5, 0.55))',
+  '':              'linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7))',
 };
 
 const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
@@ -176,11 +179,38 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
     };
   }, [changeBackgroundManually]);
 
+  const cigaretteBurns = useMemo(() => {
+    return Array.from({ length: 5 }, (_, i) => ({
+      id: i,
+      top:      5 + Math.random() * 88,
+      left:     5 + Math.random() * 88,
+      delay:    -(Math.random() * 38),
+      duration: 34 + Math.random() * 20,
+      size:     55 + Math.random() * 70,
+    }));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
-    <div
-      ref={containerRef}
-      className={`background-manager ${getChannelBgClass(currentChannel)}`}
-    />
+    <>
+      <div
+        ref={containerRef}
+        className={`background-manager ${getChannelBgClass(currentChannel)}`}
+      />
+      {currentChannel === 3.5 && cigaretteBurns.map(burn => (
+        <div
+          key={burn.id}
+          className="cigarette-burn"
+          style={{
+            top: `${burn.top}%`,
+            left: `${burn.left}%`,
+            animationDelay: `${burn.delay}s`,
+            animationDuration: `${burn.duration}s`,
+            width: `${burn.size}px`,
+            height: `${burn.size}px`,
+          }}
+        />
+      ))}
+    </>
   );
 };
 

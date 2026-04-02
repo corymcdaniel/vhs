@@ -15,96 +15,119 @@
   opacity: 0.6;
 }
 
-.tv-dial-knob {
+/* Up / down arrow buttons */
+.tv-adj-arrow {
+  background: none;
+  border: none;
+  color: #ffff00;
+  font-size: 11px;
+  line-height: 1;
+  padding: 1px 0;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.1s, text-shadow 0.1s;
+  font-family: 'VT323', monospace;
+}
+
+.tv-adj-arrow:hover {
+  opacity: 1;
+  text-shadow: 0 0 6px rgba(255, 255, 0, 0.8);
+}
+
+.tv-adj-arrow:active {
+  opacity: 1;
+  transform: scale(0.85);
+}
+
+/* The roller drum viewport */
+.tv-adj-roller {
   width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #4a4a4a, #1a1a1a);
+  height: 28px;
+  overflow: hidden;
+  background: radial-gradient(circle at 35% 35%, #2a2a2a, #0d0d0d);
   border: 2px solid #444;
+  border-radius: 3px;
   box-shadow:
     0 0 0 1px #222,
     0 3px 6px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  cursor: grab;
+    inset 0 2px 5px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  transition: box-shadow 0.15s;
-  flex-shrink: 0;
 }
 
-.tv-dial-knob:hover {
-  box-shadow:
-    0 0 0 1px #555,
-    0 0 6px rgba(255, 255, 0, 0.15),
-    0 3px 6px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.tv-dial-knob.dragging {
-  cursor: grabbing;
-  box-shadow:
-    0 0 0 1px #666,
-    0 0 10px rgba(255, 255, 0, 0.25),
-    0 3px 6px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-/* Indicator line pointing from center toward top of knob */
-.tv-dial-indicator {
+/* Top/bottom shadow to simulate drum edge depth */
+.tv-adj-roller::before,
+.tv-adj-roller::after {
+  content: '';
   position: absolute;
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 3px;
-  height: 11px;
-  background: #ffff00;
-  border-radius: 2px;
-  box-shadow: 0 0 5px rgba(255, 255, 0, 0.7);
+  left: 0;
+  right: 0;
+  height: 9px;
+  z-index: 2;
+  pointer-events: none;
 }
 
-/* Subtle grip texture */
-.tv-dial-grip {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  background: repeating-conic-gradient(
-    rgba(255, 255, 255, 0.025) 0deg 10deg,
-    transparent 10deg 20deg
-  );
+.tv-adj-roller::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent);
 }
 
-.tv-dial-channel-display {
+.tv-adj-roller::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+}
+
+/* The number itself */
+.tv-adj-value {
   font-family: 'VT323', monospace;
   color: #ffff00;
-  font-size: 13px;
+  font-size: 19px;
   line-height: 1;
-  min-width: 22px;
   text-align: center;
-  text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+  text-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
+  position: relative;
+  z-index: 1;
+}
+
+/* Roll animations — ▲ brings new number in from above, ▼ from below */
+@keyframes rollInFromAbove {
+  from { transform: translateY(-110%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+@keyframes rollInFromBelow {
+  from { transform: translateY(110%);  opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+.tv-adj-value.tv-adj-roll-up {
+  animation: rollInFromAbove 0.18s ease-out;
+}
+
+.tv-adj-value.tv-adj-roll-down {
+  animation: rollInFromBelow 0.18s ease-out;
 }
 
 /* Hidden channel (3.5) state */
-.tv-dial-container.channel-hidden .tv-dial-knob {
+.tv-dial-container.channel-hidden .tv-adj-roller {
   box-shadow:
     0 0 0 1px #555,
     0 0 10px rgba(255, 60, 60, 0.35),
     0 3px 6px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    inset 0 2px 5px rgba(0, 0, 0, 0.7);
 }
 
-.tv-dial-container.channel-hidden .tv-dial-indicator {
-  background: #ff4444;
-  box-shadow: 0 0 5px rgba(255, 60, 60, 0.8);
-}
-
-.tv-dial-container.channel-hidden .tv-dial-channel-display {
+.tv-dial-container.channel-hidden .tv-adj-value {
   color: #ff4444;
-  text-shadow: 0 0 6px rgba(255, 60, 60, 0.8);
+  text-shadow: 0 0 8px rgba(255, 60, 60, 0.8);
   animation: dialHiddenFlicker 0.6s infinite;
+}
+
+.tv-dial-container.channel-hidden .tv-adj-arrow {
+  color: #ff4444;
+  text-shadow: 0 0 4px rgba(255, 60, 60, 0.5);
 }
 
 @keyframes dialHiddenFlicker {
@@ -113,21 +136,14 @@
   100%     { opacity: 1; }
 }
 
-
 /* Mobile sizing */
 @media (max-width: 768px) {
-  .tv-dial-knob {
+  .tv-adj-roller {
     width: 36px;
-    height: 36px;
+    height: 24px;
   }
 
-  .tv-dial-indicator {
-    top: 4px;
-    height: 9px;
-  }
-
-  .tv-dial-grip {
-    width: 22px;
-    height: 22px;
+  .tv-adj-value {
+    font-size: 15px;
   }
 }
