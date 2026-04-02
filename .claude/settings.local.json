@@ -20,7 +20,9 @@
       "Bash(cat \"/c/Code/Generative/September/src/components/VHSTransition.css\")",
       "Bash(cat \"/c/Code/Generative/September/src/components/TextScrambleEffect.tsx\")",
       "Bash(cat \"/c/Code/Generative/September/src/hooks/useTypewriter.ts\")",
-      "Bash(cat \"/c/Code/Generative/September/src/components/OsakaEffects.tsx\")"
+      "Bash(cat \"/c/Code/Generative/September/src/components/OsakaEffects.tsx\")",
+      "Bash(node scripts/generateImageList.js)",
+      "Bash(npm run:*)"
     ],
     "deny": [],
     "ask": []

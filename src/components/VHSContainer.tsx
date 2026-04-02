@@ -58,7 +58,7 @@ interface VHSContainerProps {
 }
 
 function getChannelClass(channel: number): string {
-  if (channel === 3.5) return 'channel-3-5';
+  if (channel === 6.5) return 'channel-3-5';
   return `channel-${channel}`;
 }
 

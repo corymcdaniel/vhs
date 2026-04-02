@@ -8,9 +8,10 @@ const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
 
 // Per-channel subfolders inside /public/bg/
 const CHANNEL_FOLDERS = {
-  ch2: 'ch2', // Channel 2 — Michigan Summers
-  ch4: 'ch4', // Channel 4 — Desert Nights
-  ch6: 'ch6', // Channel 6 — TBD
+  ch2:  'ch2',  // Channel 2 — Michigan Summers
+  ch4:  'ch4',  // Channel 4 — Desert Nights
+  ch6:  'ch6',  // Channel 6 — TBD
+  ch35: 'ch35', // Channel 6.5 — Hidden / greyscale
 };
 
 function scanImages(dir, urlPrefix) {
@@ -37,11 +38,8 @@ try {
     const images = scanImages(dir, `/bg/${folder}`);
     channelImages[key] = images;
 
-    // Create folder if missing so users know where to drop files
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-      console.log(`   📁 Created: public/bg/${folder}/`);
-    }
+    // Folder is populated by compress-images.js from ./bg/<folder>/
+    // If missing, it just means no images have been compressed for that channel yet.
   }
 
   const dataDir = path.dirname(outputFile);
@@ -58,9 +56,10 @@ export const backgroundImages = ${JSON.stringify(defaultImages, null, 2)};
 // Per-channel image pools — images in /public/bg/<folder>/
 // If a channel folder is empty, SimpleBackgroundManager falls back to backgroundImages.
 export const channelBackgroundImages = {
-  ch2: ${JSON.stringify(channelImages.ch2, null, 2)},
-  ch4: ${JSON.stringify(channelImages.ch4, null, 2)},
-  ch6: ${JSON.stringify(channelImages.ch6, null, 2)},
+  ch2:  ${JSON.stringify(channelImages.ch2, null, 2)},
+  ch4:  ${JSON.stringify(channelImages.ch4, null, 2)},
+  ch6:  ${JSON.stringify(channelImages.ch6, null, 2)},
+  ch35: ${JSON.stringify(channelImages.ch35, null, 2)},
 };
 
 export const getRandomImage = () =>

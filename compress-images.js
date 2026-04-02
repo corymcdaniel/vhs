@@ -4,8 +4,13 @@ const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 
-const INPUT_DIR = './public/backgrounds';
+// Source: ./backgrounds/ at project root (flat files + per-channel subfolders)
+// Output: ./public/bg/ (served by React dev server and included in build)
+const INPUT_DIR  = './backgrounds';
 const OUTPUT_DIR = './public/bg';
+
+const CHANNEL_FOLDERS = ['ch2', 'ch4', 'ch6', 'ch35'];
+
 const MAX_DIMENSION = 1200;
 const QUALITY = 85;
 
@@ -19,7 +24,6 @@ async function compressImage(inputPath, outputPath) {
     const image = sharp(inputPath);
     const metadata = await image.metadata();
 
-    // Calculate resize dimensions
     const { width, height } = metadata;
     let newWidth = width;
     let newHeight = height;
@@ -32,7 +36,6 @@ async function compressImage(inputPath, outputPath) {
       newWidth = Math.round((width * MAX_DIMENSION) / height);
     }
 
-    // Compress and resize to output folder
     await image
       .resize(newWidth, newHeight, {
         kernel: sharp.kernel.lanczos3,
@@ -49,67 +52,77 @@ async function compressImage(inputPath, outputPath) {
     const newSizeKB = Math.round(newStats.size / 1024);
     const savings = Math.round(((originalSizeKB - newSizeKB) / originalSizeKB) * 100);
 
-    console.log(`✅ Output: ${path.basename(outputPath)} - ${originalSizeKB}KB → ${newSizeKB}KB (${savings}% smaller)`);
-    console.log(`📐 Resized: ${width}x${height} → ${newWidth}x${newHeight}`);
+    console.log(`✅ ${path.basename(outputPath)} — ${originalSizeKB}KB → ${newSizeKB}KB (${savings}% smaller)`);
+    console.log(`   📐 ${width}x${height} → ${newWidth}x${newHeight}`);
 
   } catch (error) {
     console.error(`❌ Error processing ${inputPath}:`, error.message);
   }
 }
 
+async function processFolder(inputDir, outputDir, label) {
+  if (!fs.existsSync(inputDir)) return 0;
+
+  const files = fs.readdirSync(inputDir)
+    .filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f));
+
+  if (files.length === 0) return 0;
+
+  fs.mkdirSync(outputDir, { recursive: true });
+
+  console.log(`\n📁 ${label} — ${files.length} image(s)`);
+
+  for (const file of files) {
+    // Always output as .jpg
+    const outName = file.replace(/\.(png|webp)$/i, '.jpg');
+    await compressImage(path.join(inputDir, file), path.join(outputDir, outName));
+  }
+
+  return files.length;
+}
+
 async function main() {
   console.log('🎬 VHS Background Image Compressor');
-  console.log('==================================');
-  console.log(`📁 Input: ${INPUT_DIR}`);
-  console.log(`📁 Output: ${OUTPUT_DIR}`);
-  console.log(`📏 Max dimension: ${MAX_DIMENSION}px`);
+  console.log('===================================');
+  console.log(`📁 Source : ${INPUT_DIR}/ (+ subfolders: ${CHANNEL_FOLDERS.join(', ')})`);
+  console.log(`📁 Output : ${OUTPUT_DIR}/`);
+  console.log(`📏 Max    : ${MAX_DIMENSION}px`);
   console.log(`🎯 Quality: ${QUALITY}%`);
-  console.log('');
+
+  if (!fs.existsSync(INPUT_DIR)) {
+    console.error(`\n❌ Source folder not found: ${INPUT_DIR}`);
+    console.error('   Create it and drop your source images in.');
+    process.exit(1);
+  }
 
   try {
-    // Create output directory if it doesn't exist
-    if (!fs.existsSync(OUTPUT_DIR)) {
-      fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-      console.log(`📁 Created output directory: ${OUTPUT_DIR}`);
+    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+
+    let total = 0;
+
+    // Default pool (flat files in ./backgrounds/)
+    total += await processFolder(INPUT_DIR, OUTPUT_DIR, 'CH3 default (./backgrounds/)');
+
+    // Per-channel subfolders
+    for (const folder of CHANNEL_FOLDERS) {
+      total += await processFolder(
+        path.join(INPUT_DIR, folder),
+        path.join(OUTPUT_DIR, folder),
+        `${folder} (./backgrounds/${folder}/)`
+      );
     }
 
-    const files = fs.readdirSync(INPUT_DIR)
-      .filter(file => /\.(jpg|jpeg)$/i.test(file));
-
-    if (files.length === 0) {
-      console.log('❌ No JPEG files found in backgrounds folder');
-      return;
-    }
-
-    console.log(`📸 Found ${files.length} images to process:`);
-    files.forEach(file => console.log(`   - ${file}`));
-    console.log('');
-
-    for (const file of files) {
-      const inputPath = path.join(INPUT_DIR, file);
-      const outputPath = path.join(OUTPUT_DIR, file);
-
-      await compressImage(inputPath, outputPath);
-      console.log(''); // Empty line between files
-    }
-
-    console.log('🎉 All images processed!');
-    console.log('');
-    console.log('💡 Tips:');
-    console.log(`   - Compressed images saved to: ${OUTPUT_DIR}`);
-    console.log(`   - Original files remain in: ${INPUT_DIR}`);
-    console.log('   - Update your React code to use the /bg folder');
+    console.log(`\n🎉 Done — ${total} image(s) processed.`);
+    console.log(`💡 Run "npm run generate-images" to update the image list.`);
 
   } catch (error) {
     console.error('❌ Script failed:', error.message);
   }
 }
 
-// Check if sharp is installed
 try {
   require.resolve('sharp');
   main();
 } catch (error) {
   console.error('❌ Sharp not installed. Run: npm install sharp');
-  console.error('   Then run this script again.');
 }
