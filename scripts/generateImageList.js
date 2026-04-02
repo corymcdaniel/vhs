@@ -11,7 +11,7 @@ const CHANNEL_FOLDERS = {
   ch2:  'ch2',  // Channel 2 — Michigan Summers
   ch4:  'ch4',  // Channel 4 — Desert Nights
   ch6:  'ch6',  // Channel 6 — TBD
-  ch35: 'ch35', // Channel 3.5 — Hidden / greyscale
+  ch35: 'ch35', // Channel 6.5 — Hidden / greyscale
 };
 
 function scanImages(dir, urlPrefix) {

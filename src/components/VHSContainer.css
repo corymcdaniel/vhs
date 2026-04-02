@@ -626,7 +626,7 @@
   top: 20px;
   left: 20px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
   z-index: 1002;
 }
@@ -2450,7 +2450,7 @@
   text-shadow: 0 0 5px #b0c4de;
 }
 
-/* Channel 3.5 — Hidden / unstable
+/* Channel 6.5 — Hidden / unstable
    Mostly desaturated (~10% color, extra contrast to make it pop) + dim.
    Rapid flicker simulates a bad signal. */
 .vhs-container.channel-3-5 {

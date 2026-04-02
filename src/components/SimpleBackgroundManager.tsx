@@ -18,7 +18,7 @@ function getImagePool(channel: Channel): string[] {
   if (channel === 2)   return channelBackgroundImages.ch2.length  ? channelBackgroundImages.ch2  : backgroundImages;
   if (channel === 4)   return channelBackgroundImages.ch4.length  ? channelBackgroundImages.ch4  : backgroundImages;
   if (channel === 6)   return channelBackgroundImages.ch6.length  ? channelBackgroundImages.ch6  : backgroundImages;
-  if (channel === 3.5) return channelBackgroundImages.ch35.length ? channelBackgroundImages.ch35 : backgroundImages;
+  if (channel === 6.5) return channelBackgroundImages.ch35.length ? channelBackgroundImages.ch35 : backgroundImages;
   return backgroundImages; // channel 3
 }
 
@@ -26,7 +26,7 @@ function getChannelBgClass(channel: Channel): string {
   if (channel === 2)   return 'bg-channel-2';
   if (channel === 4)   return 'bg-channel-4';
   if (channel === 6)   return 'bg-channel-6';
-  if (channel === 3.5) return 'bg-channel-35';
+  if (channel === 6.5) return 'bg-channel-35';
   return '';
 }
 
@@ -196,7 +196,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
         ref={containerRef}
         className={`background-manager ${getChannelBgClass(currentChannel)}`}
       />
-      {currentChannel === 3.5 && cigaretteBurns.map(burn => (
+      {currentChannel === 6.5 && cigaretteBurns.map(burn => (
         <div
           key={burn.id}
           className="cigarette-burn"

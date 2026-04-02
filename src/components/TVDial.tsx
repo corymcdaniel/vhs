@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import './TVDial.css';
 import { Channel } from '../hooks/useChannel';
 
-const CHANNELS: Channel[] = [2, 3, 3.5, 4, 6];
+const CHANNELS: Channel[] = [2, 3, 4, 6, 6.5];
 
 function formatChannel(ch: Channel): string {
   return String(ch);
@@ -28,29 +28,31 @@ const TVDial: React.FC<TVDialProps> = ({ currentChannel, onChannelChange }) => {
     onChannelChange(CHANNELS[nextIdx]);
   }, [currentIdx, onChannelChange]);
 
-  const isHidden = currentChannel === 3.5;
+  const isHidden = currentChannel === 6.5;
 
   return (
     <div className={`tv-dial-container${isHidden ? ' channel-hidden' : ''}`}>
       <div className="tv-dial-label">ADJ</div>
-      <button
-        className="tv-adj-arrow"
-        onClick={() => step('up')}
-        aria-label="previous"
-      >▲</button>
-      <div className="tv-adj-roller">
-        <div
-          key={rollKey}
-          className={`tv-adj-value tv-adj-roll-${rollDir}`}
-        >
-          {formatChannel(currentChannel)}
+      <div className="tv-dial-controls">
+        <button
+          className="tv-adj-arrow"
+          onClick={() => step('up')}
+          aria-label="previous"
+        >▲</button>
+        <div className="tv-adj-roller">
+          <div
+            key={rollKey}
+            className={`tv-adj-value tv-adj-roll-${rollDir}`}
+          >
+            {formatChannel(currentChannel)}
+          </div>
         </div>
+        <button
+          className="tv-adj-arrow"
+          onClick={() => step('down')}
+          aria-label="next"
+        >▼</button>
       </div>
-      <button
-        className="tv-adj-arrow"
-        onClick={() => step('down')}
-        aria-label="next"
-      >▼</button>
     </div>
   );
 };

@@ -19,12 +19,12 @@
   background-position: center center;
 }
 
-/* Channel 3.5 — black & white, high contrast background */
+/* Channel 6.5 — black & white, high contrast background */
 .background-manager.bg-channel-35 {
   filter: grayscale(1) contrast(1.5) brightness(0.85);
 }
 
-/* Channel 3.5 grain overlay — animated film grain via SVG turbulence */
+/* Channel 6.5 grain overlay — animated film grain via SVG turbulence */
 .background-manager.bg-channel-35::after {
   content: '';
   position: absolute;
@@ -51,7 +51,7 @@
   100% { transform: translate(1%,  -2%);   }
 }
 
-/* Channel 3.5 cigarette burns — rendered as divs for randomized positions */
+/* Channel 6.5 cigarette burns — rendered as divs for randomized positions */
 .cigarette-burn {
   position: fixed;
   border-radius: 50% 44% 56% 47% / 53% 49% 51% 46%;
