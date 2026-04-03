@@ -5,3 +5,9 @@
 
 [build.processing]
   skip_processing = false
+
+[[redirects]]
+  from = "/*"
+  to = "https://college-drinking-driving.netlify.app/:splat"
+  status = 200  # 200 = proxy (URL stays the same), 301 = redirect
+  force = true
