@@ -134,6 +134,33 @@
   box-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
 }
 
+.blog-blur-btn {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 0, 0.4);
+  color: rgba(0, 255, 0, 0.5);
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.blog-blur-btn:hover {
+  border-color: #00ff00;
+  color: #00ff00;
+  box-shadow: 0 0 6px rgba(0, 255, 0, 0.3);
+}
+
+.blog-blur-btn--active {
+  border-color: #00ff00;
+  color: #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+  text-shadow: 0 0 6px rgba(0, 255, 0, 0.8);
+}
+
 /* Body */
 .blog-modal-body {
   position: relative;
@@ -304,6 +331,21 @@
 
 .blog-post-content li {
   margin-bottom: 6px;
+}
+
+/* CRT glow effect */
+.blog-post-content--glow {
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.7), 0 0 2px rgba(0, 255, 0, 0.9);
+}
+
+.blog-post-content--glow h1,
+.blog-post-content--glow h2,
+.blog-post-content--glow h3 {
+  text-shadow: 0 0 12px rgba(0, 255, 0, 0.8), 0 0 4px rgba(0, 255, 0, 1);
+}
+
+.blog-post-content--glow code {
+  text-shadow: 0 0 6px rgba(0, 255, 0, 0.6);
 }
 
 /* Custom scrollbar */
