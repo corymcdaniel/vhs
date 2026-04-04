@@ -56,6 +56,8 @@ interface VHSContainerProps {
   onChannelChange: (channel: Channel) => void;
   onNextChannel: () => void;
   onPrevChannel: () => void;
+  initialBlogOpen?: boolean;
+  initialBlogSlug?: string | null;
 }
 
 function getChannelClass(channel: number): string {
@@ -72,13 +74,15 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   onChannelChange,
   onNextChannel,
   onPrevChannel,
+  initialBlogOpen = false,
+  initialBlogSlug = null,
 }) => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState(false);
-  const [showBlogModal, setShowBlogModal] = useState(false);
+  const [showBlogModal, setShowBlogModal] = useState(initialBlogOpen);
   const [isEjected, setIsEjected] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -670,7 +674,10 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
       {/* Blog Modal */}
       {showBlogModal && (
-        <BlogModal onClose={() => setShowBlogModal(false)} />
+        <BlogModal
+          onClose={() => setShowBlogModal(false)}
+          initialSlug={initialBlogSlug}
+        />
       )}
     </div>
     </>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './App.css';
 import VHSContainer from './components/VHSContainer';
 import CatModal from './components/CatModal';
@@ -8,6 +9,11 @@ import { useOsakaEffects } from './components/OsakaEffects';
 import { useChannel } from './hooks/useChannel';
 
 function App() {
+  const location = useLocation();
+  const blogMatch = location.pathname.match(/^\/blog\/?([^/]*)$/);
+  const initialBlogOpen = !!blogMatch;
+  const initialBlogSlug = blogMatch ? (blogMatch[1] || null) : null;
+
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [effectsReduced, setEffectsReduced] = useState(false);
   const [isAutoEjecting, setIsAutoEjecting] = useState(false);
@@ -54,6 +60,8 @@ function App() {
           onChannelChange={switchChannel}
           onNextChannel={nextChannel}
           onPrevChannel={prevChannel}
+          initialBlogOpen={initialBlogOpen}
+          initialBlogSlug={initialBlogSlug}
         />
       )}
 
