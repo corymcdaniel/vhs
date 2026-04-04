@@ -1,9 +1,15 @@
 // Auto-generated blog post list
-// Generated on: 2026-04-04T05:57:03.336Z
+// Generated on: 2026-04-04T06:46:05.338Z
 // Source: src/blog/*.md — ordered by first git commit (ascending)
 // DO NOT EDIT — run npm run generate-blog to regenerate
 
 export const blogPosts = [
+  {
+    "filename": "0004.md",
+    "slug": "0004",
+    "title": ">> 0004 AI Projects: Using Claude to Master Your D&D Character",
+    "description": "What happens when you hand your character sheet to an AI and ask it to find everything you're missing"
+  },
   {
     "filename": "0002.md",
     "slug": "0002",

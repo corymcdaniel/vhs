@@ -5,6 +5,16 @@ import { marked } from 'marked';
 import { blogPosts } from '../data/blogPosts';
 import './BlogModal.css';
 
+// Open all links in new tab so react-router doesn't intercept external URLs
+marked.use({
+  renderer: {
+    link({ href, title, text }: { href: string; title?: string | null; text: string }) {
+      const titleAttr = title ? ` title="${title}"` : '';
+      return `<a href="${href}" target="_blank" rel="noopener noreferrer"${titleAttr}>${text}</a>`;
+    }
+  }
+});
+
 interface BlogPost {
   filename: string;
   slug: string;
@@ -27,6 +37,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
   });
   const [postContent, setPostContent] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [blurEnabled, setBlurEnabled] = useState(false);
 
   // Load post content when selectedPost changes
   useEffect(() => {
@@ -124,6 +135,13 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
                   ◀ BACK
                 </button>
                 <h1 className="blog-modal-title">{selectedPost.title}</h1>
+                <button
+                  className={`blog-blur-btn${blurEnabled ? ' blog-blur-btn--active' : ''}`}
+                  onClick={() => setBlurEnabled(v => !v)}
+                  title={blurEnabled ? 'Disable CRT glow' : 'Enable CRT glow'}
+                >
+                  {blurEnabled ? '◉ GLOW' : '◎ GLOW'}
+                </button>
               </div>
             ) : (
               <h1 className="blog-modal-title">◼ BLOG</h1>
@@ -136,7 +154,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
                 <div className="blog-loading">LOADING...</div>
               ) : (
                 <div
-                  className="blog-post-content"
+                  className={`blog-post-content${blurEnabled ? ' blog-post-content--glow' : ''}`}
                   dangerouslySetInnerHTML={{ __html: postContent }}
                 />
               )
