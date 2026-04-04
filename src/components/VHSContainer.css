@@ -491,7 +491,7 @@
 }
 
 /* Base Button Styles */
-.toggle-effects-btn,
+.blog-btn,
 .photo-gallery-btn,
 .pause-btn,
 .fast-forward-btn {
@@ -512,10 +512,20 @@
   white-space: nowrap;
 }
 
-.toggle-effects-btn:hover,
 .pause-btn:hover {
   background: rgba(255, 255, 0, 0.3);
   box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+}
+
+.blog-btn {
+  background: rgba(0, 255, 255, 0.2);
+  border-color: #00ffff;
+  color: #00ffff;
+}
+
+.blog-btn:hover {
+  background: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
 }
 
 .photo-gallery-btn {
@@ -657,6 +667,46 @@
 
 .help-button:active {
   transform: scale(0.95);
+}
+
+/* FX Button - compact effects toggle in top bar */
+.fx-button {
+  background: rgba(255, 255, 0, 0.2);
+  border: 2px solid #ffff00;
+  color: #ffff00;
+  padding: 6px 10px;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: helpFadeIn 0.8s ease-out 0.3s forwards;
+}
+
+.fx-button:hover {
+  background: rgba(255, 255, 0, 0.3);
+  box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.fx-button:active {
+  transform: scale(0.95);
+}
+
+.fx-button--reduced {
+  background: rgba(0, 255, 0, 0.2);
+  border-color: #00ff00;
+  color: #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+}
+
+.fx-button--reduced:hover {
+  background: rgba(0, 255, 0, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
 }
 
 .test-btn {
@@ -1964,7 +2014,7 @@
     padding-left: 1.5px;
   }
 
-  .toggle-effects-btn,
+  .blog-btn,
   .photo-gallery-btn,
   .pause-btn,
   .fast-forward-btn {
@@ -2097,7 +2147,7 @@
     padding-left: 1.25px;
   }
 
-  .toggle-effects-btn,
+  .blog-btn,
   .photo-gallery-btn,
   .pause-btn,
   .fast-forward-btn {

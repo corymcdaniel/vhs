@@ -14,6 +14,7 @@ import VHSLoadingScreen from './VHSLoadingScreen';
 import VHSTextDisplay from './VHSTextDisplay';
 import VHSNavigationBar from './VHSNavigationBar';
 import VHSControlPanel from './VHSControlPanel';
+import BlogModal from './BlogModal';
 import { useAutoEjectSequence } from './AutoEjectSequence';
 import { useOhNoMessage } from './OhNoMessage';
 import TextScrambleEffect from './TextScrambleEffect';
@@ -77,6 +78,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState(false);
+  const [showBlogModal, setShowBlogModal] = useState(false);
   const [isEjected, setIsEjected] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -223,7 +225,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const showOhNoMessage = useOhNoMessage({ isActive: isAutoEjecting });
 
   // Track if any modal is open - used to pause auto-eject timer
-  const isAnyModalOpen = showContactModal || showRecordingModal || showHelpModal || showAboutModal || showPhotoGalleryModal;
+  const isAnyModalOpen = showContactModal || showRecordingModal || showHelpModal || showAboutModal || showPhotoGalleryModal || showBlogModal;
 
   // Auto-trigger eject 20 seconds after typewriter completes (when contact button shows)
   // Pauses when any modal is open to prevent interrupting user interaction
@@ -594,9 +596,11 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       <VHSTopNavBar
         isEjected={isEjected}
         currentChannel={currentChannel}
+        effectsReduced={effectsReduced}
         onHelpClick={handleHelpClick}
         onReopen={handleReopen}
         onChannelChange={onChannelChange}
+        onToggleEffects={onToggleEffects}
       />
 
       {/* Timestamp */}
@@ -630,14 +634,13 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
       {/* Controls */}
       <VHSControlPanel
-        effectsReduced={effectsReduced}
         isPaused={isPaused}
         isEjected={isEjected}
-        onToggleEffects={onToggleEffects}
         onPause={handlePause}
         onFastForward={handleFastForward}
         onReopen={handleReopen}
         onPhotoGalleryClick={handlePhotoGalleryClick}
+        onBlogClick={() => setShowBlogModal(true)}
       />
 
       {/* Contact Modal */}
@@ -663,6 +666,11 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* Photo Gallery Modal */}
       {showPhotoGalleryModal && (
         <PhotoGalleryModal onClose={handlePhotoGalleryClose} />
+      )}
+
+      {/* Blog Modal */}
+      {showBlogModal && (
+        <BlogModal onClose={() => setShowBlogModal(false)} />
       )}
     </div>
     </>

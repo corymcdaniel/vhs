@@ -1,32 +1,30 @@
 import React from 'react';
 
 interface VHSControlPanelProps {
-  effectsReduced: boolean;
   isPaused: boolean;
   isEjected: boolean;
-  onToggleEffects: () => void;
   onPause: () => void;
   onFastForward: () => void;
   onReopen: () => void;
   onPhotoGalleryClick: () => void;
+  onBlogClick: () => void;
 }
 
 const VHSControlPanel: React.FC<VHSControlPanelProps> = ({
-  effectsReduced,
   isPaused,
   isEjected,
-  onToggleEffects,
   onPause,
   onFastForward,
   onReopen,
   onPhotoGalleryClick,
+  onBlogClick,
 }) => {
   return (
     <>
       {/* Left Side Controls */}
       <div className="control-buttons-left">
-        <button className="toggle-effects-btn" onClick={onToggleEffects}>
-          {effectsReduced ? 'RESTORE EFFECTS' : 'REDUCE EFFECTS'}
+        <button className="blog-btn" onClick={onBlogClick}>
+          BLOG
         </button>
 
         <button className="photo-gallery-btn" onClick={onPhotoGalleryClick}>

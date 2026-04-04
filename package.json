@@ -24,8 +24,9 @@
   },
   "scripts": {
     "generate-images": "node scripts/generateImageList.js",
-    "prestart": "npm run generate-images",
-    "prebuild": "npm run compress-images && npm run generate-images",
+    "generate-blog": "node scripts/generateBlogList.js",
+    "prestart": "npm run generate-images && npm run generate-blog",
+    "prebuild": "npm run compress-images && npm run generate-images && npm run generate-blog",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
