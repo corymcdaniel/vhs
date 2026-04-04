@@ -29,6 +29,8 @@ const VHSTopNavBar: React.FC<VHSTopNavBarProps> = ({
         className={`fx-button${effectsReduced ? ' fx-button--reduced' : ''}`}
         onClick={onToggleEffects}
         title={effectsReduced ? 'Restore Effects' : 'Reduce Effects'}
+        aria-pressed={effectsReduced}
+        aria-label={effectsReduced ? 'Effects reduced. Activate to restore effects' : 'Effects enabled. Activate to reduce effects'}
       >
         {effectsReduced ? '✓FX' : 'FX'}
       </button>
