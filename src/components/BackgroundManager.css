@@ -55,24 +55,24 @@
 /* Channel 6.5 cigarette burns — rendered as divs for randomized positions */
 .cigarette-burn {
   position: fixed;
-  border-radius: 50% 44% 56% 47% / 53% 49% 51% 46%;
+  clip-path: ellipse(49% 51% at 50% 50%);
   background: radial-gradient(circle, #000 52%, #fff 60%, rgba(255, 255, 255, 0.25) 67%, transparent 73%);
   box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.2);
   pointer-events: none;
   opacity: 0;
-  will-change: opacity, border-radius;
+  will-change: opacity, clip-path;
   animation: cigaretteBurn 17s steps(1) infinite, burnWiggle 0.25s ease-in-out infinite alternate;
   z-index: 2;
   transform: translate(-50%, -50%);
 }
 
 @keyframes burnWiggle {
-  0%   { border-radius: 50% 44% 56% 47% / 53% 49% 51% 46%; }
-  20%  { border-radius: 47% 57% 43% 53% / 46% 54% 47% 53%; }
-  40%  { border-radius: 55% 43% 58% 44% / 51% 46% 55% 48%; }
-  60%  { border-radius: 43% 55% 47% 56% / 57% 43% 52% 47%; }
-  80%  { border-radius: 58% 46% 44% 52% / 44% 56% 46% 54%; }
-  100% { border-radius: 46% 52% 54% 48% / 50% 44% 56% 50%; }
+  0%   { clip-path: ellipse(49% 51% at 50% 50%); }
+  20%  { clip-path: ellipse(52% 47% at 48% 52%); }
+  40%  { clip-path: ellipse(46% 53% at 52% 48%); }
+  60%  { clip-path: ellipse(54% 46% at 48% 51%); }
+  80%  { clip-path: ellipse(47% 54% at 51% 49%); }
+  100% { clip-path: ellipse(51% 49% at 50% 50%); }
 }
 
 @keyframes cigaretteBurn {
