@@ -5,6 +5,16 @@ import { marked } from 'marked';
 import { blogPosts } from '../data/blogPosts';
 import './BlogModal.css';
 
+// Open all links in new tab so react-router doesn't intercept external URLs
+marked.use({
+  renderer: {
+    link({ href, title, text }: { href: string; title?: string | null; text: string }) {
+      const titleAttr = title ? ` title="${title}"` : '';
+      return `<a href="${href}" target="_blank" rel="noopener noreferrer"${titleAttr}>${text}</a>`;
+    }
+  }
+});
+
 interface BlogPost {
   filename: string;
   slug: string;
@@ -27,6 +37,8 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
   });
   const [postContent, setPostContent] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [blurEnabled, setBlurEnabled] = useState(false);
+  const [readerMode, setReaderMode] = useState(false);
 
   // Load post content when selectedPost changes
   useEffect(() => {
@@ -60,7 +72,9 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        if (selectedPost) {
+        if (readerMode) {
+          setReaderMode(false);
+        } else if (selectedPost) {
           handleBack();
         } else {
           handleClose();
@@ -70,7 +84,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPost]);
+  }, [selectedPost, readerMode]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -80,12 +94,14 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
 
   const handleSelectPost = (post: BlogPost) => {
     setSelectedPost(post);
+    setReaderMode(false);
     navigate(`/blog/${post.slug}`);
   };
 
   const handleBack = () => {
     setSelectedPost(null);
     setPostContent('');
+    setReaderMode(false);
     navigate('/blog');
   };
 
@@ -100,6 +116,11 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
 
   const metaDescription = selectedPost?.description || 'Blog posts about AI experiments and development projects.';
 
+  const contentClass = [
+    'blog-post-content',
+    blurEnabled && !readerMode ? 'blog-post-content--glow' : '',
+  ].filter(Boolean).join(' ');
+
   return (
     <>
       <Helmet>
@@ -110,33 +131,58 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
         <meta property="og:type" content="article" />
       </Helmet>
 
-      <div className="blog-modal-backdrop" onClick={handleBackdropClick}>
-        <div className="blog-modal-content">
-          <div className="blog-modal-static"></div>
-          <div className="blog-modal-scanlines"></div>
+      <div className={`blog-modal-backdrop${readerMode ? ' blog-modal-backdrop--reader' : ''}`} onClick={handleBackdropClick}>
+        <div className={`blog-modal-content${readerMode ? ' blog-modal-content--reader' : ''}`}>
 
-          <button className="blog-modal-close" onClick={handleClose}>×</button>
+          {!readerMode && <div className="blog-modal-static"></div>}
+          {!readerMode && <div className="blog-modal-scanlines"></div>}
 
-          <div className="blog-modal-header">
+          <button
+            className={`blog-modal-close${readerMode ? ' blog-modal-close--reader' : ''}`}
+            onClick={handleClose}
+          >×</button>
+
+          <div className={`blog-modal-header${readerMode ? ' blog-modal-header--reader' : ''}`}>
             {selectedPost ? (
               <div className="blog-modal-header-row">
-                <button className="blog-back-btn" onClick={handleBack}>
+                <button
+                  className={`blog-back-btn${readerMode ? ' blog-back-btn--reader' : ''}`}
+                  onClick={handleBack}
+                >
                   ◀ BACK
                 </button>
-                <h1 className="blog-modal-title">{selectedPost.title}</h1>
+                {!readerMode && (
+                  <h1 className="blog-modal-title">{selectedPost.title}</h1>
+                )}
+                <button
+                  className={`blog-reader-btn${readerMode ? ' blog-reader-btn--active' : ''}`}
+                  onClick={() => setReaderMode(v => !v)}
+                  title={readerMode ? 'Switch to VHS view' : 'Switch to reader view'}
+                >
+                  {readerMode ? '◉ READ' : '◎ READ'}
+                </button>
+                {!readerMode && (
+                  <button
+                    className={`blog-blur-btn${blurEnabled ? ' blog-blur-btn--active' : ''}`}
+                    onClick={() => setBlurEnabled(v => !v)}
+                    title={blurEnabled ? 'Disable CRT glow' : 'Enable CRT glow'}
+                  >
+                    {blurEnabled ? '◉ GLOW' : '◎ GLOW'}
+                  </button>
+                )}
               </div>
             ) : (
               <h1 className="blog-modal-title">◼ BLOG</h1>
             )}
           </div>
 
-          <div className="blog-modal-body">
+          <div className={`blog-modal-body${readerMode ? ' blog-modal-body--reader' : ''}`}>
             {selectedPost ? (
               isLoading ? (
                 <div className="blog-loading">LOADING...</div>
               ) : (
                 <div
-                  className="blog-post-content"
+                  className={readerMode ? 'blog-post-content--reader' : contentClass}
                   dangerouslySetInnerHTML={{ __html: postContent }}
                 />
               )
