@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { marked } from 'marked';
 import { blogPosts } from '../data/blogPosts';
 import './BlogModal.css';
@@ -7,110 +9,159 @@ interface BlogPost {
   filename: string;
   slug: string;
   title: string;
+  description?: string;
 }
 
 interface BlogModalProps {
   onClose: () => void;
+  initialSlug?: string | null;
 }
 
-const BlogModal: React.FC<BlogModalProps> = ({ onClose }) => {
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
+  const navigate = useNavigate();
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(() => {
+    if (initialSlug) {
+      return blogPosts.find((p) => p.slug === initialSlug) || null;
+    }
+    return null;
+  });
   const [postContent, setPostContent] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Load post content when selectedPost changes
+  useEffect(() => {
+    if (!selectedPost) {
+      setPostContent('');
+      return;
+    }
+    setIsLoading(true);
+    fetch(`/blog/${selectedPost.filename}`)
+      .then((res) => res.text())
+      .then((markdown) => {
+        setPostContent(marked.parse(markdown) as string);
+      })
+      .catch(() => {
+        setPostContent('<p>Failed to load post.</p>');
+      })
+      .finally(() => setIsLoading(false));
+  }, [selectedPost]);
+
+  // Load initial post by slug if provided
+  useEffect(() => {
+    if (initialSlug) {
+      navigate(`/blog/${initialSlug}`, { replace: true });
+    } else {
+      navigate('/blog', { replace: true });
+    }
+  // Only run on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (selectedPost) {
-          setSelectedPost(null);
-          setPostContent('');
+          handleBack();
         } else {
-          onClose();
+          handleClose();
         }
       }
     };
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [onClose, selectedPost]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPost]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      handleClose();
     }
   };
 
-  const loadPost = async (post: BlogPost) => {
-    setIsLoading(true);
+  const handleSelectPost = (post: BlogPost) => {
     setSelectedPost(post);
-    try {
-      const response = await fetch(`/blog/${post.filename}`);
-      const markdown = await response.text();
-      const html = marked.parse(markdown) as string;
-      setPostContent(html);
-    } catch {
-      setPostContent('<p>Failed to load post.</p>');
-    } finally {
-      setIsLoading(false);
-    }
+    navigate(`/blog/${post.slug}`);
   };
 
   const handleBack = () => {
     setSelectedPost(null);
     setPostContent('');
+    navigate('/blog');
   };
 
+  const handleClose = () => {
+    navigate('/');
+    onClose();
+  };
+
+  const pageTitle = selectedPost
+    ? `${selectedPost.title} — corymcdaniel.com`
+    : 'Blog — corymcdaniel.com';
+
+  const metaDescription = selectedPost?.description || 'Blog posts about AI experiments and development projects.';
+
   return (
-    <div className="blog-modal-backdrop" onClick={handleBackdropClick}>
-      <div className="blog-modal-content">
-        <div className="blog-modal-static"></div>
-        <div className="blog-modal-scanlines"></div>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={selectedPost?.title || 'Blog'} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:type" content="article" />
+      </Helmet>
 
-        <button className="blog-modal-close" onClick={onClose}>×</button>
+      <div className="blog-modal-backdrop" onClick={handleBackdropClick}>
+        <div className="blog-modal-content">
+          <div className="blog-modal-static"></div>
+          <div className="blog-modal-scanlines"></div>
 
-        <div className="blog-modal-header">
-          {selectedPost ? (
-            <div className="blog-modal-header-row">
-              <button className="blog-back-btn" onClick={handleBack}>
-                ◀ BACK
-              </button>
-              <h1 className="blog-modal-title">{selectedPost.title}</h1>
-            </div>
-          ) : (
-            <h1 className="blog-modal-title">◼ BLOG</h1>
-          )}
-        </div>
+          <button className="blog-modal-close" onClick={handleClose}>×</button>
 
-        <div className="blog-modal-body">
-          {selectedPost ? (
-            isLoading ? (
-              <div className="blog-loading">LOADING...</div>
+          <div className="blog-modal-header">
+            {selectedPost ? (
+              <div className="blog-modal-header-row">
+                <button className="blog-back-btn" onClick={handleBack}>
+                  ◀ BACK
+                </button>
+                <h1 className="blog-modal-title">{selectedPost.title}</h1>
+              </div>
             ) : (
-              <div
-                className="blog-post-content"
-                dangerouslySetInnerHTML={{ __html: postContent }}
-              />
-            )
-          ) : (
-            <ul className="blog-post-list">
-              {blogPosts.map((post, index) => (
-                <li key={post.slug} className="blog-post-item">
-                  <button
-                    className="blog-post-row"
-                    onClick={() => loadPost(post)}
-                  >
-                    <span className="blog-post-index">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    <span className="blog-post-title">{post.title}</span>
-                    <span className="blog-post-arrow">▶</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+              <h1 className="blog-modal-title">◼ BLOG</h1>
+            )}
+          </div>
+
+          <div className="blog-modal-body">
+            {selectedPost ? (
+              isLoading ? (
+                <div className="blog-loading">LOADING...</div>
+              ) : (
+                <div
+                  className="blog-post-content"
+                  dangerouslySetInnerHTML={{ __html: postContent }}
+                />
+              )
+            ) : (
+              <ul className="blog-post-list">
+                {blogPosts.map((post, index) => (
+                  <li key={post.slug} className="blog-post-item">
+                    <button
+                      className="blog-post-row"
+                      onClick={() => handleSelectPost(post)}
+                    >
+                      <span className="blog-post-index">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="blog-post-title">{post.title}</span>
+                      <span className="blog-post-arrow">▶</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

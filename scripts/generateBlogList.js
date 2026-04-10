@@ -31,6 +31,28 @@ function extractTitle(filePath) {
   }
 }
 
+function extractDescription(filePath) {
+  try {
+    const content = fs.readFileSync(filePath, 'utf8');
+    // Find first non-empty, non-heading, non-html line
+    const lines = content.split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      if (trimmed.startsWith('#')) continue;
+      if (trimmed.startsWith('<')) continue;
+      // Strip markdown formatting (*italic*, **bold**, etc.)
+      const plain = trimmed.replace(/[*_`~]/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+      if (plain.length > 20) {
+        return plain.length > 160 ? plain.slice(0, 157) + '...' : plain;
+      }
+    }
+    return '';
+  } catch {
+    return '';
+  }
+}
+
 try {
   if (!fs.existsSync(blogSrcDir)) {
     console.log('No src/blog directory found, skipping blog generation.');
@@ -50,8 +72,9 @@ try {
     const srcPath = path.join(blogSrcDir, filename);
     const timestamp = getFirstCommitTimestamp(srcPath);
     const title = extractTitle(srcPath);
+    const description = extractDescription(srcPath);
     const slug = path.basename(filename, '.md');
-    return { filename, slug, title, timestamp };
+    return { filename, slug, title, description, timestamp };
   });
 
   // Sort ascending by first commit time
@@ -68,7 +91,7 @@ try {
   const dataDir = path.dirname(outputFile);
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
-  const postsJson = posts.map(({ filename, slug, title }) => ({ filename, slug, title }));
+  const postsJson = posts.map(({ filename, slug, title, description }) => ({ filename, slug, title, description }));
   const output = `// Auto-generated blog post list
 // Generated on: ${new Date().toISOString()}
 // Source: src/blog/*.md — ordered by first git commit (ascending)
