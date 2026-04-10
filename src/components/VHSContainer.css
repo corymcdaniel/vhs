@@ -55,6 +55,7 @@
     blur(0.3px);
   pointer-events: none;
   z-index: 1;
+  will-change: transform;
   animation: backgroundScan var(--vhs-background-scan-duration) linear infinite;
   mix-blend-mode: multiply;
 }
@@ -83,6 +84,7 @@
     saturate(0.05);
   pointer-events: none;
   z-index: 2;
+  will-change: transform, opacity;
   animation: backgroundDistortion 4s ease-in-out infinite alternate;
   mix-blend-mode: screen;
 }

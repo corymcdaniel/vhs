@@ -51,6 +51,7 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
   const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
   const activeTimers = useRef(new Set<NodeJS.Timeout>());
   const currentChannelRef = useRef<Channel>(currentChannel);
+  const pendingPortraitCheckRef = useRef<HTMLImageElement | null>(null);
 
   const getGradient = useCallback(() => {
     const cls = getChannelBgClass(currentChannelRef.current);
@@ -63,8 +64,18 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
     containerRef.current.style.backgroundImage = `${gradient}, url('${imageSrc}')`;
     // Default to cover; switch to contain for portrait images to avoid extreme zoom
     containerRef.current.style.backgroundSize = 'cover';
+
+    // Cancel any in-flight portrait check before starting a new one
+    if (pendingPortraitCheckRef.current) {
+      pendingPortraitCheckRef.current.onload = null;
+      pendingPortraitCheckRef.current = null;
+    }
+
     const img = new Image();
+    pendingPortraitCheckRef.current = img;
     img.onload = () => {
+      if (pendingPortraitCheckRef.current !== img) return; // superseded
+      pendingPortraitCheckRef.current = null;
       if (!containerRef.current) return;
       if (img.naturalHeight > img.naturalWidth) {
         containerRef.current.style.backgroundSize = 'contain';
@@ -178,6 +189,10 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
       if (currentCycleTimer) clearInterval(currentCycleTimer);
       currentActiveTimers.forEach(timer => clearTimeout(timer));
       currentActiveTimers.clear();
+      if (pendingPortraitCheckRef.current) {
+        pendingPortraitCheckRef.current.onload = null;
+        pendingPortraitCheckRef.current = null;
+      }
     };
   }, []);
 

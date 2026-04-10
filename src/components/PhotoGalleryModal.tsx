@@ -159,7 +159,7 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
                 className="photo-gallery-item"
                 onClick={() => handleImageClick(image, index)}
               >
-                <img src={image} alt={`Gallery item ${index + 1}`} />
+                <img src={image} alt={`Gallery item ${index + 1}`} loading="lazy" decoding="async" />
                 <div className="photo-overlay">
                   <span className="photo-number">#{index + 1}</span>
                 </div>
