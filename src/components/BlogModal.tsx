@@ -5,6 +5,9 @@ import { marked } from 'marked';
 import { blogPosts } from '../data/blogPosts';
 import './BlogModal.css';
 
+// Module-level cache so navigating back to a post doesn't re-fetch
+const postContentCache = new Map<string, string>();
+
 // Open all links in new tab so react-router doesn't intercept external URLs
 marked.use({
   renderer: {
@@ -46,11 +49,20 @@ const BlogModal: React.FC<BlogModalProps> = ({ onClose, initialSlug }) => {
       setPostContent('');
       return;
     }
+
+    const cached = postContentCache.get(selectedPost.filename);
+    if (cached) {
+      setPostContent(cached);
+      return;
+    }
+
     setIsLoading(true);
     fetch(`/blog/${selectedPost.filename}`)
       .then((res) => res.text())
       .then((markdown) => {
-        setPostContent(marked.parse(markdown) as string);
+        const html = marked.parse(markdown) as string;
+        postContentCache.set(selectedPost.filename, html);
+        setPostContent(html);
       })
       .catch(() => {
         setPostContent('<p>Failed to load post.</p>');

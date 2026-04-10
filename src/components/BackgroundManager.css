@@ -36,6 +36,7 @@
   opacity: 0.48;
   mix-blend-mode: overlay;
   pointer-events: none;
+  will-change: transform;
   animation: grainShift 0.08s steps(1) infinite;
 }
 
@@ -59,6 +60,7 @@
   box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.2);
   pointer-events: none;
   opacity: 0;
+  will-change: opacity, border-radius;
   animation: cigaretteBurn 17s steps(1) infinite, burnWiggle 0.25s ease-in-out infinite alternate;
   z-index: 2;
   transform: translate(-50%, -50%);

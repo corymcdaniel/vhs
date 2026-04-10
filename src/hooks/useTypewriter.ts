@@ -41,7 +41,7 @@ export const useTypewriter = ({
 
   // Phonetic/kanji flash effect - flash contextual Japanese syllables/words in completed lines
   useEffect(() => {
-    if (!hasStarted) return;
+    if (!hasStarted || isComplete) return;
 
     const activeTimeouts = new Set<NodeJS.Timeout>();
 
@@ -83,7 +83,7 @@ export const useTypewriter = ({
       activeTimeouts.forEach(timeout => clearTimeout(timeout));
       activeTimeouts.clear();
     };
-  }, [hasStarted, currentLineIndex, displayTexts]);
+  }, [hasStarted, isComplete, currentLineIndex, displayTexts]);
 
 
   useEffect(() => {

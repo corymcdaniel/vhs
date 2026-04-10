@@ -94,6 +94,7 @@
   left: 0;
   width: 100%;
   height: 100%;
+  will-change: transform, opacity;
   background:
     repeating-linear-gradient(
       13deg,
@@ -124,6 +125,7 @@
   left: 0;
   width: 100%;
   height: 100%;
+  will-change: opacity;
   background:
     repeating-linear-gradient(
       0deg,
@@ -169,6 +171,7 @@
     rgba(0, 255, 0, 0.03) 4px
   );
   pointer-events: none;
+  will-change: transform;
   animation: scanlineMove var(--vhs-scanline-move-duration) linear infinite;
   z-index: 5;
 }
@@ -186,6 +189,7 @@
     rgba(255, 255, 255, 0.02) 100px,
     rgba(255, 255, 255, 0.02) 101px
   );
+  will-change: transform;
   animation: trackingMove 25s linear infinite;
   pointer-events: none;
   z-index: 6;
@@ -751,6 +755,7 @@
   left: 0;
   width: 100%;
   height: 100%;
+  will-change: opacity, transform;
   background:
     url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="dramatic-noise"><feTurbulence baseFrequency="0.98" numOctaves="8" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23dramatic-noise)" opacity="0.95"/></svg>'),
     linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(0,255,255,0.2) 25%, rgba(255,0,255,0.2) 50%, rgba(255,255,0,0.1) 75%, rgba(255,255,255,0.1) 100%);

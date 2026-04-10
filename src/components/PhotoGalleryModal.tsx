@@ -10,13 +10,28 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [isGlitching, setIsGlitching] = useState(false);
+  const glitchTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Clear glitch timer on unmount
+  useEffect(() => {
+    return () => {
+      if (glitchTimerRef.current) clearTimeout(glitchTimerRef.current);
+    };
+  }, []);
+
+  const triggerGlitch = useCallback(() => {
+    if (glitchTimerRef.current) clearTimeout(glitchTimerRef.current);
+    setIsGlitching(true);
+    glitchTimerRef.current = setTimeout(() => {
+      setIsGlitching(false);
+      glitchTimerRef.current = null;
+    }, 300);
+  }, []);
 
   const handleNext = useCallback(() => {
     setSelectedIndex(prevIndex => {
       if (prevIndex < backgroundImages.length - 1) {
-        // Trigger glitch effect
-        setIsGlitching(true);
-        setTimeout(() => setIsGlitching(false), 300);
+        triggerGlitch();
 
         const newIndex = prevIndex + 1;
         setSelectedImage(backgroundImages[newIndex]);
@@ -24,22 +39,19 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
       }
       return prevIndex;
     });
-  }, []);
+  }, [triggerGlitch]);
 
   const handlePrevious = useCallback(() => {
     setSelectedIndex(prevIndex => {
       if (prevIndex > 0) {
-        // Trigger glitch effect
-        setIsGlitching(true);
-        setTimeout(() => setIsGlitching(false), 300);
-
+        triggerGlitch();
         const newIndex = prevIndex - 1;
         setSelectedImage(backgroundImages[newIndex]);
         return newIndex;
       }
       return prevIndex;
     });
-  }, []);
+  }, [triggerGlitch]);
 
   useEffect(() => {
     const handleKeyboard = (e: KeyboardEvent) => {

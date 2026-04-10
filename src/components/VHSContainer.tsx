@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import './VHSContainer.css';
 import { useTypewriter } from '../hooks/useTypewriter';
 import ContactModal from './ContactModal';
@@ -159,11 +159,15 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   });
 
   // Track which navigation sections should be visible based on content
-  const completedText = displayTexts.slice(0, currentLineIndex + 1).join(' ').toLowerCase();
-  const showWorkNav = completedText.includes('developing websites') || completedText.includes('websites');
-  const showPhotoNav = completedText.includes('photography') || completedText.includes('photographer');
-  const showCatsNav = completedText.includes('cats') && (completedText.includes('charlie') || completedText.includes('papago'));
-  const showLocationNav = completedText.includes('phoenix') || completedText.includes('desert');
+  const { showWorkNav, showPhotoNav, showCatsNav, showLocationNav } = useMemo(() => {
+    const completedText = displayTexts.slice(0, currentLineIndex + 1).join(' ').toLowerCase();
+    return {
+      showWorkNav: completedText.includes('developing websites') || completedText.includes('websites'),
+      showPhotoNav: completedText.includes('photography') || completedText.includes('photographer'),
+      showCatsNav: completedText.includes('cats') && (completedText.includes('charlie') || completedText.includes('papago')),
+      showLocationNav: completedText.includes('phoenix') || completedText.includes('desert'),
+    };
+  }, [displayTexts, currentLineIndex]);
   const showContactButton = isComplete; // After all text is complete
 
   // Handle images loaded callback from BackgroundManager

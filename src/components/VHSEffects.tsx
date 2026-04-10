@@ -8,7 +8,7 @@ interface VHSEffectsProps {
   isAutoEjecting?: boolean;
 }
 
-const VHSEffects: React.FC<VHSEffectsProps> = ({ effectsReduced, isPaused, isPreChaos = false, isAutoEjecting = false }) => {
+const VHSEffects: React.FC<VHSEffectsProps> = React.memo(({ effectsReduced, isPaused, isPreChaos = false, isAutoEjecting = false }) => {
   if (effectsReduced) {
     return null; // No effects when reduced
   }
@@ -31,5 +31,7 @@ const VHSEffects: React.FC<VHSEffectsProps> = ({ effectsReduced, isPaused, isPre
     </>
   );
 };
+
+});
 
 export default VHSEffects;

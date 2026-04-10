@@ -22,7 +22,8 @@
       "Bash(cat \"/c/Code/Generative/September/src/hooks/useTypewriter.ts\")",
       "Bash(cat \"/c/Code/Generative/September/src/components/OsakaEffects.tsx\")",
       "Bash(node scripts/generateImageList.js)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(grep -r \"animation\\\\|transform\\\\|left\\\\|right\\\\|top\\\\|bottom\" /c/Code/Generative/September/src/components/*.css)"
     ],
     "deny": [],
     "ask": []
