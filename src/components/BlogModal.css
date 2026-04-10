@@ -367,6 +367,252 @@
   background: #88ff88;
 }
 
+/* ─── Reader Mode ─────────────────────────────────────────── */
+
+.blog-modal-backdrop--reader {
+  background-color: rgba(30, 20, 10, 0.85);
+}
+
+.blog-modal-content--reader {
+  background: #f4f0e8;
+  border: 1px solid #c8b99a;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.35);
+  width: 760px;
+  max-width: 92vw;
+}
+
+.blog-modal-header--reader {
+  background: #ede8de;
+  border-bottom: 1px solid #c8b99a;
+  padding: 14px 60px 14px 20px;
+}
+
+.blog-modal-body--reader {
+  background: #f4f0e8;
+}
+
+.blog-modal-body--reader::-webkit-scrollbar-track {
+  background: #e8e2d8;
+  border: 1px solid #c8b99a;
+}
+
+.blog-modal-body--reader::-webkit-scrollbar-thumb {
+  background: #a89070;
+}
+
+.blog-modal-body--reader::-webkit-scrollbar-thumb:hover {
+  background: #7a6450;
+}
+
+.blog-modal-close--reader {
+  border-color: #a89070;
+  color: #5a4030;
+}
+
+.blog-modal-close--reader:hover {
+  background: rgba(90, 64, 48, 0.1);
+  box-shadow: none;
+}
+
+.blog-back-btn--reader {
+  border-color: #a89070;
+  color: #5a4030;
+}
+
+.blog-back-btn--reader:hover {
+  background: rgba(90, 64, 48, 0.08);
+  box-shadow: none;
+}
+
+/* Reader toggle button — matches .blog-blur-btn */
+.blog-reader-btn {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 0, 0.4);
+  color: rgba(0, 255, 0, 0.5);
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.blog-reader-btn:hover {
+  border-color: #00ff00;
+  color: #00ff00;
+  box-shadow: 0 0 6px rgba(0, 255, 0, 0.3);
+}
+
+.blog-reader-btn--active {
+  border-color: #00ff00;
+  color: #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+  text-shadow: 0 0 6px rgba(0, 255, 0, 0.8);
+}
+
+.blog-reader-btn--active:hover {
+  background: rgba(0, 255, 0, 0.1);
+}
+
+/* Reader mode article content */
+.blog-post-content--reader {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 48px 40px 60px;
+  color: #2c1810;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.blog-post-content--reader h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a0f08;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  border-bottom: none;
+  text-transform: none;
+  text-shadow: none;
+}
+
+.blog-post-content--reader h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a0f08;
+  margin: 40px 0 14px 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  border-left: none;
+  padding-left: 0;
+  text-transform: none;
+  border-bottom: 1px solid #c8b99a;
+  padding-bottom: 6px;
+}
+
+.blog-post-content--reader h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #3a2010;
+  margin: 28px 0 10px 0;
+  text-transform: none;
+  text-shadow: none;
+}
+
+.blog-post-content--reader p {
+  margin: 0 0 20px 0;
+  color: #2c1810;
+  text-shadow: none;
+}
+
+.blog-post-content--reader em {
+  color: #5a3820;
+  font-style: italic;
+}
+
+.blog-post-content--reader strong {
+  color: #1a0f08;
+  font-weight: 600;
+}
+
+.blog-post-content--reader a {
+  color: #7a3010;
+  text-decoration: underline;
+  text-decoration-color: rgba(122, 48, 16, 0.4);
+  transition: color 0.15s;
+}
+
+.blog-post-content--reader a:hover {
+  color: #5a2008;
+  text-decoration-color: rgba(90, 32, 8, 0.7);
+}
+
+.blog-post-content--reader code {
+  background: #e8e0d0;
+  border: 1px solid #c8b99a;
+  color: #3a2010;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 15px;
+  text-shadow: none;
+}
+
+.blog-post-content--reader pre {
+  background: #ede8de;
+  border: 1px solid #c8b99a;
+  padding: 18px 20px;
+  overflow-x: auto;
+  border-radius: 4px;
+  margin: 0 0 24px 0;
+}
+
+.blog-post-content--reader pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  color: #2c1810;
+}
+
+.blog-post-content--reader blockquote {
+  border-left: 3px solid #a89070;
+  background: rgba(168, 144, 112, 0.08);
+  padding: 12px 18px;
+  margin: 0 0 20px 0;
+  color: #5a4030;
+}
+
+.blog-post-content--reader blockquote p {
+  margin: 0;
+  color: inherit;
+}
+
+.blog-post-content--reader hr {
+  border: none;
+  border-top: 1px solid #c8b99a;
+  margin: 32px 0;
+}
+
+.blog-post-content--reader ul,
+.blog-post-content--reader ol {
+  padding-left: 26px;
+  margin: 0 0 20px 0;
+}
+
+.blog-post-content--reader li {
+  margin-bottom: 8px;
+  color: #2c1810;
+}
+
+.blog-post-content--reader table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 24px 0;
+  font-size: 16px;
+}
+
+.blog-post-content--reader th {
+  background: #e0d8c8;
+  color: #1a0f08;
+  font-weight: 600;
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid #c8b99a;
+}
+
+.blog-post-content--reader td {
+  padding: 7px 12px;
+  border: 1px solid #c8b99a;
+  color: #2c1810;
+}
+
+.blog-post-content--reader tr:nth-child(even) td {
+  background: #ede8de;
+}
+
 /* Animations */
 @keyframes blogModalFadeIn {
   from { opacity: 0; transform: scale(0.95); }
