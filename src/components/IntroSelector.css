@@ -1,0 +1,500 @@
+/* ============================================================
+   IntroSelector — Two-Panel Intro Chooser
+   ============================================================ */
+
+.intro-selector {
+  position: fixed;
+  inset: 0;
+  background: #030803;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'VT323', 'Courier New', monospace;
+}
+
+/* ---- Background FX ---- */
+
+.intro-selector-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 3px,
+    rgba(0, 0, 0, 0.32) 3px,
+    rgba(0, 0, 0, 0.32) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.intro-selector-static {
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.015) 2px,
+      rgba(255, 255, 255, 0.015) 4px
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: selectorStatic 0.14s infinite;
+}
+
+@keyframes selectorStatic {
+  0%   { transform: translate(0, 0); opacity: 0.8; }
+  14%  { transform: translate(-2px, 1px); opacity: 0.6; }
+  28%  { transform: translate(1px, -2px); opacity: 0.9; }
+  42%  { transform: translate(-1px, 2px); opacity: 0.7; }
+  57%  { transform: translate(2px, -1px); opacity: 0.8; }
+  71%  { transform: translate(-2px, 2px); opacity: 0.5; }
+  85%  { transform: translate(1px, -1px); opacity: 0.85; }
+}
+
+/* ---- Content ---- */
+
+.intro-selector-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 48px 40px;
+  opacity: 0;
+  animation: selectorContentFadeIn 0.6s ease forwards;
+  animation-delay: 0.35s;
+}
+
+@keyframes selectorContentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-selector-site-name {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 10px;
+  letter-spacing: 0.38em;
+  color: rgba(51, 255, 87, 0.32);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.intro-selector-heading {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 28px;
+  font-weight: normal;
+  letter-spacing: 0.25em;
+  color: #33ff57;
+  margin: 4px 0 0;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 8px rgba(51, 255, 87, 0.65),
+    0 0 22px rgba(51, 255, 87, 0.28);
+}
+
+.intro-selector-subheading {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: rgba(51, 255, 87, 0.28);
+  margin: 0 0 18px;
+  text-transform: uppercase;
+}
+
+/* ---- Panels Container ---- */
+
+.intro-selector-panels {
+  display: flex;
+  align-items: stretch;
+}
+
+/* ---- Individual Panel ---- */
+
+.intro-selector-panel {
+  appearance: none;
+  background: #060e06;
+  border: 1px solid #1b301b;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 44px;
+  width: 210px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.intro-selector-panel:hover {
+  background: #0b160b;
+  border-color: rgba(0, 200, 45, 0.7);
+  box-shadow:
+    0 0 18px rgba(0, 200, 45, 0.16),
+    inset 0 0 18px rgba(0, 200, 45, 0.04);
+}
+
+.intro-selector-panel:active {
+  background: #0f200f;
+  border-color: #00ff41;
+  box-shadow:
+    0 0 28px rgba(0, 255, 65, 0.28),
+    inset 0 0 22px rgba(0, 255, 65, 0.08);
+  transition-duration: 0.05s;
+}
+
+/* Hover: tinted scanline overlay */
+.intro-selector-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 255, 65, 0.01) 3px,
+    rgba(0, 255, 65, 0.01) 4px
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.intro-selector-panel:hover::before {
+  opacity: 1;
+}
+
+/* ---- Divider ---- */
+
+.intro-selector-divider {
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #1b301b 12%,
+    #1b301b 88%,
+    transparent 100%
+  );
+  flex-shrink: 0;
+}
+
+/* ---- Panel Content ---- */
+
+.intro-panel-icon {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-panel-title {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 20px;
+  letter-spacing: 0.2em;
+  color: #33ff57;
+  margin: 0;
+  text-shadow: 0 0 6px rgba(51, 255, 87, 0.38);
+  text-transform: uppercase;
+  transition: text-shadow 0.22s ease;
+}
+
+.intro-selector-panel:hover .intro-panel-title {
+  text-shadow:
+    0 0 8px rgba(51, 255, 87, 0.7),
+    0 0 18px rgba(51, 255, 87, 0.28);
+}
+
+.intro-panel-desc {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: rgba(51, 255, 87, 0.35);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.intro-panel-cta {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: rgba(51, 255, 87, 0.52);
+  text-transform: uppercase;
+  border: 1px solid rgba(51, 255, 87, 0.18);
+  padding: 6px 14px;
+  margin-top: 4px;
+  display: inline-block;
+  transition:
+    color 0.22s ease,
+    border-color 0.22s ease,
+    text-shadow 0.22s ease;
+}
+
+.intro-selector-panel:hover .intro-panel-cta {
+  color: #00ff41;
+  border-color: rgba(0, 255, 65, 0.42);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.45);
+}
+
+/* ---- Footer ---- */
+
+.intro-selector-footer {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: rgba(51, 255, 87, 0.18);
+  margin: 12px 0 0;
+  text-transform: uppercase;
+  animation: selectorFooterBlink 2.8s step-end infinite;
+}
+
+@keyframes selectorFooterBlink {
+  0%, 100% { opacity: 0.65; }
+  50%       { opacity: 0.2; }
+}
+
+/* ============================================================
+   CSS VHS Cassette Icon
+   ============================================================ */
+
+.selector-cassette {
+  position: relative;
+  width: 82px;
+  height: 54px;
+  background: #111820;
+  border: 1.5px solid #33ff57;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 5px rgba(51, 255, 87, 0.12);
+  overflow: visible;
+  transition: box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.intro-selector-panel:hover .selector-cassette {
+  border-color: #55ff77;
+  box-shadow: 0 0 12px rgba(51, 255, 87, 0.28);
+}
+
+.selector-cassette-label {
+  width: 100%;
+  height: 18px;
+  background: #c5bc9a;
+  border-bottom: 1px solid rgba(51, 255, 87, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1px 1px 0 0;
+  flex-shrink: 0;
+}
+
+.selector-cassette-label span {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 8px;
+  font-weight: bold;
+  color: #28201e;
+  letter-spacing: 0.2em;
+}
+
+.selector-cassette-window {
+  position: relative;
+  width: 58px;
+  height: 20px;
+  background: #07090a;
+  border: 1px solid rgba(51, 255, 87, 0.22);
+  margin-top: 3px;
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 7px;
+}
+
+.selector-cassette-reel {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(51, 255, 87, 0.6);
+  background: #07090a;
+  position: relative;
+}
+
+.selector-cassette-reel::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: rgba(51, 255, 87, 0.08);
+}
+
+.selector-cassette-ribbon {
+  position: absolute;
+  bottom: 1px;
+  left: 13px;
+  right: 13px;
+  height: 2px;
+  background: rgba(51, 255, 87, 0.22);
+}
+
+.selector-cassette-base {
+  position: absolute;
+  bottom: -7px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.selector-cassette-bump {
+  width: 16px;
+  height: 7px;
+  background: #111820;
+  border: 1.5px solid #33ff57;
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  transition: border-color 0.22s ease;
+}
+
+.intro-selector-panel:hover .selector-cassette-bump {
+  border-color: #55ff77;
+}
+
+/* ============================================================
+   CSS Tube TV Icon
+   ============================================================ */
+
+.selector-tv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selector-tv-antennas {
+  position: relative;
+  width: 56px;
+  height: 26px;
+  margin-bottom: -2px;
+}
+
+.selector-tv-antenna {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: 26px;
+  background: rgba(51, 255, 87, 0.72);
+  border-radius: 1px;
+  transition: background 0.22s ease;
+}
+
+.intro-selector-panel:hover .selector-tv-antenna {
+  background: rgba(51, 255, 87, 0.95);
+}
+
+.selector-tv-antenna--left {
+  left: 18px;
+  transform-origin: bottom center;
+  transform: rotate(-26deg);
+}
+
+.selector-tv-antenna--right {
+  right: 18px;
+  transform-origin: bottom center;
+  transform: rotate(26deg);
+}
+
+.selector-tv-body {
+  width: 72px;
+  height: 50px;
+  background: #111820;
+  border: 1.5px solid #33ff57;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 7px;
+  box-shadow: 0 0 5px rgba(51, 255, 87, 0.12);
+  transition: box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.intro-selector-panel:hover .selector-tv-body {
+  border-color: #55ff77;
+  box-shadow: 0 0 12px rgba(51, 255, 87, 0.28);
+}
+
+.selector-tv-screen {
+  width: 44px;
+  height: 34px;
+  background: #040c04;
+  border: 1px solid rgba(51, 255, 87, 0.28);
+  border-radius: 1px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Animated scanline sweeping down the mini screen */
+.selector-tv-scanline {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(51, 255, 87, 0.55);
+  box-shadow: 0 0 4px rgba(51, 255, 87, 0.4);
+  animation: tvMiniScanline 1.8s linear infinite;
+}
+
+@keyframes tvMiniScanline {
+  from { top: -2px; }
+  to   { top: 100%; }
+}
+
+.selector-tv-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: center;
+}
+
+.selector-tv-knob {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1a2a1a;
+  border: 1px solid rgba(51, 255, 87, 0.42);
+  transition: border-color 0.22s ease;
+}
+
+.intro-selector-panel:hover .selector-tv-knob {
+  border-color: rgba(51, 255, 87, 0.7);
+}
+
+.selector-tv-stand {
+  width: 24px;
+  height: 5px;
+  background: #111820;
+  border: 1.5px solid rgba(51, 255, 87, 0.58);
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  transition: border-color 0.22s ease;
+}
+
+.intro-selector-panel:hover .selector-tv-stand {
+  border-color: rgba(51, 255, 87, 0.85);
+}

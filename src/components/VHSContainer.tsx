@@ -58,6 +58,7 @@ interface VHSContainerProps {
   onPrevChannel: () => void;
   initialBlogOpen?: boolean;
   initialBlogSlug?: string | null;
+  skipTypewriter?: boolean;
 }
 
 function getChannelClass(channel: number): string {
@@ -76,6 +77,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   onPrevChannel,
   initialBlogOpen = false,
   initialBlogSlug = null,
+  skipTypewriter = false,
 }) => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
@@ -155,7 +157,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     texts: textLines,
     speed: 60,
     delay: 800,
-    startDelay: 500
+    startDelay: 500,
+    instant: skipTypewriter,
   });
 
   // Track which navigation sections should be visible based on content

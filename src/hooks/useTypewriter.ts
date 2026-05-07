@@ -7,6 +7,7 @@ interface UseTypewriterProps {
   speed?: number;
   delay?: number;
   startDelay?: number;
+  instant?: boolean;
 }
 
 interface UseTypewriterReturn {
@@ -20,27 +21,31 @@ export const useTypewriter = ({
   texts,
   speed = 80,
   delay = 500,
-  startDelay = 1000
+  startDelay = 1000,
+  instant = false,
 }: UseTypewriterProps): UseTypewriterReturn => {
-  const [displayTexts, setDisplayTexts] = useState<string[]>(() => texts.map(() => ''));
-  const [currentLineIndex, setCurrentLineIndex] = useState(-1);
+  const [displayTexts, setDisplayTexts] = useState<string[]>(() =>
+    instant ? [...texts] : texts.map(() => '')
+  );
+  const [currentLineIndex, setCurrentLineIndex] = useState(instant ? texts.length - 1 : -1);
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
+  const [isComplete, setIsComplete] = useState(instant);
+  const [hasStarted, setHasStarted] = useState(instant);
   const [wordFlashCharacters, setWordFlashCharacters] = useState<{[key: string]: string}>({});
 
   useEffect(() => {
-    // Start delay
+    if (instant) return;
     const startTimer = setTimeout(() => {
       setHasStarted(true);
       setCurrentLineIndex(0);
     }, startDelay);
 
     return () => clearTimeout(startTimer);
-  }, [startDelay]);
+  }, [startDelay, instant]);
 
   // Phonetic/kanji flash effect - flash contextual Japanese syllables/words in completed lines
   useEffect(() => {
+    if (instant) return;
     if (!hasStarted || isComplete) return;
 
     const activeTimeouts = new Set<NodeJS.Timeout>();
@@ -83,10 +88,11 @@ export const useTypewriter = ({
       activeTimeouts.forEach(timeout => clearTimeout(timeout));
       activeTimeouts.clear();
     };
-  }, [hasStarted, isComplete, currentLineIndex, displayTexts]);
+  }, [hasStarted, isComplete, currentLineIndex, displayTexts, instant]);
 
 
   useEffect(() => {
+    if (instant) return;
     if (!hasStarted || currentLineIndex === -1 || currentLineIndex >= texts.length) {
       return;
     }
@@ -153,7 +159,7 @@ export const useTypewriter = ({
 
       return () => clearTimeout(nextLineTimer);
     }
-  }, [hasStarted, currentLineIndex, currentCharIndex, texts, speed, delay]);
+  }, [hasStarted, currentLineIndex, currentCharIndex, texts, speed, delay, instant]);
 
   return {
     displayTexts,

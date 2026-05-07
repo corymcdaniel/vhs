@@ -1,0 +1,103 @@
+/* ============================================================
+   TubeTVIntro — CRT Phosphor Power-On Effect
+   ============================================================ */
+
+.tube-tv-intro {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 10000;
+  overflow: hidden;
+}
+
+/* The expanding CRT phosphor beam */
+.tube-tv-beam {
+  position: absolute;
+  inset: 0;
+  background: #0a1a0a;
+  transform-origin: center center;
+  animation: crtPowerOn 2.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes crtPowerOn {
+  0% {
+    transform: scaleX(0.001) scaleY(0.001);
+    filter: brightness(9) blur(12px) saturate(0);
+    background: #ffffff;
+  }
+  8% {
+    transform: scaleX(1) scaleY(0.001);
+    filter: brightness(7) blur(6px) saturate(0.15);
+    background: #d0ffd0;
+  }
+  22% {
+    transform: scaleX(1) scaleY(0.003);
+    filter: brightness(5) blur(3px) saturate(0.5);
+    background: #a0ffa0;
+  }
+  52% {
+    transform: scaleX(1) scaleY(0.45);
+    filter: brightness(2.8) blur(1.2px) saturate(0.85);
+    background: #50e050;
+  }
+  78% {
+    transform: scaleX(1) scaleY(1);
+    filter: brightness(1.9) blur(0.4px) saturate(1.1);
+    background: #18b018;
+  }
+  100% {
+    transform: scaleX(1) scaleY(1);
+    filter: brightness(1) blur(0px) saturate(1);
+    background: #020902;
+  }
+}
+
+/* Scanlines overlay — fades in after beam expands */
+.tube-tv-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 3px,
+    rgba(0, 0, 0, 0.28) 3px,
+    rgba(0, 0, 0, 0.28) 4px
+  );
+  pointer-events: none;
+  opacity: 0;
+  animation: tvScanlinesFadeIn 0.4s ease forwards;
+  animation-delay: 1.55s;
+}
+
+@keyframes tvScanlinesFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Subtle chromatic fringe at screen edges */
+.tube-tv-chromatic {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 0% 50%, rgba(255, 20, 0, 0.04) 0%, transparent 35%),
+    radial-gradient(ellipse at 100% 50%, rgba(0, 20, 255, 0.04) 0%, transparent 35%);
+  opacity: 0;
+  animation: tvChromaticFadeIn 0.5s ease forwards;
+  animation-delay: 1.8s;
+}
+
+@keyframes tvChromaticFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Fade out before unmount */
+.tube-tv-intro.fading {
+  animation: tvIntroFadeOut 0.4s ease forwards;
+}
+
+@keyframes tvIntroFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}

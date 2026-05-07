@@ -30,8 +30,6 @@ const VHSEffects: React.FC<VHSEffectsProps> = React.memo(({ effectsReduced, isPa
       {isAutoEjecting && <div className="dramatic-static"></div>}
     </>
   );
-};
-
 });
 
 export default VHSEffects;

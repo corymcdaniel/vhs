@@ -23,7 +23,13 @@
       "Bash(cat \"/c/Code/Generative/September/src/components/OsakaEffects.tsx\")",
       "Bash(node scripts/generateImageList.js)",
       "Bash(npm run:*)",
-      "Bash(grep -r \"animation\\\\|transform\\\\|left\\\\|right\\\\|top\\\\|bottom\" /c/Code/Generative/September/src/components/*.css)"
+      "Bash(grep -r \"animation\\\\|transform\\\\|left\\\\|right\\\\|top\\\\|bottom\" /c/Code/Generative/September/src/components/*.css)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Code\\\\Generative\\\\September\" -Recurse -Depth 2)",
+      "Bash(Select-Object FullName)",
+      "Bash(npx tsc *)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill *)",
+      "PowerShell(Stop-Process *)"
     ],
     "deny": [],
     "ask": []

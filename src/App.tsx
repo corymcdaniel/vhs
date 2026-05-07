@@ -5,8 +5,12 @@ import VHSContainer from './components/VHSContainer';
 import CatModal from './components/CatModal';
 import OsakaModal from './components/OsakaModal';
 import VHSTapeLoadingIntro from './components/VHSTapeLoadingIntro';
+import TubeTVIntro from './components/TubeTVIntro';
+import IntroSelector from './components/IntroSelector';
 import { useOsakaEffects } from './components/OsakaEffects';
 import { useChannel } from './hooks/useChannel';
+
+type IntroVariant = 'vhs' | 'tv';
 
 function App() {
   const location = useLocation();
@@ -19,6 +23,7 @@ function App() {
   const [isAutoEjecting, setIsAutoEjecting] = useState(false);
   const [showOsakaModal, setShowOsakaModal] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
+  const [introVariant, setIntroVariant] = useState<IntroVariant | null>(null);
   const { channel, switchChannel, nextChannel, prevChannel } = useChannel();
 
   // Osaka effects at App level so they persist independently
@@ -48,10 +53,21 @@ function App() {
 
   return (
     <div className="App">
-      {showIntro && <VHSTapeLoadingIntro onIntroComplete={handleIntroComplete} />}
+      {showIntro && introVariant === null && (
+        <IntroSelector onSelect={setIntroVariant} />
+      )}
+
+      {showIntro && introVariant === 'vhs' && (
+        <VHSTapeLoadingIntro onIntroComplete={handleIntroComplete} />
+      )}
+
+      {showIntro && introVariant === 'tv' && (
+        <TubeTVIntro onIntroComplete={handleIntroComplete} />
+      )}
 
       {!showIntro && (
         <VHSContainer
+          skipTypewriter={introVariant === 'tv'}
           effectsReduced={effectsReduced}
           currentChannel={channel}
           onCatClick={handleCatClick}

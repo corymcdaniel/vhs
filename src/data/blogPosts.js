@@ -1,15 +1,9 @@
 // Auto-generated blog post list
-// Generated on: 2026-04-04T06:46:05.338Z
+// Generated on: 2026-05-07T15:51:50.468Z
 // Source: src/blog/*.md — ordered by first git commit (ascending)
 // DO NOT EDIT — run npm run generate-blog to regenerate
 
 export const blogPosts = [
-  {
-    "filename": "0004.md",
-    "slug": "0004",
-    "title": ">> 0004 AI Projects: Using Claude to Master Your D&D Character",
-    "description": "What happens when you hand your character sheet to an AI and ask it to find everything you're missing"
-  },
   {
     "filename": "0002.md",
     "slug": "0002",
@@ -21,5 +15,17 @@ export const blogPosts = [
     "slug": "0003",
     "title": ">> 0003 AI Projects: Mapping Experiment",
     "description": "I've been doing a few experiments with Claude Code agents, this is one of them."
+  },
+  {
+    "filename": "0004.md",
+    "slug": "0004",
+    "title": ">> 0004 AI Projects: Using Claude to Master Your D&D Character",
+    "description": "What happens when you hand your character sheet to an AI and ask it to find everything you're missing"
+  },
+  {
+    "filename": "0005.md",
+    "slug": "0005",
+    "title": ">> 0005 AI Projects: Chip Gather",
+    "description": "Do you also collect casino chips?"
   }
 ];
