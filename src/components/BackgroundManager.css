@@ -17,6 +17,11 @@
   background-size: contain;
   background-color: #04160b;
   background-position: center center;
+  /* Size `contain` against this element's box (the full-screen div), not the
+     browser viewport. `fixed` attachment uses the viewport as its reference,
+     which mismatches on mobile/transformed ancestors and clips the top/bottom
+     of portrait images. */
+  background-attachment: scroll;
 }
 
 /* Channel 4 — clearest channel: images in-frame, black letterbox */
