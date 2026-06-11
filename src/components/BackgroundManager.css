@@ -12,6 +12,13 @@
   transition: background-image 0.1s ease-in-out;
 }
 
+/* Channel 3 — VHS view: full image shown, black border with a green tint */
+.background-manager.bg-channel-3 {
+  background-size: contain;
+  background-color: #04160b;
+  background-position: center center;
+}
+
 /* Channel 4 — clearest channel: images in-frame, black letterbox */
 .background-manager.bg-channel-4 {
   background-size: contain;

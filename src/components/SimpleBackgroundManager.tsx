@@ -27,11 +27,13 @@ function getChannelBgClass(channel: Channel): string {
   if (channel === 4)   return 'bg-channel-4';
   if (channel === 6)   return 'bg-channel-6';
   if (channel === 6.5) return 'bg-channel-35';
+  if (channel === 3)   return 'bg-channel-3';
   return '';
 }
 
 const GRADIENT_BY_CHANNEL: { [key: string]: string } = {
   'bg-channel-2':  'linear-gradient(rgba(40, 30, 10, 0.5), rgba(30, 25, 5, 0.5), rgba(20, 15, 0, 0.5))',
+  'bg-channel-3':  'linear-gradient(rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7))',
   'bg-channel-4':  'linear-gradient(rgba(10, 20, 80, 0.2), rgba(8, 16, 70, 0.2), rgba(6, 12, 60, 0.2))',
   'bg-channel-6':  'linear-gradient(rgba(20, 10, 30, 0.65), rgba(15, 5, 25, 0.65), rgba(10, 0, 20, 0.65))',
   'bg-channel-35': 'linear-gradient(rgba(5, 5, 5, 0.55), rgba(5, 5, 5, 0.55), rgba(5, 5, 5, 0.55))',
@@ -62,14 +64,22 @@ const SimpleBackgroundManager: React.FC<SimpleBackgroundManagerProps> = ({
     if (!containerRef.current) return;
     const gradient = getGradient();
     containerRef.current.style.backgroundImage = `${gradient}, url('${imageSrc}')`;
-    // Default to cover; switch to contain for portrait images to avoid extreme zoom
-    containerRef.current.style.backgroundSize = 'cover';
 
     // Cancel any in-flight portrait check before starting a new one
     if (pendingPortraitCheckRef.current) {
       pendingPortraitCheckRef.current.onload = null;
       pendingPortraitCheckRef.current = null;
     }
+
+    // Channel 3 (VHS view) always shows the full image, letterboxed against
+    // the black/green-tinted border — no portrait check needed.
+    if (currentChannelRef.current === 3) {
+      containerRef.current.style.backgroundSize = 'contain';
+      return;
+    }
+
+    // Default to cover; switch to contain for portrait images to avoid extreme zoom
+    containerRef.current.style.backgroundSize = 'cover';
 
     const img = new Image();
     pendingPortraitCheckRef.current = img;
