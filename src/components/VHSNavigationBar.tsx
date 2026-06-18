@@ -23,10 +23,10 @@ const VHSNavigationBar: React.FC<VHSNavigationBarProps> = ({
         <button
           className="vhs-nav-item"
           style={{ animationDelay: '0.2s' }}
-          onClick={() => onLinkClick('https://github.com/corymcdaniel')}
+          onClick={() => onLinkClick('https://wrongfolks.com')}
         >
-          <span className="nav-label">WORK</span>
-          <span className="nav-desc">GitHub</span>
+          <span className="nav-label">MUSIC</span>
+          <span className="nav-desc">Wrong Folks</span>
         </button>
       )}
 

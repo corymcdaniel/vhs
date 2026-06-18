@@ -107,8 +107,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
 
   const textLines = useRef([
     "Hello, I'm Cory.",
-    "I've been developing websites for years.",
-    "...............",
+    "I've been developing websites for years (find me on the github).",
+    "Prefer musical work though....",
     "I am also sort of an amateur photographer.",
     "I have two cats, Charlie and Papago.",
     "I live in Phoenix, Arizona and love the desert.",
