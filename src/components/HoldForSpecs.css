@@ -1,0 +1,134 @@
+/* ============================================================
+   HoldForSpecs: hold the ▶▶ button to fast-forward to the technical version
+   ============================================================ */
+
+.hold-specs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* Inside a card, take the space the summary used to */
+.work-card .hold-specs {
+  flex: 1;
+}
+
+/* Both versions share one cell, so the block is always as tall as the longer one */
+.hold-specs-stack {
+  display: grid;
+}
+
+.hold-specs-text {
+  grid-area: 1 / 1;
+  transition: opacity 0.12s ease;
+}
+
+.hold-specs-detail {
+  opacity: 0;
+  visibility: hidden;
+  font-family: 'VT323', monospace;
+  font-size: 1.15em;
+  line-height: 1.25;
+  color: var(--work-accent, #add8e6);
+}
+
+.hold-specs.is-held .hold-specs-casual {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hold-specs.is-held .hold-specs-detail {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* VHS tracking flicker as the text switches either way (after the first press only) */
+.hold-specs.is-touched.is-held .hold-specs-detail,
+.hold-specs.is-touched:not(.is-held) .hold-specs-casual {
+  animation: holdSpecsTracking 0.28s steps(4, end);
+}
+
+@keyframes holdSpecsTracking {
+  0% {
+    transform: translateX(-6px) skewX(-8deg);
+    filter: blur(1px) brightness(1.6);
+    clip-path: inset(0 0 55% 0);
+  }
+  33% {
+    transform: translateX(5px);
+    clip-path: inset(40% 0 0 0);
+  }
+  66% {
+    transform: translateX(-2px) skewX(3deg);
+    filter: none;
+    clip-path: inset(0);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* ---- The tape-deck button ---- */
+
+.hold-specs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid rgba(173, 216, 230, 0.5);
+  border-radius: 3px;
+  background: linear-gradient(180deg, #1c2a6e 0%, #0d1745 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 2px 0 #050b26;
+  color: var(--work-accent, #add8e6);
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  transition: color 0.15s, border-color 0.15s, box-shadow 0.1s, transform 0.1s;
+}
+
+.hold-specs-btn:hover,
+.hold-specs-btn:focus-visible {
+  outline: none;
+  color: var(--work-highlight, #ffffff);
+  border-color: var(--work-accent, #add8e6);
+}
+
+.hold-specs-btn:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--work-accent, #add8e6),
+    0 2px 0 #050b26;
+}
+
+/* Held down like a real deck button */
+.hold-specs.is-held .hold-specs-btn {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: var(--work-highlight, #ffffff);
+  border-color: var(--work-highlight, #ffffff);
+}
+
+.hold-specs.is-held .hold-specs-btn-ff {
+  animation: holdSpecsFF 0.4s steps(2) infinite;
+}
+
+@keyframes holdSpecsFF {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hold-specs.is-touched.is-held .hold-specs-detail,
+  .hold-specs.is-touched:not(.is-held) .hold-specs-casual,
+  .hold-specs.is-held .hold-specs-btn-ff {
+    animation: none;
+  }
+}

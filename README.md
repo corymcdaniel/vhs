@@ -112,7 +112,8 @@ This project demonstrates the evolution from a simple static site to a sophistic
 
 Channel 4 is the work channel. Tuning to it opens the **Work** panel, and a WORK button sits in the navigation bar on every channel, just ahead of MUSIC. `corymcdaniel.com/work` skips the intro and opens the panel directly, so the portfolio can be shared as a plain link.
 
-- Content lives in `src/data/portfolio.ts` (current role, stats, personal projects, earlier roles). Edit that file to update the portfolio; `WorkModal.tsx` only handles layout.
+- Content lives in `src/data/portfolio.ts` (current role, freelance work, personal projects, earlier roles). Edit that file to update the portfolio; `WorkModal.tsx` only handles layout.
+- Cards are written casually. Any item with a `specs` field (and the Fullstory summary's `summarySpecs`) gets a **HOLD ▶▶ SPECS** tape-deck button: holding it with mouse, touch, Space or Enter fast-forwards to the technical version with a tracking flicker, and letting go switches back (`HoldForSpecs.tsx`). Both versions share one grid cell, so cards don't change size.
 - Styling is in `WorkModal.css`: Channel 4's navy and white palette with light scanlines, and VT323 for headings only so body copy stays readable.
 - Site keyboard shortcuts are paused while the panel is open so it can scroll normally. Escape closes it.
 
