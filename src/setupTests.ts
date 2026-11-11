@@ -1,9 +1,2 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
-import { TextEncoder, TextDecoder } from 'util';
-
-// React Router 7 needs TextEncoder, which CRA's older jsdom doesn't provide
-Object.assign(global, { TextEncoder, TextDecoder });
+// Adds jest-dom matchers like toBeInTheDocument() to Vitest's expect
+import '@testing-library/jest-dom/vitest';

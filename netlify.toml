@@ -3,6 +3,10 @@
   publish = "build"
   command = "npm ci && npm run build"
 
+# Vite 6 needs Node 18+; pin it so Netlify doesn't fall back to an older default
+[build.environment]
+  NODE_VERSION = "22"
+
 [build.processing]
   skip_processing = false
 
