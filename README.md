@@ -118,7 +118,7 @@ Channel 4 is the work channel. Tuning to it opens the **Work** panel, and a WORK
 
 ## Analytics consent
 
-Google Analytics only loads after a visitor agrees. A small VCR-style on-screen display ("RECORD THIS VISIT?") rises from the bottom-left on any page, intro included, until the visitor answers; **● REC** allows analytics and **■ STOP** declines. The choice is saved in `localStorage` (`vhs-analytics`), and **Analytics settings** in the Help modal reopens the banner.
+Google Analytics only loads after a visitor agrees. A small VCR-style on-screen display ("RECORD THIS VISIT?") rises from the bottom-left on any page, intro included, until the visitor answers; **● REC** allows analytics and **■ STOP** declines. The choice is saved in `localStorage` (`vhs-analytics`), and both **Analytics settings** in the Help modal and the top-right REC timestamp reopen the banner, with the current choice and a short description of what each button does.
 
 - Logic lives in `src/utils/analytics.ts`, styling in `src/components/ConsentBanner.css`. It's ported from Show Log's banner.
 - The banner and GA never run on localhost or Netlify deploy previews (`--` in the hostname), so local testing and previews don't count.

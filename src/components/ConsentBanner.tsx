@@ -7,19 +7,20 @@ import { analyticsAvailable, choose, getChoice, onOpenConsent } from '../utils/a
 const ConsentBanner: React.FC = () => {
   // Ask only until the visitor answers; the saved choice carries over to future visits
   const [open, setOpen] = useState(() => analyticsAvailable() && getChoice() === null);
-  // Only reopening from Help moves focus here; the first-visit banner leaves the keyboard on the TV
-  const [focusOnOpen, setFocusOnOpen] = useState(false);
+  // Opened from Help's "Analytics settings": show the current choice and what each button does,
+  // and move focus here (the first-visit banner leaves the keyboard on the TV)
+  const [fromSettings, setFromSettings] = useState(false);
   const recRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => onOpenConsent(() => {
     if (!analyticsAvailable()) return;
-    setFocusOnOpen(true);
+    setFromSettings(true);
     setOpen(true);
   }), []);
 
   useEffect(() => {
-    if (open && focusOnOpen) recRef.current?.focus({ preventScroll: true });
-  }, [open, focusOnOpen]);
+    if (open && fromSettings) recRef.current?.focus({ preventScroll: true });
+  }, [open, fromSettings]);
 
   if (!open) return null;
 
@@ -31,7 +32,13 @@ const ConsentBanner: React.FC = () => {
   const handleChoice = (granted: boolean) => {
     choose(granted);
     setOpen(false);
+    setFromSettings(false);
   };
+
+  const choice = getChoice();
+  let status = 'Not set';
+  if (choice === 'granted') status = '● Recording';
+  if (choice === 'denied') status = '■ Stopped';
 
   return (
     <div className="consent-osd" role="region" aria-label="Analytics" onKeyDown={handleKeyDown}>
@@ -40,6 +47,17 @@ const ConsentBanner: React.FC = () => {
       <p className="consent-osd-text">
         Google Analytics, so I can see which channels people tune to. No ads, no tracking across other sites.
       </p>
+      {fromSettings && (
+        <>
+          <p className="consent-osd-status">
+            Now: <span className={`consent-osd-status-value ${choice === 'granted' ? 'is-rec' : ''}`}>{status}</span>
+          </p>
+          <p className="consent-osd-text consent-osd-detail">
+            REC lets Google Analytics count your visits here. STOP turns it off right away and deletes its cookies.
+            Your choice is saved in this browser, and you can change it anytime from Help or the REC button up top.
+          </p>
+        </>
+      )}
       <div className="consent-osd-actions">
         <button
           type="button"

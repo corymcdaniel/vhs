@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getChoice, onChoiceChange } from '../utils/analytics';
 
 interface VHSTimestampProps {
   onRecordingClick: () => void;
@@ -15,6 +16,10 @@ const VHSTimestamp: React.FC<VHSTimestampProps> = ({ onRecordingClick }) => {
     return () => clearInterval(interval);
   }, []);
 
+  // Visitors who picked STOP in the consent banner see the VCR in stop mode instead of REC
+  const [stopped, setStopped] = useState(() => getChoice() === 'denied');
+  useEffect(() => onChoiceChange(() => setStopped(getChoice() === 'denied')), []);
+
   const formatCurrentTime = (date: Date): string => {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -27,9 +32,13 @@ const VHSTimestamp: React.FC<VHSTimestampProps> = ({ onRecordingClick }) => {
   };
 
   return (
-    <div className="vhs-timestamp" onClick={onRecordingClick}>
-      <span className="rec-dot"></span>
-      REC {formatCurrentTime(currentTime)}
+    <div
+      className={`vhs-timestamp ${stopped ? 'is-stopped' : ''}`}
+      onClick={onRecordingClick}
+      title={stopped ? 'Analytics stopped. Click to change' : 'Analytics settings'}
+    >
+      <span className={stopped ? 'stop-square' : 'rec-dot'}></span>
+      {stopped ? 'STOP' : 'REC'} {formatCurrentTime(currentTime)}
     </div>
   );
 };

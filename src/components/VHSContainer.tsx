@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import './VHSContainer.css';
 import { useTypewriter } from '../hooks/useTypewriter';
 import ContactModal from './ContactModal';
-import RecordingModal from './RecordingModal';
+import { openConsent } from '../utils/analytics';
 import HelpModal from './HelpModal';
 import VHSTopNavBar from './VHSTopNavBar';
 import AboutModal from './AboutModal';
@@ -83,7 +83,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   skipTypewriter = false,
 }) => {
   const [showContactModal, setShowContactModal] = useState(false);
-  const [showRecordingModal, setShowRecordingModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState(false);
@@ -241,7 +240,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const showOhNoMessage = useOhNoMessage({ isActive: isAutoEjecting });
 
   // Track if any modal is open - used to pause auto-eject timer
-  const isAnyModalOpen = showContactModal || showRecordingModal || showHelpModal || showAboutModal || showPhotoGalleryModal || showBlogModal || showWorkModal;
+  const isAnyModalOpen = showContactModal || showHelpModal || showAboutModal || showPhotoGalleryModal || showBlogModal || showWorkModal;
 
   // Auto-trigger eject 20 seconds after typewriter completes (when contact button shows)
   // Pauses when any modal is open to prevent interrupting user interaction
@@ -442,15 +441,12 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     if (recordingTimerRef.current) {
       clearTimeout(recordingTimerRef.current);
     }
+    // The REC button opens the analytics consent banner (same as Help's "Analytics settings")
     setShowTransition(true);
     recordingTimerRef.current = setTimeout(() => {
-      setShowRecordingModal(true);
+      openConsent();
       recordingTimerRef.current = null;
     }, 400);
-  };
-
-  const handleRecordingClose = () => {
-    setShowRecordingModal(false);
   };
 
   const handleHelpClick = () => {
@@ -675,11 +671,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* Contact Modal */}
       {showContactModal && (
         <ContactModal onClose={handleContactClose} />
-      )}
-
-      {/* Recording Modal */}
-      {showRecordingModal && (
-        <RecordingModal onClose={handleRecordingClose} />
       )}
 
       {/* Help Modal */}

@@ -6,6 +6,7 @@
 const GA_ID = 'G-WMJEW7KTGP';
 const KEY = 'vhs-analytics';
 const OPEN_EVENT = 'vhs:open-consent';
+const CHANGE_EVENT = 'vhs:consent-change';
 
 export type ConsentChoice = 'granted' | 'denied' | null;
 
@@ -95,6 +96,20 @@ function apply(granted: boolean) {
 export function choose(granted: boolean) {
   saveChoice(granted ? 'granted' : 'denied');
   apply(granted);
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+// Fires when the choice changes, here or in another tab of the site (the REC/STOP display listens)
+export function onChoiceChange(handler: () => void) {
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === KEY) handler();
+  };
+  window.addEventListener(CHANGE_EVENT, handler);
+  window.addEventListener('storage', onStorage);
+  return () => {
+    window.removeEventListener(CHANGE_EVENT, handler);
+    window.removeEventListener('storage', onStorage);
+  };
 }
 
 // Called once on startup: load GA for returning visitors who already said yes

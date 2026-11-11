@@ -45,6 +45,31 @@
   color: rgba(0, 255, 0, 0.8);
 }
 
+/* Shown only when opened from Help's "Analytics settings" */
+.consent-osd-status {
+  margin: 2px 0 0;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 255, 0, 0.4);
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.consent-osd-status-value {
+  color: #ffff00;
+  text-shadow: 0 0 6px rgba(255, 255, 0, 0.6);
+}
+
+.consent-osd-status-value.is-rec {
+  color: #ff2b2b;
+  text-shadow: 0 0 6px rgba(255, 43, 43, 0.8);
+}
+
+.consent-osd-detail {
+  font-size: 16px;
+  color: rgba(0, 255, 0, 0.7);
+}
+
 .consent-osd-actions {
   display: flex;
   gap: 10px;
