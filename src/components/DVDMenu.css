@@ -1,0 +1,376 @@
+/* ============================================================
+   DVDMenu: glossy early-2000s main menu with a clockwise ring
+   ============================================================ */
+
+.dvd-menu {
+  --dvd-blue-deep: #020a24;
+  --dvd-blue: #0a2a6b;
+  --dvd-blue-bright: #2f7bff;
+  --dvd-chrome: #e8eef8;
+  --dvd-glow: #7fc4ff;
+  --dvd-highlight: #ffd84d;
+  /* Distance from the center of the ring to each item */
+  --dvd-radius: min(32vh, 38vw, 300px);
+
+  position: fixed;
+  inset: 0;
+  /* Just under the Work panel and cat modal (9999) so picks open on top of the menu */
+  z-index: 9990;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 16px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 45%, var(--dvd-blue) 0%, var(--dvd-blue-deep) 75%);
+  color: var(--dvd-chrome);
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  animation: dvdMenuIn 0.5s ease both;
+}
+
+@keyframes dvdMenuIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---- Looping background ---- */
+
+.dvd-menu-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dvd-menu-bg-glow {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(47, 123, 255, 0.35), transparent 40%),
+    radial-gradient(circle at 70% 70%, rgba(127, 196, 255, 0.22), transparent 45%);
+  animation: dvdGlowDrift 14s ease-in-out infinite alternate;
+}
+
+@keyframes dvdGlowDrift {
+  to {
+    transform: translate(6%, -4%) rotate(12deg);
+  }
+}
+
+.dvd-menu-bg-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--dvd-radius) * 2.6);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle,
+    rgba(127, 196, 255, 0.07) 0 1px,
+    transparent 1px 22px
+  );
+  animation: dvdRingsPulse 6s ease-in-out infinite;
+}
+
+@keyframes dvdRingsPulse {
+  50% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+/* ---- Header ---- */
+
+.dvd-menu-header {
+  position: relative;
+  text-align: center;
+}
+
+.dvd-menu-kicker {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: rgba(232, 238, 248, 0.55);
+}
+
+.dvd-menu-title {
+  margin: 4px 0 0;
+  font-size: clamp(28px, 6vw, 44px);
+  font-weight: bold;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  background: linear-gradient(180deg, #ffffff 0%, #dce6f5 45%, #7d8fae 55%, #c8d4e8 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.5)) drop-shadow(0 0 12px rgba(127, 196, 255, 0.45));
+}
+
+/* ---- The ring ---- */
+
+.dvd-menu-ring {
+  position: relative;
+  width: calc(var(--dvd-radius) * 2);
+  height: calc(var(--dvd-radius) * 2);
+  flex-shrink: 0;
+  /* Centered in the space under the header, even when the hint line is hidden */
+  margin: auto 0;
+}
+
+/* Center: the spinning PLAY disc */
+.dvd-menu-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--dvd-radius) * 0.9);
+  max-width: 200px;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--dvd-chrome);
+  cursor: pointer;
+  animation: dvdPlayIn 0.6s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes dvdPlayIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+}
+
+.dvd-menu-play-disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle, var(--dvd-blue-deep) 0 9%, #d7deea 10% 17%, #c9d3e3 18%, #f4f7fc 40%, #aab6c9 75%, #e6ecf5 100%);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.5),
+    0 0 30px rgba(127, 196, 255, 0.45);
+  animation: dvdPlaySpin 6s linear infinite;
+  transition: box-shadow 0.25s ease;
+}
+
+.dvd-menu-play-sheen {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    rgba(255, 0, 128, 0.4),
+    rgba(255, 200, 0, 0.35),
+    rgba(0, 255, 160, 0.35),
+    rgba(0, 160, 255, 0.4),
+    rgba(170, 0, 255, 0.35),
+    rgba(255, 0, 128, 0.4)
+  );
+  mix-blend-mode: overlay;
+}
+
+@keyframes dvdPlaySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dvd-menu-play-label {
+  position: relative;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(10, 42, 107, 0.92), rgba(2, 10, 36, 0.92));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 10px rgba(0, 0, 0, 0.4);
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.dvd-menu-play:hover .dvd-menu-play-disc,
+.dvd-menu-play:focus-visible .dvd-menu-play-disc {
+  box-shadow:
+    0 0 0 3px var(--dvd-highlight),
+    0 0 40px rgba(255, 216, 77, 0.55);
+  animation-duration: 1.5s;
+}
+
+.dvd-menu-play:hover .dvd-menu-play-label,
+.dvd-menu-play:focus-visible .dvd-menu-play-label {
+  color: var(--dvd-highlight);
+  transform: scale(1.06);
+}
+
+.dvd-menu-play:focus-visible {
+  outline: none;
+}
+
+/* Each item sits on the ring at its angle, then loads in clockwise from 12 o'clock */
+.dvd-menu-item {
+  --angle: -90deg;
+  --delay: 0.6s;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 108px;
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #3d8bff 0%, #1450c8 48%, #0a3596 52%, #1b5fe0 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.3),
+    0 6px 16px rgba(0, 0, 0, 0.45);
+  color: var(--dvd-chrome);
+  font-family: inherit;
+  cursor: pointer;
+  /* Out along the angle, then back to upright */
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--angle))
+    translateX(var(--dvd-radius))
+    rotate(calc(var(--angle) * -1));
+  animation: dvdItemIn 0.5s var(--delay) cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, filter 0.2s ease, scale 0.2s ease;
+}
+
+/* Glossy top half */
+.dvd-menu-item::before {
+  content: '';
+  position: absolute;
+  inset: 1px 1px 50% 1px;
+  border-radius: 13px 13px 6px 6px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.05));
+  pointer-events: none;
+}
+
+@keyframes dvdItemIn {
+  from {
+    opacity: 0;
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--angle))
+      translateX(calc(var(--dvd-radius) * 0.35))
+      rotate(calc(var(--angle) * -1))
+      scale(0.4);
+  }
+}
+
+/* Covers the ring so items position from its center */
+.dvd-menu-items {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dvd-menu-items .dvd-menu-item {
+  pointer-events: auto;
+}
+
+/* Seven items, evenly spaced clockwise starting at 12 o'clock */
+.dvd-menu-item:nth-child(1) { --angle: -90deg;      --delay: 0.6s; }
+.dvd-menu-item:nth-child(2) { --angle: -38.571deg;  --delay: 0.8s; }
+.dvd-menu-item:nth-child(3) { --angle: 12.857deg;   --delay: 1s; }
+.dvd-menu-item:nth-child(4) { --angle: 64.286deg;   --delay: 1.2s; }
+.dvd-menu-item:nth-child(5) { --angle: 115.714deg;  --delay: 1.4s; }
+.dvd-menu-item:nth-child(6) { --angle: 167.143deg;  --delay: 1.6s; }
+.dvd-menu-item:nth-child(7) { --angle: 218.571deg;  --delay: 1.8s; }
+
+.dvd-menu-item-label {
+  position: relative;
+  font-size: 17px;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.dvd-menu-item-desc {
+  position: relative;
+  font-size: 11px;
+  color: rgba(232, 238, 248, 0.75);
+}
+
+/* The DVD remote highlight */
+.dvd-menu-item:hover,
+.dvd-menu-item:focus-visible {
+  outline: none;
+  border-color: var(--dvd-highlight);
+  filter: brightness(1.15);
+  /* scale composes with the ring transform instead of replacing it */
+  scale: 1.08;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 0 0 2px var(--dvd-highlight),
+    0 0 24px rgba(255, 216, 77, 0.6),
+    0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+.dvd-menu-item:hover .dvd-menu-item-label,
+.dvd-menu-item:focus-visible .dvd-menu-item-label {
+  color: var(--dvd-highlight);
+}
+
+.dvd-menu-hint {
+  position: relative;
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: rgba(232, 238, 248, 0.5);
+  animation: dvdMenuIn 0.5s 2s ease both;
+}
+
+/* ---- Phones: a tighter ring with smaller buttons ---- */
+
+@media (max-width: 600px) {
+  .dvd-menu {
+    --dvd-radius: min(30vh, 34vw);
+  }
+
+  .dvd-menu-item {
+    min-width: 0;
+    padding: 7px 10px;
+    border-radius: 10px;
+  }
+
+  .dvd-menu-item::before {
+    border-radius: 9px 9px 4px 4px;
+  }
+
+  .dvd-menu-item-label {
+    font-size: 13px;
+  }
+
+  .dvd-menu-item-desc {
+    font-size: 9px;
+  }
+
+  .dvd-menu-play-label {
+    font-size: 14px;
+    padding: 4px 10px;
+  }
+
+  /* Arrow keys aren't a thing on a phone */
+  .dvd-menu-hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dvd-menu,
+  .dvd-menu-bg-glow,
+  .dvd-menu-bg-rings,
+  .dvd-menu-play,
+  .dvd-menu-play-disc,
+  .dvd-menu-item,
+  .dvd-menu-hint {
+    animation: none;
+  }
+}
