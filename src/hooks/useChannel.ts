@@ -7,8 +7,8 @@ export type Channel = number;
 // Channels reachable via keyboard — 6.5 is dial-only
 const CHANNEL_ORDER: Channel[] = [2, 3, 4, 6];
 
-export function useChannel() {
-  const [channel, setChannel] = useState<Channel>(3);
+export function useChannel(initialChannel: Channel = 3) {
+  const [channel, setChannel] = useState<Channel>(initialChannel);
 
   const switchChannel = useCallback((newChannel: Channel) => {
     setChannel(newChannel);

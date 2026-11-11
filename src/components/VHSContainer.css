@@ -2577,3 +2577,18 @@
     margin-top: 1px;
   }
 }
+
+/* Channel 4 WORK nav button — navy/white to match the channel */
+.vhs-nav-item.work-nav {
+  border-color: #add8e6;
+  color: #ffffff;
+  background: rgba(10, 20, 80, 0.55);
+  box-shadow: 0 0 12px rgba(173, 216, 230, 0.35);
+}
+
+.vhs-nav-item.work-nav:hover {
+  background: rgba(17, 29, 85, 0.85);
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
+}

@@ -5,6 +5,7 @@ interface VHSNavigationBarProps {
   showPhotoNav: boolean;
   showCatsNav: boolean;
   showLocationNav: boolean;
+  onWorkClick: () => void;
   onLinkClick: (url: string) => void;
   onCatClick: (catName: string) => void;
 }
@@ -14,11 +15,23 @@ const VHSNavigationBar: React.FC<VHSNavigationBarProps> = ({
   showPhotoNav,
   showCatsNav,
   showLocationNav,
+  onWorkClick,
   onLinkClick,
   onCatClick
 }) => {
   return (
     <div className={`vhs-nav ${showWorkNav ? 'show' : ''}`}>
+      {showWorkNav && (
+        <button
+          className="vhs-nav-item work-nav"
+          style={{ animationDelay: '0.1s' }}
+          onClick={onWorkClick}
+        >
+          <span className="nav-label">WORK</span>
+          <span className="nav-desc">Portfolio</span>
+        </button>
+      )}
+
       {showWorkNav && (
         <button
           className="vhs-nav-item"
