@@ -5,6 +5,10 @@ import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { initAnalytics } from './utils/analytics';
+
+// Loads Google Analytics only for visitors who already allowed it
+initAnalytics();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

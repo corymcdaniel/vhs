@@ -110,8 +110,16 @@ This project demonstrates the evolution from a simple static site to a sophistic
 **Production Status**: ✅ Deployed and optimized
 ## Work channel (Channel 4 and /work)
 
-Channel 4 is the work channel. Tuning to it opens the **Work** panel, and a WORK button joins the navigation bar while you're on it. `corymcdaniel.com/work` skips the intro and opens the panel directly, so the portfolio can be shared as a plain link.
+Channel 4 is the work channel. Tuning to it opens the **Work** panel, and a WORK button sits in the navigation bar on every channel, just ahead of MUSIC. `corymcdaniel.com/work` skips the intro and opens the panel directly, so the portfolio can be shared as a plain link.
 
 - Content lives in `src/data/portfolio.ts` (current role, stats, personal projects, earlier roles). Edit that file to update the portfolio; `WorkModal.tsx` only handles layout.
 - Styling is in `WorkModal.css`: Channel 4's navy and white palette with light scanlines, and VT323 for headings only so body copy stays readable.
 - Site keyboard shortcuts are paused while the panel is open so it can scroll normally. Escape closes it.
+
+## Analytics consent
+
+Google Analytics only loads after a visitor agrees. A small VCR-style on-screen display ("RECORD THIS VISIT?") rises from the bottom-left on any page, intro included, until the visitor answers; **● REC** allows analytics and **■ STOP** declines. The choice is saved in `localStorage` (`vhs-analytics`), and **Analytics settings** in the Help modal reopens the banner.
+
+- Logic lives in `src/utils/analytics.ts`, styling in `src/components/ConsentBanner.css`. It's ported from Show Log's banner.
+- The banner and GA never run on localhost or Netlify deploy previews (`--` in the hostname), so local testing and previews don't count.
+- GA is configured with Google signals and ad personalization off. No extra packages: gtag.js is injected by hand.

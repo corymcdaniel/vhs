@@ -7,6 +7,7 @@ import OsakaModal from './components/OsakaModal';
 import VHSTapeLoadingIntro from './components/VHSTapeLoadingIntro';
 import TubeTVIntro from './components/TubeTVIntro';
 import IntroSelector from './components/IntroSelector';
+import ConsentBanner from './components/ConsentBanner';
 import { useOsakaEffects } from './components/OsakaEffects';
 import { useChannel } from './hooks/useChannel';
 
@@ -83,6 +84,9 @@ function App() {
           initialWorkOpen={initialWorkOpen}
         />
       )}
+
+      {/* Analytics consent shows on every page, intro included, until the visitor answers */}
+      <ConsentBanner />
 
       {/* OSAKA effects at top level - persist independently */}
       {showOsakaFlash && (
