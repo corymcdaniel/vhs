@@ -101,6 +101,10 @@ public/
 | `marked` | Turns the blog's Markdown files into HTML. |
 | `typescript` | Type checking for the app's components and data. |
 | `@testing-library/*`, `@types/*` | Tests and type definitions. |
+| `vite`, `@vitejs/plugin-react` | Dev server and production build; much faster than Create React App and still maintained. |
+| `vitest`, `jsdom` | Test runner that shares Vite's config, so tests understand the same imports as the app. |
+| `eslint`, `typescript-eslint`, `eslint-plugin-react-hooks` | Linting, replacing CRA's built-in config. |
+| `sharp` | Compresses new images at build time. |
 
 No CSS framework: all styling is hand-written CSS per component.
 
@@ -126,10 +130,15 @@ No CSS framework: all styling is hand-written CSS per component.
 
 ### Available Scripts
 
-- `npm start` - Development server on port 3000
-- `npm run build` - Production build
-- `npm test` - Run tests
-- `npm run eject` - Eject from Create React App (not recommended)
+Built with [Vite](https://vite.dev) (moved from Create React App, which is no longer maintained).
+
+- `npm start` (or `npm run dev`) - Vite dev server on port 3000
+- `npm run build` - Type check, then production build into `build/` (what Netlify publishes)
+- `npm run preview` - Serve the production build locally
+- `npm test` - Run the Vitest tests once (`npm run test:watch` to keep watching)
+- `npm run lint` - ESLint
+
+`npm start` and `npm run build` first regenerate the background image list and the blog post list, and the build also compresses new images.
 
 ### Browser Compatibility
 

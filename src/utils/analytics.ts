@@ -33,14 +33,18 @@ export function getChoice(): ConsentChoice {
   try {
     const value = localStorage.getItem(KEY);
     if (value === 'granted' || value === 'denied') return value;
-  } catch {}
+  } catch {
+    // Treated as no choice yet
+  }
   return null;
 }
 
 function saveChoice(value: 'granted' | 'denied') {
   try {
     localStorage.setItem(KEY, value);
-  } catch {}
+  } catch {
+    // Not saved; the banner simply asks again next visit
+  }
 }
 
 let loaded = false;
