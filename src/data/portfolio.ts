@@ -166,7 +166,7 @@ export const personalProjects: PortfolioItem[] = [
   },
   {
     title: 'Chip Gather',
-    summary: 'A casino-chip collection tracker with multiplayer blackjack.',
+    summary: 'Gather your chips, remember your casino visits!',
     links: [{ label: 'Live', url: 'https://www.chipgather.com/' }],
   },
   {

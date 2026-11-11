@@ -121,6 +121,7 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
           <div className="photo-detail-view">
             <button
               className="photo-nav-btn photo-nav-prev"
+              aria-label="Previous photo"
               onClick={handlePrevious}
               disabled={selectedIndex === 0}
               style={{ opacity: selectedIndex === 0 ? 0.3 : 1 }}
@@ -144,6 +145,7 @@ const PhotoGalleryModal: React.FC<PhotoGalleryModalProps> = ({ onClose }) => {
 
             <button
               className="photo-nav-btn photo-nav-next"
+              aria-label="Next photo"
               onClick={handleNext}
               disabled={selectedIndex === backgroundImages.length - 1}
               style={{ opacity: selectedIndex === backgroundImages.length - 1 ? 0.3 : 1 }}

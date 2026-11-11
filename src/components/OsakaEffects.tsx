@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { logger } from '../utils/logger';
 
 interface OsakaEffectsProps {
   isActive: boolean;
@@ -21,23 +22,23 @@ export const useOsakaEffects = ({ isActive, onComplete }: OsakaEffectsProps): Os
       return;
     }
 
-    console.log('🔴 OSAKA effects started');
+    logger.log('🔴 OSAKA effects started');
 
     // Start flickering immediately
     setShowFlash(true);
-    console.log('🔴 OSAKA kanji flash started - 5 second duration');
+    logger.log('🔴 OSAKA kanji flash started - 5 second duration');
 
     // Stop flickering and start burn effect after 5 seconds
     const flashTimer = setTimeout(() => {
       setShowFlash(false);
       setShowBurn(true);
-      console.log('🔴 OSAKA flickering stopped - switching to burn screen - will burn for 45 seconds');
+      logger.log('🔴 OSAKA flickering stopped - switching to burn screen - will burn for 45 seconds');
     }, 5000);
 
     // Hide burn effect after 50 seconds total (5s flash + 45s burn)
     const burnTimer = setTimeout(() => {
       setShowBurn(false);
-      console.log('🔴 OSAKA burn effect ended after 50 seconds total');
+      logger.log('🔴 OSAKA burn effect ended after 50 seconds total');
       onComplete?.();
     }, 50000);
 

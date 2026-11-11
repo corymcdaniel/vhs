@@ -1,4 +1,5 @@
 import React, { useRef, useCallback } from 'react';
+import { logger } from '../utils/logger';
 import './VHSTransition.css';
 
 interface VHSTransitionProps {
@@ -18,7 +19,7 @@ const VHSTransition: React.FC<VHSTransitionProps> = ({ onTransitionTrigger }) =>
     activeTimers.current.forEach(timer => clearTimeout(timer));
     activeTimers.current.clear();
 
-    console.log('🔥 Starting VHS transition effect');
+    logger.log('🔥 Starting VHS transition effect');
 
     // Phase 1: Heavy static and distortion
     element.className = 'vhs-transition phase-1';
@@ -27,7 +28,7 @@ const VHSTransition: React.FC<VHSTransitionProps> = ({ onTransitionTrigger }) =>
     // Phase 2: Peak distortion - trigger background change
     const timer1 = setTimeout(() => {
       element.className = 'vhs-transition phase-2';
-      console.log('📺 Peak distortion - changing background');
+      logger.log('📺 Peak distortion - changing background');
       onPeak(); // Change background at peak distortion
     }, 200);
     activeTimers.current.add(timer1);
@@ -42,7 +43,7 @@ const VHSTransition: React.FC<VHSTransitionProps> = ({ onTransitionTrigger }) =>
     const timer3 = setTimeout(() => {
       element.style.opacity = '0';
       element.className = 'vhs-transition';
-      console.log('✅ VHS transition complete');
+      logger.log('✅ VHS transition complete');
     }, 800);
     activeTimers.current.add(timer3);
   }, []);

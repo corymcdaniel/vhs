@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { logger } from '../utils/logger';
 
 interface AutoEjectSequenceProps {
   isActive: boolean;
@@ -10,11 +11,11 @@ export const useAutoEjectSequence = ({ isActive, onComplete }: AutoEjectSequence
   useEffect(() => {
     if (!isActive) return;
 
-    console.log('🎬 Starting dramatic auto-eject sequence');
+    logger.log('🎬 Starting dramatic auto-eject sequence');
 
     // Complete the auto-eject after 5 seconds
     const completeTimer = setTimeout(() => {
-      console.log('🎬 Auto-eject sequence complete - ejected!');
+      logger.log('🎬 Auto-eject sequence complete - ejected!');
       onComplete();
     }, 5000);
 
