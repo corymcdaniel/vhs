@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import './ContactModal.css'; // Reuse the same modal styling
 import './HelpModal.css'; // Custom help modal styles
+import './ConsentBanner.css';
 import HelpContent from './HelpContent';
+import { analyticsAvailable, openConsent } from '../utils/analytics';
 
 interface HelpModalProps {
   onClose: () => void;
@@ -51,6 +53,19 @@ const HelpModal: React.FC<HelpModalProps> = ({ onClose }) => {
               }
             }}
           />
+
+          {analyticsAvailable() && (
+            <button
+              type="button"
+              className="consent-settings-link"
+              onClick={() => {
+                onClose();
+                openConsent();
+              }}
+            >
+              Analytics settings
+            </button>
+          )}
         </div>
       </div>
     </div>

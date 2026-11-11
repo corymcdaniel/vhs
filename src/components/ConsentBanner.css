@@ -1,0 +1,153 @@
+/* ---------- analytics consent: a VCR on-screen display that rises from the bottom-left ---------- */
+.consent-osd {
+  position: fixed;
+  left: max(16px, env(safe-area-inset-left, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  /* Above the intros and modals (10000) so it shows on every page until answered */
+  z-index: 10001;
+  width: min(360px, calc(100vw - 32px));
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px;
+  overflow: hidden;
+  background: rgba(0, 12, 0, 0.88);
+  border: 1px solid #00ff00;
+  box-shadow: 0 0 18px rgba(0, 255, 0, 0.25), inset 0 0 24px rgba(0, 255, 0, 0.08);
+  color: #00ff00;
+  font-family: 'VT323', monospace;
+  text-shadow: 0 0 6px rgba(0, 255, 0, 0.7);
+}
+
+.consent-osd-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.25) 3px
+  );
+}
+
+.consent-osd-title {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.consent-osd-text {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.15;
+  color: rgba(0, 255, 0, 0.8);
+}
+
+/* Shown only when opened from Help's "Analytics settings" */
+.consent-osd-status {
+  margin: 2px 0 0;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 255, 0, 0.4);
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.consent-osd-status-value {
+  color: #ffff00;
+  text-shadow: 0 0 6px rgba(255, 255, 0, 0.6);
+}
+
+.consent-osd-status-value.is-rec {
+  color: #ff2b2b;
+  text-shadow: 0 0 6px rgba(255, 43, 43, 0.8);
+}
+
+.consent-osd-detail {
+  font-size: 16px;
+  color: rgba(0, 255, 0, 0.7);
+}
+
+.consent-osd-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.consent-osd-btn {
+  position: relative;
+  flex: 1;
+  padding: 8px 14px;
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  text-transform: uppercase;
+  text-shadow: inherit;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.consent-osd-btn:hover,
+.consent-osd-btn:focus-visible {
+  background: rgba(255, 255, 0, 0.15);
+  border-color: #ffff00;
+  color: #ffff00;
+  box-shadow: 0 0 12px rgba(255, 255, 0, 0.3);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.consent-osd-dot {
+  color: #ff2b2b;
+  text-shadow: 0 0 6px rgba(255, 43, 43, 0.8);
+}
+
+/* The Help modal's way back to the banner */
+.consent-settings-link {
+  display: block;
+  margin: 18px auto 0;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.15s, color 0.15s, transform 0.15s;
+}
+
+.consent-settings-link:hover,
+.consent-settings-link:focus-visible {
+  opacity: 1;
+  color: #ffff00;
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .consent-osd {
+    animation: consent-osd-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .consent-osd-dot {
+    animation: consent-osd-blink 1.2s steps(1) infinite;
+  }
+}
+
+@keyframes consent-osd-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes consent-osd-blink {
+  50% {
+    opacity: 0;
+  }
+}

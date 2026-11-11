@@ -280,6 +280,30 @@
   box-shadow: 0 0 6px #ff0000;
 }
 
+/* Stop mode: shown once the visitor picks STOP in the analytics consent banner */
+.vhs-timestamp.is-stopped {
+  color: #d8d8d8;
+}
+
+.vhs-timestamp.is-stopped:hover {
+  border-color: #d8d8d8;
+  box-shadow: 0 0 15px rgba(216, 216, 216, 0.35);
+}
+
+.stop-square {
+  width: 8px;
+  height: 8px;
+  background: currentColor;
+  box-shadow: 0 0 6px rgba(216, 216, 216, 0.6);
+  animation: stopSquareIn 0.3s ease-out;
+}
+
+@keyframes stopSquareIn {
+  from {
+    transform: scale(0);
+  }
+}
+
 /* Main Text */
 .vhs-text {
   position: relative;
@@ -1994,7 +2018,8 @@
     padding: 6px 10px;
   }
 
-  .rec-dot {
+  .rec-dot,
+  .stop-square {
     width: 6px;
     height: 6px;
   }
@@ -2131,7 +2156,8 @@
     padding: 5px 8px;
   }
 
-  .rec-dot {
+  .rec-dot,
+  .stop-square {
     width: 5px;
     height: 5px;
   }
