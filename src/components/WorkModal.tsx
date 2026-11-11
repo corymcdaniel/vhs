@@ -136,14 +136,16 @@ const WorkModal: React.FC<WorkModalProps> = ({ onClose }) => {
               <p className="work-period">{fullstory.period}</p>
               <p className="work-lede">{fullstory.summary}</p>
 
-              <dl className="work-stats">
-                {fullstory.stats.map((stat) => (
-                  <div key={stat.label} className="work-stat">
-                    <dt className="work-stat-label">{stat.label}</dt>
-                    <dd className="work-stat-value">{stat.value}</dd>
-                  </div>
-                ))}
-              </dl>
+              {fullstory.showStats && (
+                <dl className="work-stats">
+                  {fullstory.stats.map((stat) => (
+                    <div key={stat.label} className="work-stat">
+                      <dt className="work-stat-label">{stat.label}</dt>
+                      <dd className="work-stat-value">{stat.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
 
               {fullstory.groups.map((group) => (
                 <div key={group.heading} className="work-group">

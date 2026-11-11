@@ -656,7 +656,6 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         showPhotoNav={showPhotoNav}
         showCatsNav={showCatsNav}
         showLocationNav={showLocationNav}
-        isWorkChannel={currentChannel === 4}
         onWorkClick={() => setShowWorkModal(true)}
         onLinkClick={handleLinkClick}
         onCatClick={handleCatLinkClick}

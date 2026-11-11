@@ -35,7 +35,7 @@ export const profile = {
   role: 'Senior UX Engineer at Fullstory',
   location: 'Phoenix, Arizona',
   headline:
-    'Full-stack engineer since 2010, building data-driven products. These days I make AI the way my team builds, not just something we try on a PR.',
+    'Full-stack engineer since 2010, building data-driven products. Experimentation and a heavy workload made me slightly AI-pilled. I still care about the craft.',
   links: [
     { label: 'GitHub', url: 'https://github.com/corymcdaniel' },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/corymcdaniel' },
@@ -49,6 +49,8 @@ export const fullstory = {
   period: 'Highlights from May – Nov 2026',
   summary:
     "I work on Fullstory's marketing site and the standalone projects around it. Over the last six months AI went from an experiment to how we ship: as a pair programmer, as a reviewer on every PR, and as tooling that designers, content managers and other engineers can run themselves.",
+  // Stats are hidden for now: set showStats to true to bring the row back.
+  showStats: false,
   stats: [
     { value: '169', label: 'PRs shipped in 6 months' },
     { value: '3', label: 'Claude Code skills written for the team' },
@@ -150,16 +152,6 @@ export const personalProjects: PortfolioItem[] = [
     ],
   },
   {
-    title: 'Drink / Drive / University',
-    summary:
-      'A choropleth and marker map of about 1,900 universities over state alcohol and fuel data, with three data pipelines (NIAAA, College Scorecard, EIA plus Census) and gamma-corrected color scales.',
-    tags: ['Leaflet', 'Data pipelines'],
-    links: [
-      { label: 'Live', url: 'https://map.corymcdaniel.com/' },
-      { label: 'Write-up', url: '/blog/0003' },
-    ],
-  },
-  {
     title: 'Wrong Folks',
     summary:
       'My band site. Chunked uploads to get past serverless body limits, ranged audio streaming, sanitized Markdown notes and a WCAG AA accessibility pass.',
@@ -180,19 +172,24 @@ export const personalProjects: PortfolioItem[] = [
     ],
   },
   {
-    title: 'Podunk Ridge',
-    summary:
-      'A RimWorld colony blog in early-2000s style, using Next.js App Router with Netlify Blobs as its only data store and signed-cookie admin auth.',
-    tags: ['Next.js', 'Netlify Blobs'],
-    links: [{ label: 'Code', url: 'https://github.com/corymcdaniel/podunk-ridge' }],
+    title: 'Chip Gather',
+    summary: 'A casino-chip collection tracker with multiplayer blackjack.',
+    links: [{ label: 'Live', url: 'https://www.chipgather.com/' }],
   },
   {
-    title: 'Chip Gather and LAN Watchdog',
+    title: 'LAN Watchdog',
     summary:
-      'A casino-chip collection tracker with multiplayer blackjack, and a Windows PowerShell utility that shuts a machine down safely after a real network outage.',
+      'A Windows PowerShell utility that shuts a machine down safely after a real network outage.',
+    links: [{ label: 'Code', url: 'https://github.com/corymcdaniel/lan-watchdog' }],
+  },
+  {
+    title: 'Drink / Drive / University',
+    summary:
+      'A choropleth and marker map of about 1,900 universities over state alcohol and fuel data, with three data pipelines (NIAAA, College Scorecard, EIA plus Census) and gamma-corrected color scales.',
+    tags: ['Leaflet', 'Data pipelines'],
     links: [
-      { label: 'Chip Gather', url: 'https://www.chipgather.com/' },
-      { label: 'LAN Watchdog', url: 'https://github.com/corymcdaniel/lan-watchdog' },
+      { label: 'Live', url: 'https://map.corymcdaniel.com/' },
+      { label: 'Write-up', url: '/blog/0003' },
     ],
   },
 ];
