@@ -118,6 +118,7 @@
 .intro-selector-panels {
   display: flex;
   align-items: stretch;
+  gap: 28px;
 }
 
 /* ---- Individual Panel ---- */
@@ -182,7 +183,9 @@
 
 /* ---- Divider ---- */
 
+/* The panels are separated by a gap now; the divider lines stay in the markup but aren't shown */
 .intro-selector-divider {
+  display: none;
   width: 1px;
   align-self: stretch;
   background: linear-gradient(
@@ -497,4 +500,85 @@
 
 .intro-selector-panel:hover .selector-tv-stand {
   border-color: rgba(51, 255, 87, 0.85);
+}
+
+/* ---- DVD disc icon ---- */
+
+.selector-disc {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1.5px solid #33ff57;
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(51, 255, 87, 0.05),
+      rgba(51, 255, 87, 0.28),
+      rgba(51, 255, 87, 0.05),
+      rgba(51, 255, 87, 0.28),
+      rgba(51, 255, 87, 0.05)
+    );
+  box-shadow: 0 0 5px rgba(51, 255, 87, 0.12);
+  display: grid;
+  place-items: center;
+  transition: box-shadow 0.22s ease, border-color 0.22s ease;
+  animation: selectorDiscSpin 6s linear infinite;
+}
+
+.selector-disc-hub {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(51, 255, 87, 0.6);
+  background: #060e06;
+}
+
+.intro-selector-panel:hover .selector-disc {
+  border-color: #55ff77;
+  box-shadow: 0 0 12px rgba(51, 255, 87, 0.28);
+  animation-duration: 1.2s;
+}
+
+@keyframes selectorDiscSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- Phones and narrow screens: stack the three panels ---- */
+
+@media (max-width: 760px) {
+  .intro-selector {
+    overflow-y: auto;
+    align-items: flex-start;
+  }
+
+  .intro-selector-content {
+    padding: 32px 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .intro-selector-panels {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .intro-selector-panel {
+    width: auto;
+    padding: 18px 20px;
+  }
+
+  .intro-selector-divider {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .selector-disc {
+    animation: none;
+  }
 }

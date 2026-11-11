@@ -116,6 +116,14 @@ Channel 4 is the work channel. Tuning to it opens the **Work** panel, and a WORK
 - Styling is in `WorkModal.css`: Channel 4's navy and white palette with light scanlines, and VT323 for headings only so body copy stays readable.
 - Site keyboard shortcuts are paused while the panel is open so it can scroll normally. Escape closes it.
 
+## DVD intro
+
+The intro picker on `/` offers three experiences: VHS Tape, Tube TV and **DVD**. Picking DVD plays a short disc intro (`DVDIntro.tsx`): the tray slides out, the disc drops in and spins up with a rainbow sheen, and a click skips ahead. It then opens a glossy early-2000s **Main Menu** (`DVDMenu.tsx`), where the site's nav items (WORK, MUSIC, PHOTOS, CHARLIE, PAPAGO, PHOENIX, DESERT) load one by one, clockwise from 12 o'clock, around a spinning PLAY disc.
+
+- PLAY enters the site with the intro text already typed. WORK and the cats open their panel over the menu, and closing it returns to the menu. The links open in a new tab and the menu stays put.
+- Arrow keys move around the ring like a remote; Enter picks.
+- Ring positions and load delays are plain CSS rules per item (`--angle`, `--delay`), so there are no inline styles. Adding an item means adding a CSS rule and respacing the angles (360° ÷ item count).
+
 ## Analytics consent
 
 Google Analytics only loads after a visitor agrees. A small VCR-style on-screen display ("RECORD THIS VISIT?") rises from the bottom-left on any page, intro included, until the visitor answers; **● REC** allows analytics and **■ STOP** declines. The choice is saved in `localStorage` (`vhs-analytics`), and both **Analytics settings** in the Help modal and the top-right REC timestamp reopen the banner, with the current choice and a short description of what each button does.

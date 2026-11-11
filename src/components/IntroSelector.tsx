@@ -1,7 +1,7 @@
 import React from 'react';
 import './IntroSelector.css';
 
-type IntroVariant = 'vhs' | 'tv';
+type IntroVariant = 'vhs' | 'tv' | 'dvd';
 
 interface IntroSelectorProps {
   onSelect: (variant: IntroVariant) => void;
@@ -76,6 +76,24 @@ const IntroSelector: React.FC<IntroSelectorProps> = ({ onSelect }) => {
             <p className="intro-panel-title">TUBE TV</p>
             <p className="intro-panel-desc">INSTANT SIGNAL</p>
             <span className="intro-panel-cta">&#9675; POWER ON</span>
+          </button>
+
+          <div className="intro-selector-divider" />
+
+          {/* DVD option */}
+          <button
+            className="intro-selector-panel"
+            onClick={() => onSelect('dvd')}
+            aria-label="DVD intro"
+          >
+            <div className="intro-panel-icon">
+              <div className="selector-disc">
+                <div className="selector-disc-hub" />
+              </div>
+            </div>
+            <p className="intro-panel-title">DVD</p>
+            <p className="intro-panel-desc">MAIN MENU &middot; WIDESCREEN</p>
+            <span className="intro-panel-cta">&#9654; PLAY DISC</span>
           </button>
 
         </div>
