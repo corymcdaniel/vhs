@@ -415,7 +415,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   // formatCurrentTime moved to VHSTimestamp component
 
   const handleLinkClick = (url: string) => {
-    window.open(url, '_blank');
+    // noopener: the opened page gets no handle back to this one
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleCatLinkClick = (catName: string) => {

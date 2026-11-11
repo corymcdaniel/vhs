@@ -54,14 +54,55 @@ This project started as a vanilla HTML/CSS/JS website and was converted to React
 
 ```
 src/
+├── App.tsx                     # Intro picker → intro → the TV; routes /work and /blog
 ├── components/
-│   ├── VHSContainer.tsx      # Main VHS component with typewriter and navigation
-│   ├── VHSContainer.css      # All VHS styling and animations
-│   └── CatModal.tsx          # Modal component for cat photos
+│   ├── IntroSelector.tsx       # "Select experience": VHS Tape, Tube TV or DVD
+│   ├── VHSTapeLoadingIntro.tsx # VHS intro: the tape loads
+│   ├── TubeTVIntro.tsx         # Tube TV intro: instant signal
+│   ├── DVDIntro.tsx            # DVD intro: the disc spins up
+│   ├── DVDMenu.tsx             # DVD main menu: nav items load clockwise
+│   ├── VHSContainer.tsx        # The main screen: typewriter text, effects, channels, modals
+│   ├── VHSNavigationBar.tsx    # Bottom nav that appears as the text mentions each topic
+│   ├── VHSTimestamp.tsx        # Top-right REC/STOP clock (opens analytics settings)
+│   ├── TVDial.tsx              # Channel dial, including hidden channels
+│   ├── SimpleBackgroundManager.tsx # Background photo cycling
+│   ├── VHSTransition.tsx, VHSEffects.tsx, TextScrambleEffect.tsx, ... # VHS distortion effects
+│   ├── AutoEjectSequence.tsx, OhNoMessage.tsx, OsakaEffects.tsx      # The eject easter egg
+│   ├── WorkModal.tsx           # Work panel (Channel 4 and /work)
+│   ├── HoldForSpecs.tsx        # HOLD ▶▶ SPECS button on Work cards
+│   ├── BlogModal.tsx, AboutModal.tsx, ContactModal.tsx, HelpModal.tsx,
+│   │   PhotoGalleryModal.tsx, CatModal.tsx, OsakaModal.tsx, VideoModal.tsx # Modals
+│   └── ConsentBanner.tsx       # Analytics consent (REC / STOP)
+├── data/
+│   ├── portfolio.ts            # Work panel content
+│   └── blogPosts.js            # Generated from src/blog/*.md at build time
 ├── hooks/
-│   └── useTypewriter.ts      # Custom hook for typewriter effect
-└── App.tsx                   # Main app component with state management
+│   ├── useTypewriter.ts        # Character-by-character typing
+│   └── useChannel.ts           # Current channel and switching
+├── utils/
+│   ├── analytics.ts            # Consent-gated Google Analytics
+│   ├── logger.ts               # console logging in development only
+│   ├── markdownLoader.ts       # Blog Markdown → HTML
+│   └── japanese*.ts, phoneticJapanese.ts # Text-scramble characters for the effects
+└── blog/                       # Blog posts as Markdown
+public/
+├── bg/                         # Background photos
+├── cats/                       # Charlie and Papago (metadata stripped)
+└── og-image.jpg                # Link-preview image (1200×630)
 ```
+
+### Packages
+
+| Package | Why |
+| --- | --- |
+| `react`, `react-dom` | The UI. |
+| `react-router-dom` | Real URLs for `/work` and `/blog/<post>`, so they can be shared and opened directly. |
+| `react-helmet-async` | Per-page `<title>` and meta tags, such as the Work panel's description for link previews. |
+| `marked` | Turns the blog's Markdown files into HTML. |
+| `typescript` | Type checking for the app's components and data. |
+| `@testing-library/*`, `@types/*` | Tests and type definitions. |
+
+No CSS framework: all styling is hand-written CSS per component.
 
 ### Key Components
 

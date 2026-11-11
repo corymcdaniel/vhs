@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { logger } from '../utils/logger';
 
 interface OhNoMessageProps {
   isActive: boolean;
@@ -14,18 +15,18 @@ export const useOhNoMessage = ({ isActive, onComplete }: OhNoMessageProps): bool
       return;
     }
 
-    console.log('😰 "oh no...." sequence started');
+    logger.log('😰 "oh no...." sequence started');
 
     // Show message after 300ms delay
     const showTimer = setTimeout(() => {
       setShowMessage(true);
-      console.log('😰 "oh no...." message appeared');
+      logger.log('😰 "oh no...." message appeared');
     }, 300);
 
     // Hide message after 30 seconds total (let it persist longer)
     const hideTimer = setTimeout(() => {
       setShowMessage(false);
-      console.log('😰 "oh no...." message ended after 30 seconds');
+      logger.log('😰 "oh no...." message ended after 30 seconds');
       onComplete?.();
     }, 30000);
 
