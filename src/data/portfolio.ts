@@ -65,7 +65,7 @@ export const fullstory = {
         {
           title: 'Claude Code rules and skills',
           summary:
-            'Wrote and maintain the CLAUDE.md rules for both marketing repos, split into focused files with a codebase guide and a 10-phase project conversion playbook. Built three slash commands: /convert-project, /html-to-page and /artifact-extract-dynamic-components.',
+            'Wrote and maintain the CLAUDE.md rules for both marketing repos, split into focused files with a codebase guide and a 10-phase project conversion playbook. Wrote skills to make any interface work.',
           tags: ['Claude Code', 'CLAUDE.md', 'Skills'],
         },
         {
@@ -193,6 +193,21 @@ export const personalProjects: PortfolioItem[] = [
     ],
   },
 ];
+
+// Client work alongside the day job
+export const freelance = {
+  title: 'Freelance Shopify developer',
+  dates: '2025 – 2026',
+  items: [
+    {
+      title: 'Holiday Bundler',
+      summary:
+        'A Shopify app for holiday-decoration rental boxes. Customers pick a box size, fill it and choose rental dates; items past the box limit charge a flat rate. Draft orders use GraphQL price overrides so Shopify checkout honors the custom pricing, promo codes hold up under simultaneous checkouts, and inventory syncs through webhooks. 383 commits across 114 PRs.',
+      tags: ['Shopify', 'Remix', 'PostgreSQL'],
+      links: [{ label: 'Live', url: 'https://evrgreen.shop' }],
+    },
+  ] as PortfolioItem[],
+};
 
 export const earlierRoles: Role[] = [
   { company: 'Fullstory', title: 'Web Developer (contract)', dates: '2019 – 2021' },

@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import {
   profile,
   fullstory,
+  freelance,
   personalProjects,
   earlierRoles,
   PortfolioItem,
@@ -166,6 +167,18 @@ const WorkModal: React.FC<WorkModalProps> = ({ onClose }) => {
                     <li key={line}>{line}</li>
                   ))}
                 </ul>
+              </div>
+            </section>
+
+            <section className="work-section" aria-labelledby="work-freelance">
+              <div className="work-section-head">
+                <h3 id="work-freelance" className="work-section-title">{freelance.title}</h3>
+                <span className="work-section-meta">{freelance.dates}</span>
+              </div>
+              <div className="work-grid">
+                {freelance.items.map((item) => (
+                  <ItemCard key={item.title} item={item} />
+                ))}
               </div>
             </section>
 
