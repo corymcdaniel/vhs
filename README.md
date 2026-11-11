@@ -108,3 +108,10 @@ Optimized for modern browsers with support for:
 This project demonstrates the evolution from a simple static site to a sophisticated React application while maintaining the authentic VHS aesthetic and improving user experience.
 
 **Production Status**: ✅ Deployed and optimized
+## Work channel (Channel 4 and /work)
+
+Channel 4 is the work channel. Tuning to it opens the **Work** panel, and a WORK button joins the navigation bar while you're on it. `corymcdaniel.com/work` skips the intro and opens the panel directly, so the portfolio can be shared as a plain link.
+
+- Content lives in `src/data/portfolio.ts` (current role, stats, personal projects, earlier roles). Edit that file to update the portfolio; `WorkModal.tsx` only handles layout.
+- Styling is in `WorkModal.css`: Channel 4's navy and white palette with light scanlines, and VT323 for headings only so body copy stays readable.
+- Site keyboard shortcuts are paused while the panel is open so it can scroll normally. Escape closes it.

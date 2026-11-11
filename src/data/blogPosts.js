@@ -1,5 +1,5 @@
 // Auto-generated blog post list
-// Generated on: 2026-05-07T15:51:50.468Z
+// Generated on: 2026-11-11T05:19:01.170Z
 // Source: src/blog/*.md — ordered by first git commit (ascending)
 // DO NOT EDIT — run npm run generate-blog to regenerate
 
@@ -27,5 +27,11 @@ export const blogPosts = [
     "slug": "0005",
     "title": ">> 0005 AI Projects: Chip Gather",
     "description": "Do you also collect casino chips?"
+  },
+  {
+    "filename": "0006.md",
+    "slug": "0006",
+    "title": ">> 0006 Music Project",
+    "description": "My songwriting/producing page.  Electronic/indie alternative"
   }
 ];

@@ -17,14 +17,16 @@ function App() {
   const blogMatch = location.pathname.match(/^\/blog\/?([^/]*)$/);
   const initialBlogOpen = !!blogMatch;
   const initialBlogSlug = blogMatch ? (blogMatch[1] || null) : null;
+  // /work skips the intro and lands on Channel 4 with the Work panel open
+  const initialWorkOpen = /^\/work\/?$/.test(location.pathname);
 
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [effectsReduced, setEffectsReduced] = useState(false);
   const [isAutoEjecting, setIsAutoEjecting] = useState(false);
   const [showOsakaModal, setShowOsakaModal] = useState(false);
-  const [showIntro, setShowIntro] = useState(true);
-  const [introVariant, setIntroVariant] = useState<IntroVariant | null>(null);
-  const { channel, switchChannel, nextChannel, prevChannel } = useChannel();
+  const [showIntro, setShowIntro] = useState(!initialWorkOpen);
+  const [introVariant, setIntroVariant] = useState<IntroVariant | null>(initialWorkOpen ? 'tv' : null);
+  const { channel, switchChannel, nextChannel, prevChannel } = useChannel(initialWorkOpen ? 4 : 3);
 
   // Osaka effects at App level so they persist independently
   const { showFlash: showOsakaFlash, showBurn: showOsakaBurn } = useOsakaEffects({
@@ -78,6 +80,7 @@ function App() {
           onPrevChannel={prevChannel}
           initialBlogOpen={initialBlogOpen}
           initialBlogSlug={initialBlogSlug}
+          initialWorkOpen={initialWorkOpen}
         />
       )}
 

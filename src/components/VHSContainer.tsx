@@ -15,6 +15,7 @@ import VHSTextDisplay from './VHSTextDisplay';
 import VHSNavigationBar from './VHSNavigationBar';
 import VHSControlPanel from './VHSControlPanel';
 import BlogModal from './BlogModal';
+import WorkModal from './WorkModal';
 import { useAutoEjectSequence } from './AutoEjectSequence';
 import { useOhNoMessage } from './OhNoMessage';
 import TextScrambleEffect from './TextScrambleEffect';
@@ -58,6 +59,7 @@ interface VHSContainerProps {
   onPrevChannel: () => void;
   initialBlogOpen?: boolean;
   initialBlogSlug?: string | null;
+  initialWorkOpen?: boolean;
   skipTypewriter?: boolean;
 }
 
@@ -77,6 +79,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   onPrevChannel,
   initialBlogOpen = false,
   initialBlogSlug = null,
+  initialWorkOpen = false,
   skipTypewriter = false,
 }) => {
   const [showContactModal, setShowContactModal] = useState(false);
@@ -85,6 +88,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showPhotoGalleryModal, setShowPhotoGalleryModal] = useState(false);
   const [showBlogModal, setShowBlogModal] = useState(initialBlogOpen);
+  const [showWorkModal, setShowWorkModal] = useState(initialWorkOpen);
+  const previousChannelRef = useRef<Channel>(currentChannel);
   const [isEjected, setIsEjected] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -236,7 +241,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
   const showOhNoMessage = useOhNoMessage({ isActive: isAutoEjecting });
 
   // Track if any modal is open - used to pause auto-eject timer
-  const isAnyModalOpen = showContactModal || showRecordingModal || showHelpModal || showAboutModal || showPhotoGalleryModal || showBlogModal;
+  const isAnyModalOpen = showContactModal || showRecordingModal || showHelpModal || showAboutModal || showPhotoGalleryModal || showBlogModal || showWorkModal;
 
   // Auto-trigger eject 20 seconds after typewriter completes (when contact button shows)
   // Pauses when any modal is open to prevent interrupting user interaction
@@ -292,6 +297,9 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
     const keyboardTimers = new Set<NodeJS.Timeout>();
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      // The Work panel scrolls, so leave the keyboard to it while it's open
+      if (showWorkModal) return;
+
       // Prevent default for our custom keys
       if (['g', 'b', 'r', 'n', 'e', ' ', 'arrowup', 'arrowdown'].includes(e.key.toLowerCase())) {
         e.preventDefault();
@@ -357,7 +365,7 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       keyboardTimers.forEach(timer => clearTimeout(timer));
       keyboardTimers.clear();
     };
-  }, [handleFastForward, handleAutoEject, isEjected, isAutoEjecting, effectsReduced, onNextChannel, onPrevChannel]);
+  }, [handleFastForward, handleAutoEject, isEjected, isAutoEjecting, effectsReduced, onNextChannel, onPrevChannel, showWorkModal]);
 
   // Random glitch effects with useRef - OPTIMIZED for performance
   useEffect(() => {
@@ -395,6 +403,15 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       };
     }
   }, [effectsReduced]);
+
+  // Tuning to Channel 4 (the work channel) opens the Work panel
+  useEffect(() => {
+    const cameFromAnotherChannel = previousChannelRef.current !== currentChannel;
+    previousChannelRef.current = currentChannel;
+    if (currentChannel === 4 && cameFromAnotherChannel) {
+      setShowWorkModal(true);
+    }
+  }, [currentChannel]);
 
   // formatCurrentTime moved to VHSTimestamp component
 
@@ -639,6 +656,8 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
         showPhotoNav={showPhotoNav}
         showCatsNav={showCatsNav}
         showLocationNav={showLocationNav}
+        isWorkChannel={currentChannel === 4}
+        onWorkClick={() => setShowWorkModal(true)}
         onLinkClick={handleLinkClick}
         onCatClick={handleCatLinkClick}
       />
@@ -677,6 +696,11 @@ const VHSContainer: React.FC<VHSContainerProps> = ({
       {/* Photo Gallery Modal */}
       {showPhotoGalleryModal && (
         <PhotoGalleryModal onClose={handlePhotoGalleryClose} />
+      )}
+
+      {/* Work Modal (Channel 4 and /work) */}
+      {showWorkModal && (
+        <WorkModal onClose={() => setShowWorkModal(false)} />
       )}
 
       {/* Blog Modal */}
