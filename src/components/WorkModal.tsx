@@ -11,6 +11,7 @@ import {
   PortfolioLink,
 } from '../data/portfolio';
 import './WorkModal.css';
+import HoldForSpecs from './HoldForSpecs';
 
 interface WorkModalProps {
   onClose: () => void;
@@ -51,7 +52,11 @@ const Tags: React.FC<{ tags?: string[] }> = ({ tags }) => {
 const ItemCard: React.FC<{ item: PortfolioItem }> = ({ item }) => (
   <article className="work-card">
     <h4 className="work-card-title">{item.title}</h4>
-    <p className="work-card-summary">{item.summary}</p>
+    {item.specs ? (
+      <HoldForSpecs text={item.summary} specs={item.specs} textClassName="work-card-summary" />
+    ) : (
+      <p className="work-card-summary">{item.summary}</p>
+    )}
     <Tags tags={item.tags} />
     <LinkList links={item.links} />
   </article>
@@ -135,18 +140,9 @@ const WorkModal: React.FC<WorkModalProps> = ({ onClose }) => {
                 <span className="work-section-meta">{fullstory.dates}</span>
               </div>
               <p className="work-period">{fullstory.period}</p>
-              <p className="work-lede">{fullstory.summary}</p>
-
-              {fullstory.showStats && (
-                <dl className="work-stats">
-                  {fullstory.stats.map((stat) => (
-                    <div key={stat.label} className="work-stat">
-                      <dt className="work-stat-label">{stat.label}</dt>
-                      <dd className="work-stat-value">{stat.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
+              <div className="work-lede-wrap">
+                <HoldForSpecs text={fullstory.summary} specs={fullstory.summarySpecs} textClassName="work-lede" />
+              </div>
 
               {fullstory.groups.map((group) => (
                 <div key={group.heading} className="work-group">
@@ -159,15 +155,6 @@ const WorkModal: React.FC<WorkModalProps> = ({ onClose }) => {
                   </div>
                 </div>
               ))}
-
-              <div className="work-group">
-                <h4 className="work-group-title">How I work with AI</h4>
-                <ul className="work-approach">
-                  {fullstory.approach.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </div>
             </section>
 
             <section className="work-section" aria-labelledby="work-freelance">

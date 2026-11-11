@@ -6,14 +6,11 @@ export interface PortfolioLink {
   url: string;
 }
 
-export interface PortfolioStat {
-  value: string;
-  label: string;
-}
-
 export interface PortfolioItem {
   title: string;
   summary: string;
+  // Optional technical version, shown while the card's HOLD ▶▶ SPECS button is held
+  specs?: string;
   tags?: string[];
   links?: PortfolioLink[];
 }
@@ -48,19 +45,14 @@ export const fullstory = {
   dates: '2021 – present',
   period: 'Highlights from May – Nov 2026',
   summary:
+    "I work on Fullstory's marketing site and the little projects that orbit it. Lately that's meant figuring out where AI actually helps: pairing on code, reviewing PRs, and building tools so designers and content folks don't have to wait on an engineer.",
+  // Shown while HOLD ▶▶ SPECS is held
+  summarySpecs:
     "I work on Fullstory's marketing site and the standalone projects around it. Over the last six months AI went from an experiment to how we ship: as a pair programmer, as a reviewer on every PR, and as tooling that designers, content managers and other engineers can run themselves.",
-  // Stats are hidden for now: set showStats to true to bring the row back.
-  showStats: false,
-  stats: [
-    { value: '169', label: 'PRs shipped in 6 months' },
-    { value: '3', label: 'Claude Code skills written for the team' },
-    { value: '5', label: 'AI-facing launches' },
-    { value: '100%', label: 'of PRs through AI review' },
-  ] as PortfolioStat[],
   groups: [
     {
-      heading: 'AI as team infrastructure',
-      intro: 'Turning one-off Claude sessions into workflows other people can repeat.',
+      heading: 'Making Claude useful for the team',
+      intro: 'Things I figured out once and wrote down, so nobody has to figure them out again.',
       items: [
         {
           title: 'Claude Code rules and skills',
@@ -71,6 +63,8 @@ export const fullstory = {
         {
           title: 'Artifact-to-site pipeline',
           summary:
+            "Turns a Claude artifact into a real production page, or into widgets authors can drop in from Contentful. The skills are cautious on purpose: plan first, ask before touching the shared content model, and don't call it done until the build actually passes.",
+          specs:
             'A Claude artifact becomes a production page, or a set of embeddable widgets authors place from Contentful. The skills carry guardrails: plan before changing anything, never touch the shared content model without a yes, and check the real build exit code.',
           tags: ['Contentful', 'React', 'Guardrails'],
         },
@@ -83,7 +77,7 @@ export const fullstory = {
       ],
     },
     {
-      heading: "Shipping Fullstory's AI story",
+      heading: 'Launch pages',
       items: [
         {
           title: 'MCP Get Started',
@@ -112,7 +106,7 @@ export const fullstory = {
     },
     {
       heading: 'The groundwork',
-      intro: 'Platform work that made the AI work possible.',
+      intro: 'Less flashy, but everything else leans on it.',
       items: [
         {
           title: 'Shared form-events module',
@@ -128,23 +122,22 @@ export const fullstory = {
         {
           title: 'Site performance',
           summary:
+            'Made the site faster: CSS split by template, heavy libraries like GSAP and matter-js only loaded when needed, and no more hero flash after the page hydrates.',
+          specs:
             'Per-template CSS chunks, lazy-loaded GSAP, react-player and matter-js, and a fix for hero flashes after hydration.',
         },
       ],
     },
   ] as PortfolioGroup[],
-  approach: [
-    'Claude as a pair programmer on the hardest cross-repo work, with commit messages that explain why.',
-    'Cursor Bugbot on every PR, plus Copilot Autofix fixes I review and accept.',
-    "Experiments are framed as experiments. When a Claude attempt doesn't hold up, I revert it and redo it properly.",
-  ],
 };
 
 export const personalProjects: PortfolioItem[] = [
   {
     title: 'Show Log',
     summary:
-      'Every concert and stand-up show since 2002. Postgres with full change history and undo, setlist.fm "likely setlist" forecasts, Wikidata enrichment, Spotify stats and venue maps. 88 commits across 26 PRs in about two weeks with Claude.',
+      "Every concert and stand-up show I've seen since 2002. Full edit history with undo, setlist.fm guesses at what a band will play, Wikidata and Spotify details, and venue maps. Built in about two weeks with Claude.",
+    specs:
+      'Every concert and stand-up show since 2002. Postgres with full change history and undo, setlist.fm "likely setlist" forecasts, Wikidata enrichment, Spotify stats and venue maps. Built in about two weeks with Claude.',
     tags: ['Astro', 'Netlify Database', 'Data'],
     links: [
       { label: 'Live', url: 'https://cory-concert-tracker.netlify.app' },
@@ -185,6 +178,8 @@ export const personalProjects: PortfolioItem[] = [
   {
     title: 'Drink / Drive / University',
     summary:
+      "A map of about 1,900 universities over each state's drinking and gas-price data. Three data pipelines to get there, plus color scales tuned so the differences actually show.",
+    specs:
       'A choropleth and marker map of about 1,900 universities over state alcohol and fuel data, with three data pipelines (NIAAA, College Scorecard, EIA plus Census) and gamma-corrected color scales.',
     tags: ['Leaflet', 'Data pipelines'],
     links: [
@@ -202,7 +197,9 @@ export const freelance = {
     {
       title: 'Holiday Bundler',
       summary:
-        'A Shopify app for holiday-decoration rental boxes. Customers pick a box size, fill it and choose rental dates; items past the box limit charge a flat rate. Draft orders use GraphQL price overrides so Shopify checkout honors the custom pricing, promo codes hold up under simultaneous checkouts, and inventory syncs through webhooks. 383 commits across 114 PRs.',
+        "A Shopify app for renting holiday decorations by the box. Pick a box, fill it, pick your dates; extra items cost a flat rate. The hard part was getting Shopify checkout to respect custom pricing, plus promo codes that don't break when two people grab the last one, and inventory that stays in sync.",
+      specs:
+        'A Shopify app for holiday-decoration rental boxes. Customers pick a box size, fill it and choose rental dates; items past the box limit charge a flat rate. Draft orders use GraphQL price overrides so Shopify checkout honors the custom pricing, promo codes hold up under simultaneous checkouts, and inventory syncs through webhooks.',
       tags: ['Shopify', 'Remix', 'PostgreSQL'],
       links: [{ label: 'Live', url: 'https://evrgreen.shop' }],
     },
